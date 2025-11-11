@@ -1,7 +1,10 @@
+import NavbarComponent from "@/components/NavbarComponent";
+
 export default function Navbar() {
   return (
     <div>
-      Navbar Component
+      <NavbarComponent/>
     </div>
-  );
+  )
+   
 }
