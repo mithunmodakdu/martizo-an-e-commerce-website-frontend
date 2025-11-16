@@ -1,5 +1,5 @@
 import App from "@/App";
-import AdminLayout from "@/layout/AdminLayout";
+import AdminLayout from "@/components/layout/AdminLayout";
 import About from "@/pages/About";
 import Analytics from "@/pages/Analytics";
 import { createBrowserRouter } from "react-router";
