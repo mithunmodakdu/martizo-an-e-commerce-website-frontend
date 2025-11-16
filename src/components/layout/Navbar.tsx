@@ -20,10 +20,11 @@ import {
 } from "@/components/ui/popover";
 import { Link } from "react-router";
 import CartSheet from "../ui/cart-sheet";
+import { ListItem } from "./ListItem";
 
 export default function Navbar() {
   const id = useId();
-
+  
   const navItems = [
     {
       label: "Home",
@@ -38,7 +39,8 @@ export default function Navbar() {
         {
           title: "All Products",
           href: "/products",
-          description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Non, distinctio",
+          description:
+            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Non, distinctio",
         },
         {
           title: "New Arrivals",
@@ -69,18 +71,18 @@ export default function Navbar() {
           href: "/products/trending-now",
           description:
             "Lorem ipsum dolor sit amet consectetur adipisicing elit. Non, distinctio",
-        }
-        
+        },
       ],
     },
     {
       label: "Categories",
-      type: "menu", 
+      type: "menu",
       links: [
         {
           title: "Electronics",
           href: "/products/electronics",
-          description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Non, distinctio",
+          description:
+            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Non, distinctio",
         },
         {
           title: "Fashion (Men / Women / Kids)",
@@ -111,11 +113,12 @@ export default function Navbar() {
           href: "/products/sports-outdoors",
           description:
             "Lorem ipsum dolor sit amet consectetur adipisicing elit. Non, distinctio",
-        }, 
+        },
         {
           title: "Baby & Toys",
           href: "/products/baby-toys",
-          description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Non, distinctio",
+          description:
+            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Non, distinctio",
         },
         {
           title: "Automobiles & Motorbike",
@@ -140,18 +143,18 @@ export default function Navbar() {
           href: "/products/medicine-health-care",
           description:
             "Lorem ipsum dolor sit amet consectetur adipisicing elit. Non, distinctio",
-        }
-        
+        },
       ],
     },
     {
       label: "Brands",
-      type: "menu", 
+      type: "menu",
       links: [
         {
           title: "All Brands",
           href: "/products/all-brands",
-          description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Non, distinctio",
+          description:
+            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Non, distinctio",
         },
         {
           title: "Top Brands",
@@ -164,18 +167,18 @@ export default function Navbar() {
           href: "/products/martizo-choice-brands",
           description:
             "Lorem ipsum dolor sit amet consectetur adipisicing elit. Non, distinctio",
-        }
-        
+        },
       ],
     },
     {
       label: "Deals / Offers",
-      type: "menu", 
+      type: "menu",
       links: [
         {
           title: "Today’s Deals",
           href: "#",
-          description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Non, distinctio",
+          description:
+            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Non, distinctio",
         },
         {
           title: "Clearance Sale",
@@ -194,11 +197,10 @@ export default function Navbar() {
           href: "#",
           description:
             "Lorem ipsum dolor sit amet consectetur adipisicing elit. Non, distinctio",
-        }
-        
+        },
       ],
     },
-   {
+    {
       label: "Track Order",
       href: "/track-order",
       type: "link",
@@ -274,23 +276,15 @@ export default function Navbar() {
                             {item.label}
                           </NavigationMenuTrigger>
                           <NavigationMenuContent>
-                            <ul className="grid gap-2 md:w-[400px] lg:w-[500px]">
+                            <ul className="grid gap-2 sm:w-[300px] md:w-[400px] md:grid-cols-2 lg:w-[500px]">
                               {item?.links?.map((link) => (
-                                <li key={link.title} className="row-span-3">
-                                  <NavigationMenuLink asChild>
-                                    <a
-                                      href={link.href}
-                                      className="from-muted/50 to-muted flex h-full w-full flex-col justify-end rounded-md bg-linear-to-b p-4 no-underline outline-hidden transition-all duration-200 select-none focus:shadow-md md:p-6"
-                                    >
-                                      <div className="mb-2 text-lg font-medium sm:mt-4">
-                                        {link.title}
-                                      </div>
-                                      <p className="text-muted-foreground text-sm leading-tight">
-                                        {link.description}
-                                      </p>
-                                    </a>
-                                  </NavigationMenuLink>
-                                </li>
+                                <ListItem
+                                  key={link.title}
+                                  title={link.title}
+                                  href={link.href}
+                                >
+                                  {link.description}
+                                </ListItem>
                               ))}
                             </ul>
                           </NavigationMenuContent>
@@ -356,23 +350,15 @@ export default function Navbar() {
                   <>
                     <NavigationMenuTrigger>{item.label}</NavigationMenuTrigger>
                     <NavigationMenuContent>
-                      <ul className="grid gap-2 md:w-[400px] lg:w-[500px]">
+                      <ul className="grid gap-2 sm:w-[300px] md:w-[400px] md:grid-cols-2 lg:w-[500px]">
                         {item?.links?.map((link) => (
-                          <li key={link.title} className="row-span-3">
-                            <NavigationMenuLink asChild>
-                              <a
-                                href={link.href}
-                                className="from-muted/50 to-muted flex h-full w-full flex-col justify-end rounded-md bg-linear-to-b p-4 no-underline outline-hidden transition-all duration-200 select-none focus:shadow-md md:p-6"
-                              >
-                                <div className="mb-2 text-lg font-medium sm:mt-4">
-                                  {link.title}
-                                </div>
-                                <p className="text-muted-foreground text-sm leading-tight">
-                                  {link.description}
-                                </p>
-                              </a>
-                            </NavigationMenuLink>
-                          </li>
+                          <ListItem
+                            key={link.title}
+                            title={link.title}
+                            href={link.href}
+                          >
+                            {link.description}
+                          </ListItem>
                         ))}
                       </ul>
                     </NavigationMenuContent>
