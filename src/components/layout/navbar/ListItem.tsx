@@ -1,5 +1,6 @@
+import { NavigationMenuLink } from "@/components/ui/navigation-menu";
 import { Link } from "react-router";
-import { NavigationMenuLink } from "../ui/navigation-menu";
+
 
 export function ListItem({
   title,

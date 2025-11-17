@@ -14,7 +14,7 @@ export default function CartSheet() {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="outline"><span><ShoppingCart/></span><sup>{cartItems.length}</sup></Button>
+        <Button className="cursor-pointer" variant="outline"><span><ShoppingCart/></span><sup>{cartItems.length}</sup></Button>
       </SheetTrigger>
 
       <SheetContent className="w-[400px] sm:w-[540px]">
