@@ -16,6 +16,8 @@ import {
 import { Link } from "react-router";
 import CartSheet from "../../ui/cart-sheet";
 import { ListItem } from "./ListItem";
+import { ModeToggler } from "../MoodToggler";
+
 
 
 export default function Navbar() {
@@ -245,6 +247,11 @@ export default function Navbar() {
 
         {/* Right side */}
         <div className="flex flex-1 items-center justify-end gap-2">
+          
+          {/* dark mode toggler */}
+          <ModeToggler/>
+          
+          {/* wishlist */}
           <Button variant="outline" asChild>
             <Link to="/wishlist">
               <span><Heart/></span>
