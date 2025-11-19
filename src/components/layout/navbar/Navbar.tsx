@@ -1,6 +1,7 @@
 import { useId } from "react";
 import { Heart, SearchIcon } from "lucide-react";
 import Logo from "@/components/logo";
+import logoImage from "@/assets/images/martizo-logo.png"
 import UserMenu from "@/components/layout/navbar/user-menu";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,8 +18,11 @@ import { Link } from "react-router";
 import CartSheet from "../../ui/cart-sheet";
 import { ListItem } from "./ListItem";
 import { ModeToggler } from "../MoodToggler";
-
-
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 export default function Navbar() {
   const id = useId();
@@ -170,7 +174,7 @@ export default function Navbar() {
       ],
     },
     {
-      label: "Deals / Offers",
+      label: "Offers",
       type: "menu",
       links: [
         {
@@ -205,26 +209,26 @@ export default function Navbar() {
       type: "link",
     },
     {
-      label: "About Martizo",
+      label: "About us",
       href: "/about",
       type: "link",
     },
     {
-      label: "Contact Us",
+      label: "Contact us",
       href: "/contact",
       type: "link",
     },
   ];
 
   return (
-    <header className="border-b px-4 md:px-6">
-      <div className="flex h-16 items-center justify-between gap-4">
+    <header>
+      <div className="flex flex-col px-4 md:px-6 md:flex-row items-center justify-between gap-4">
         {/* Left side */}
         <div className="flex flex-1 items-center gap-2">
           {/* Logo */}
-          <div className="flex items-center">
-            <a href="#" className="text-primary hover:text-primary/90">
-              <Logo />
+          <div className="flex items-center pt-5">
+            <a href="/">
+              <img src={logoImage} className="w-32" alt="Logo of Martizo" />
             </a>
           </div>
         </div>
@@ -246,19 +250,97 @@ export default function Navbar() {
         </div>
 
         {/* Right side */}
-        <div className="flex flex-1 items-center justify-end gap-2">
-          
+        <div className="flex flex-1 items-center justify-end gap-5 md:gap-2">
+          {/* Mobile menu trigger */}
+          <div className="block md:hidden">
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  className="group size-9 md:hidden"
+                  variant="outline"
+                  size="icon"
+                >
+                  <svg
+                    className="pointer-events-none"
+                    width={16}
+                    height={16}
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M4 12L20 12"
+                      className="origin-center -translate-y-[7px] transition-all duration-300 ease-[cubic-bezier(.5,.85,.25,1.1)] group-aria-expanded:translate-x-0 group-aria-expanded:translate-y-0 group-aria-expanded:rotate-[315deg]"
+                    />
+                    <path
+                      d="M4 12H20"
+                      className="origin-center transition-all duration-300 ease-[cubic-bezier(.5,.85,.25,1.8)] group-aria-expanded:rotate-45"
+                    />
+                    <path
+                      d="M4 12H20"
+                      className="origin-center translate-y-[7px] transition-all duration-300 ease-[cubic-bezier(.5,.85,.25,1.1)] group-aria-expanded:translate-y-0 group-aria-expanded:rotate-[135deg]"
+                    />
+                  </svg>
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent align="start" className="w-36 p-1 md:hidden">
+                <NavigationMenu className="max-w-none *:w-full">
+                  <NavigationMenuList className="flex-col items-start gap-0 md:gap-2">
+                    {navItems.map((item) => (
+                      <NavigationMenuItem key={item.label}>
+                        {item.type === "link" ? (
+                          <NavigationMenuLink
+                            asChild
+                            className={navigationMenuTriggerStyle()}
+                            active={item.active}
+                          >
+                            <Link to={`${item.href}`}>{item.label}</Link>
+                          </NavigationMenuLink>
+                        ) : (
+                          <>
+                            <NavigationMenuTrigger>
+                              {item.label}
+                            </NavigationMenuTrigger>
+                            <NavigationMenuContent>
+                              <ul className="grid gap-2 sm:w-[300px] md:w-[400px] md:grid-cols-2 lg:w-[500px]">
+                                {item?.links?.map((link) => (
+                                  <ListItem
+                                    key={link.title}
+                                    title={link.title}
+                                    href={link.href}
+                                  >
+                                    {link.description}
+                                  </ListItem>
+                                ))}
+                              </ul>
+                            </NavigationMenuContent>
+                          </>
+                        )}
+                      </NavigationMenuItem>
+                    ))}
+                  </NavigationMenuList>
+                </NavigationMenu>
+              </PopoverContent>
+            </Popover>
+          </div>
+
           {/* dark mode toggler */}
-          <ModeToggler/>
-          
+          <ModeToggler />
+
           {/* wishlist */}
           <Button variant="outline" asChild>
             <Link to="/wishlist">
-              <span><Heart/></span>
+              <span>
+                <Heart />
+              </span>
               <sup>{wishlistLength}</sup>
             </Link>
           </Button>
-          
+
           {/* cart */}
           <CartSheet />
 
@@ -267,13 +349,13 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Bottom navigation */}
-      <div className="border-t py-2 ">
+      {/* main navigation */}
+      <div className="py-2 px-4 md:px-6 hidden md:block bg-primary w-full">
         {/* Navigation menu */}
         <NavigationMenu>
-          <NavigationMenuList className="flex-wrap">
+          <NavigationMenuList className="flex-wrap ">
             {navItems.map((item) => (
-              <NavigationMenuItem key={item.label}>
+              <NavigationMenuItem  key={item.label}>
                 {item.type === "link" ? (
                   <NavigationMenuLink
                     asChild
