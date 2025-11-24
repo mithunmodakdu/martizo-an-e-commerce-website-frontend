@@ -1,7 +1,7 @@
 import { useId } from "react";
-import { Heart, SearchIcon } from "lucide-react";
+import { CircleIcon, Heart, SearchIcon } from "lucide-react";
 import Logo from "@/components/logo";
-import logoImage from "@/assets/images/martizo-logo.png"
+import logoImage from "@/assets/images/martizo-logo.png";
 import UserMenu from "@/components/layout/navbar/user-menu";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -83,6 +83,7 @@ export default function Navbar() {
       links: [
         {
           title: "Electronics",
+          icon: "https://res.cloudinary.com/<cloud_name>/image/upload/category-icons/electronics.png",
           href: "/products/electronics",
           description:
             "Lorem ipsum dolor sit amet consectetur adipisicing elit. Non, distinctio",
@@ -355,7 +356,7 @@ export default function Navbar() {
         <NavigationMenu>
           <NavigationMenuList className="flex-wrap ">
             {navItems.map((item) => (
-              <NavigationMenuItem  key={item.label}>
+              <NavigationMenuItem key={item.label}>
                 {item.type === "link" ? (
                   <NavigationMenuLink
                     asChild
@@ -370,13 +371,22 @@ export default function Navbar() {
                     <NavigationMenuContent>
                       <ul className="grid gap-2 sm:w-[300px] md:w-[400px] md:grid-cols-2 lg:w-[500px]">
                         {item?.links?.map((link) => (
-                          <ListItem
-                            key={link.title}
-                            title={link.title}
-                            href={link.href}
-                          >
-                            {link.description}
-                          </ListItem>
+                          // <ListItem
+                          //   key={link.title}
+                          //   title={link.title}
+                          //   href={link.href}
+                          // >
+                          //   {link.description}
+                          // </ListItem>
+                          <NavigationMenuLink asChild>
+                            <Link
+                              to={link.href}
+                              className="flex-row items-center gap-2"
+                            >
+                              <CircleIcon />
+                              {link.title}
+                            </Link>
+                          </NavigationMenuLink>
                         ))}
                       </ul>
                     </NavigationMenuContent>
