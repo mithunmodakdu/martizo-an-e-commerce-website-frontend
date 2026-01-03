@@ -1,6 +1,5 @@
 import { useId } from "react";
 import { CircleIcon, Heart, SearchIcon } from "lucide-react";
-import Logo from "@/components/logo";
 import logoImage from "@/assets/images/martizo-logo.png";
 import UserMenu from "@/components/layout/navbar/user-menu";
 import { Button } from "@/components/ui/button";
@@ -227,9 +226,9 @@ export default function Navbar() {
         {/* Left side */}
         <div className="flex flex-1 items-center gap-2">
           {/* Logo */}
-          <div className="flex items-center pt-5">
+          <div className="flex items-center pt-5 w-32">
             <a href="/">
-              <img src={logoImage} className="w-32" alt="Logo of Martizo" />
+              <img src={logoImage} alt="Logo of Martizo" />
             </a>
           </div>
         </div>
