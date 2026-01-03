@@ -1,10 +1,7 @@
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   Field,
   FieldDescription,
-  FieldGroup,
-  FieldLabel,
   FieldSeparator,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
@@ -19,14 +16,24 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { z } from "zod";
+import {zodResolver} from "@hookform/resolvers/zod";
+
+const formSchema = z.object({
+  name: z.string().min(2).max(50)
+});
 
 export function SignupForm({
   className,
   ...props
 }: React.ComponentProps<"form">) {
-  const form = useForm();
+  
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+   
+  });
 
-  const onSubmit = (data) => {
+  const onSubmit = (data: z.infer<typeof formSchema>) => {
     console.log(data);
   };
 
@@ -43,10 +50,10 @@ export function SignupForm({
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <FormField
             control={form.control}
-            name="username"
+            name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Username</FormLabel>
+                <FormLabel>Name</FormLabel>
                 <FormControl>
                   <Input placeholder="Write here your full name." {...field} />
                 </FormControl>
@@ -57,12 +64,12 @@ export function SignupForm({
               </FormItem>
             )}
           />
-          <Button type="submit">Create Account</Button>
+          <Button type="submit" className="mt-5">Create Account</Button>
         </form>
       </Form>
 
       
-      <FieldSeparator>Or continue with</FieldSeparator>
+      <FieldSeparator className="mt-6">Or continue with</FieldSeparator>
       <Field>
         <Button variant="outline" type="button">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
