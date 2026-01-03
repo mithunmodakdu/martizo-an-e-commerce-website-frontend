@@ -19,8 +19,31 @@ import {
 import { z } from "zod";
 import {zodResolver} from "@hookform/resolvers/zod";
 
-const formSchema = z.object({
-  name: z.string().min(2).max(50)
+export const SignupUserZodSchema = z.object({
+  name: z.string({message: "Name must be string"})
+    .min(2, {message: "Name is too short. It must have minimum 2 characters.",})
+    .max(50, {message: "Name is too long. It must have maximum 50 characters."}),
+  email: z.email(),
+  password: z.string({message: "Password must be string"})
+    .min(8, { message: "Password must have at least 8 characters."})
+    .regex(/^(?=.*[A-Z])/, {message: "Password must have at least one uppercase letter"})
+    .regex(/^(?=.*[@#$%!*])/, {message: "Password must have at least one special character"})
+    .regex(/^(?=.*\d)/, { message: "Password must have at least one digit" }),
+  confirmPassword: z.string({message: "Password must be string"})
+    .min(8, { message: "Password must have at least 8 characters."})
+    .regex(/^(?=.*[A-Z])/, {message: "Password must have at least one uppercase letter"})
+    .regex(/^(?=.*[@#$%!*])/, {message: "Password must have at least one special character"})
+    .regex(/^(?=.*\d)/, { message: "Password must have at least one digit" }),
+  phone: z.string({ message: "Phone number must be string" })
+    .regex(/^(?:\+8801\d{9}|01\d{9})$/, {
+      message:
+        "Phone number must be valid for Bangladesh.   Format: +8801XXXXXXXXX or 01XXXXXXXXX",
+    })
+    .optional(),
+  address: z.string({message: "Address must be string" })
+    .max(200, { message: "Address can not exceed 200 characters"})
+    .optional()
+   
 });
 
 export function SignupForm({
@@ -28,18 +51,18 @@ export function SignupForm({
   ...props
 }: React.ComponentProps<"form">) {
   
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof SignupUserZodSchema>>({
+    resolver: zodResolver(SignupUserZodSchema),
    
   });
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
+  const onSubmit = (data: z.infer<typeof SignupUserZodSchema>) => {
     console.log(data);
   };
 
   return (
     <div>
-      <div className="flex flex-col items-center gap-1 text-center">
+      <div className="flex flex-col items-center gap-1 text-center mb-6">
         <h1 className="text-2xl font-bold">Create your account</h1>
         <p className="text-muted-foreground text-sm text-balance">
           Fill in the form below to create your account
@@ -47,7 +70,7 @@ export function SignupForm({
       </div>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
           <FormField
             control={form.control}
             name="name"
@@ -55,21 +78,71 @@ export function SignupForm({
               <FormItem>
                 <FormLabel>Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Write here your full name." {...field} />
+                  <Input placeholder="Mithun Modak" {...field} />
                 </FormControl>
-                <FormDescription>
-                  This is your public display name.
+                <FormDescription className="sr-only">
+                  This is for your name.
                 </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <Button type="submit" className="mt-5">Create Account</Button>
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input placeholder="mithunmodakdu@gmail.com" type="email" {...field} />
+                </FormControl>
+                <FormDescription className="sr-only">
+                  This is for your email.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <Input placeholder="********" type="password" {...field} />
+                </FormControl>
+                <FormDescription className="sr-only">
+                  This is for your password.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="confirmPassword"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Confirm Password</FormLabel>
+                <FormControl>
+                  <Input placeholder="********" type="password" {...field} />
+                </FormControl>
+                <FormDescription className="sr-only">
+                  This is for Confirm Password.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        
+          <Button type="submit" className="w-full">Create Account</Button>
         </form>
       </Form>
 
       
-      <FieldSeparator className="mt-6">Or continue with</FieldSeparator>
+      <FieldSeparator className="my-5">Or continue with</FieldSeparator>
+
       <Field>
         <Button variant="outline" type="button">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
