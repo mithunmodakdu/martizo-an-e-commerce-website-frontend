@@ -1,4 +1,6 @@
 import logoImage from "@/assets/images/martizo-logo.png";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
 
 export default function Footer() {
   return (
@@ -26,17 +28,17 @@ export default function Footer() {
             <form className="w-full">
               <label className="sr-only"> Email </label>
 
-              <div className="border border-primary p-2 focus-within:ring-3 sm:flex sm:items-center sm:gap-4">
-                <input
+              <div className="border border-primary p-2 focus-within:ring-3 focus-within:ring-primary sm:flex sm:items-center sm:gap-4">
+                <Input
                   type="email"
                   id="UserEmail"
                   placeholder="Write your email address here..."
-                  className="w-full h-10 border-none focus:border-transparent focus:ring-transparent sm:text-sm"
+                  className="w-full h-8 border-none rounded-none focus:border-transparent focus:ring-transparent sm:text-sm"
                 />
 
-                <button className="mt-1 w-full bg-primary px-6 py-3 text-sm font-bold tracking-wide text-white uppercase transition-none hover:bg-teal-600 sm:mt-0 sm:w-auto sm:shrink-0">
+                <Button className="mt-1 w-full px-6 py-3 rounded-none text-sm uppercase font-bold tracking-wide transition-none sm:mt-0 sm:w-auto sm:shrink-0">
                   Subscribe
-                </button>
+                </Button>
               </div>
             </form>
           </div>
@@ -232,7 +234,7 @@ export default function Footer() {
                 href="#"
                 rel="noreferrer"
                 target="_blank"
-                className="text-gray-700 transition hover:opacity-75"
+                className="text-primary transition hover:opacity-75"
               >
                 <span className="sr-only">Facebook</span>
 
@@ -256,7 +258,7 @@ export default function Footer() {
                 href="#"
                 rel="noreferrer"
                 target="_blank"
-                className="text-gray-700 transition hover:opacity-75"
+                className="text-primary transition hover:opacity-75"
               >
                 <span className="sr-only">Instagram</span>
 
@@ -280,7 +282,7 @@ export default function Footer() {
                 href="#"
                 rel="noreferrer"
                 target="_blank"
-                className="text-gray-700 transition hover:opacity-75"
+                className="text-primary transition hover:opacity-75"
               >
                 <span className="sr-only">Twitter</span>
 
@@ -300,7 +302,7 @@ export default function Footer() {
                 href="#"
                 rel="noreferrer"
                 target="_blank"
-                className="text-gray-700 transition hover:opacity-75"
+                className="text-primary transition hover:opacity-75"
               >
                 <span className="sr-only">GitHub</span>
 
@@ -324,7 +326,7 @@ export default function Footer() {
                 href="#"
                 rel="noreferrer"
                 target="_blank"
-                className="text-gray-700 transition hover:opacity-75"
+                className="text-primary transition hover:opacity-75"
               >
                 <span className="sr-only">Dribbble</span>
 
@@ -345,7 +347,7 @@ export default function Footer() {
           </ul>
         </div>
 
-        <div className="mt-8 border-t border-foreground pt-8">
+        <div className="mt-8 border-t border-primary pt-8">
           <div className="sm:flex sm:justify-between">
             <p className="text-xs text-gray-500">
               © 2026. Martizo. All rights reserved.
