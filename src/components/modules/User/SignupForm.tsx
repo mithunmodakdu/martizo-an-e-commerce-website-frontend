@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/form";
 import { z } from "zod";
 import {zodResolver} from "@hookform/resolvers/zod";
+import PasswordInput from "@/components/ui/PasswordInput";
 
 export const SignupUserZodSchema = z.object({
   name: z.string({message: "Name must be string"})
@@ -44,6 +45,9 @@ export const SignupUserZodSchema = z.object({
     .max(200, { message: "Address can not exceed 200 characters"})
     .optional()
    
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Password does not match.",
+  path: ["confirmPassword"]
 });
 
 export function SignupForm({
@@ -53,6 +57,12 @@ export function SignupForm({
   
   const form = useForm<z.infer<typeof SignupUserZodSchema>>({
     resolver: zodResolver(SignupUserZodSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    }
    
   });
 
@@ -110,7 +120,7 @@ export function SignupForm({
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input placeholder="********" type="password" {...field} />
+                  <PasswordInput {...field}/>
                 </FormControl>
                 <FormDescription className="sr-only">
                   This is for your password.
@@ -126,7 +136,7 @@ export function SignupForm({
               <FormItem>
                 <FormLabel>Confirm Password</FormLabel>
                 <FormControl>
-                  <Input placeholder="********" type="password" {...field} />
+                  <PasswordInput {...field}/>
                 </FormControl>
                 <FormDescription className="sr-only">
                   This is for Confirm Password.
@@ -136,7 +146,7 @@ export function SignupForm({
             )}
           />
         
-          <Button type="submit" className="w-full">Create Account</Button>
+          <Button type="submit" className="w-full">Sign Up</Button>
         </form>
       </Form>
 
