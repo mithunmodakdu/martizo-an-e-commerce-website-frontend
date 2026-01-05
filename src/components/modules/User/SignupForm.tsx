@@ -16,9 +16,11 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { z } from "zod";
+import { email, z } from "zod";
 import {zodResolver} from "@hookform/resolvers/zod";
 import PasswordInput from "@/components/ui/PasswordInput";
+import { useRegisterMutation } from "@/redux/features/users/users.api";
+import { toast } from "sonner";
 
 export const SignupUserZodSchema = z.object({
   name: z.string({message: "Name must be string"})
@@ -55,6 +57,8 @@ export function SignupForm({
   ...props
 }: React.ComponentProps<"form">) {
   
+  const [register] = useRegisterMutation();
+
   const form = useForm<z.infer<typeof SignupUserZodSchema>>({
     resolver: zodResolver(SignupUserZodSchema),
     defaultValues: {
@@ -66,8 +70,23 @@ export function SignupForm({
    
   });
 
-  const onSubmit = (data: z.infer<typeof SignupUserZodSchema>) => {
-    console.log(data);
+  const onSubmit = async(data: z.infer<typeof SignupUserZodSchema>) => {
+    const userInfo = {
+      name: data.name,
+      email: data.email,
+      password: data.password
+    }
+
+    try {
+      const result = await register(userInfo).unwrap();
+      console.log(result)
+      // toast.success("Your account created successfully.")
+      // toast.success(`${result.message}`)
+      toast.success(result.message)
+
+    } catch (error) {
+      console.error(error)
+    }
   };
 
   return (
