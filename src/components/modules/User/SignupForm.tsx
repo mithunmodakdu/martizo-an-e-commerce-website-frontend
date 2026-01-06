@@ -5,7 +5,7 @@ import {
   FieldSeparator,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import {
   Form,
@@ -58,6 +58,7 @@ export function SignupForm({
 }: React.ComponentProps<"form">) {
   
   const [register] = useRegisterMutation();
+  const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof SignupUserZodSchema>>({
     resolver: zodResolver(SignupUserZodSchema),
@@ -83,6 +84,7 @@ export function SignupForm({
       // toast.success("Your account created successfully.")
       // toast.success(`${result.message}`)
       toast.success(result.message)
+      navigate("/verify")
 
     } catch (error) {
       console.error(error)
