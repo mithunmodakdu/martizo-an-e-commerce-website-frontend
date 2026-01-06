@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
@@ -10,7 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import loginImage from "../../../assets/images/login_page.png";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -47,6 +48,7 @@ export function LoginForm({
 }: React.ComponentProps<"div">) {
 
   const [login] = useLoginMutation();
+  const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof LoginZodSchema>>({
     resolver: zodResolver(LoginZodSchema),
@@ -67,8 +69,12 @@ export function LoginForm({
       const result = await login(loginInfo).unwrap();
       console.log(result)
       toast.success(result.message)
-    } catch (error) {
+    } catch (error: any) {
       console.error(error)
+      if(error.status === 401){
+        toast.error("You are not verified.")
+        navigate("/verify", {state: data.email})
+      }
     }
   }
 
