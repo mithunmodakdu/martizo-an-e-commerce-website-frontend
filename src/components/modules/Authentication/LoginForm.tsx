@@ -28,6 +28,7 @@ import PasswordInput from "@/components/ui/PasswordInput";
 import { useLoginMutation } from "@/redux/features/auths/auths.api";
 import { toast } from "sonner";
 
+
 export const LoginZodSchema = z.object({
   email: z.email(),
   password: z
@@ -46,9 +47,9 @@ export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-
   const [login] = useLoginMutation();
   const navigate = useNavigate();
+
 
   const form = useForm<z.infer<typeof LoginZodSchema>>({
     resolver: zodResolver(LoginZodSchema),
@@ -58,25 +59,28 @@ export function LoginForm({
     },
   });
 
-  const onSubmit = async(data: z.infer<typeof LoginZodSchema>) => {
-    console.log(data)
+  const onSubmit = async (data: z.infer<typeof LoginZodSchema>) => {
+    console.log(data);
     const loginInfo = {
       email: data.email,
-      password: data.password
-    }
+      password: data.password,
+    };
 
     try {
-      const result = await login(loginInfo).unwrap();
-      console.log(result)
-      toast.success(result.message)
+      const res = await login(loginInfo).unwrap();
+      toast.success(res.message);
+
     } catch (error: any) {
-      console.error(error)
-      if(error.status === 401){
-        toast.error("You are not verified.")
-        navigate("/verify", {state: data.email})
+      if (!error.data.success) {
+        toast.error(error.data.message);
       }
+
+      if (error.data.message === "User is not verified") {
+        navigate("/verify", { state: data.email });
+      }
+
     }
-  }
+  };
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -91,7 +95,10 @@ export function LoginForm({
             </div>
 
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-5"
+              >
                 <FormField
                   control={form.control}
                   name="email"
@@ -128,7 +135,9 @@ export function LoginForm({
                     </FormItem>
                   )}
                 />
-                <Button type="submit" className="w-full">Login</Button>
+                <Button type="submit" className="w-full">
+                  Login
+                </Button>
               </form>
             </Form>
 

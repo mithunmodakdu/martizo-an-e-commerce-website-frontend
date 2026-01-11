@@ -21,7 +21,8 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
-import { useSendOtpMutation } from "@/redux/features/otp/otp.api";
+import { cn } from "@/lib/utils";
+import { useSendOtpMutation, useVerifyOtpMutation } from "@/redux/features/otp/otp.api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -42,6 +43,10 @@ export default function Verify({
   // console.log(location.state)
   const navigate = useNavigate();
   const [email] = useState(location.state);
+  const [verifyOtp] = useVerifyOtpMutation();
+  const [timer, setTimer] = useState(12);
+  const [confirmed, setConfirmed] = useState(false);
+  const [sendOtp] = useSendOtpMutation();
 
   useEffect(() => {
     if(!email){
@@ -49,18 +54,36 @@ export default function Verify({
     }
   }, [email, navigate])
 
-  const [confirmed, setConfirmed] = useState(false);
-  const [sendOtp] = useSendOtpMutation();
+  useEffect(() =>{
 
-  const handleConfirm = async () => {
+    if(!email || !confirmed){
+      return;
+    }
+
+    const timerId = setInterval(() => {
+      // if(email && confirmed){
+      // }
+      setTimer((prev) => (prev > 0? prev - 1 : 0))
+      console.log("Tick")
+
+    }, 1000);
+
+    return () => clearInterval(timerId)
+  }, [email, confirmed])
+
+
+
+  const handleSendOTP = async () => {
+    const toastId = toast.loading("Sending OTP...")
     try {
-      const result = await sendOtp({ email: email }).unwrap();
+      const res = await sendOtp({ email: email }).unwrap();
 
-      if (result.success) {
-        toast.success("OTP has been sent to your email.");
+      if (res.success) {
+        toast.success("OTP has been sent to your email.", {id: toastId});
+        setConfirmed(true);
+        setTimer(12);
       }
 
-      setConfirmed(true);
     } catch (error) {
       console.log(error);
     }
@@ -73,8 +96,25 @@ export default function Verify({
     },
   });
 
-  const onSubmit = (data: z.infer<typeof otpZodSchema>) => {
-    console.log(data);
+  const onSubmit = async(data: z.infer<typeof otpZodSchema>) => {
+    const verifyOtpInfo = {
+      email,
+      otp: data.otp
+    }
+    const toastId = toast.loading("Verifying OTP...")
+
+    try {
+      const res = await verifyOtp(verifyOtpInfo).unwrap();
+
+      if(res.success){
+        toast.success(res.message, {id: toastId})
+      }
+
+      navigate("/login")
+
+    } catch (error) {
+      console.log(error)
+    }
   };
 
   return (
@@ -93,7 +133,7 @@ export default function Verify({
                 <Form {...form}>
                   <form
                     onSubmit={form.handleSubmit(onSubmit)}
-                    className="space-y-5"
+                    id="otp-form"
                   >
                     <FormField
                       control={form.control}
@@ -119,20 +159,20 @@ export default function Verify({
                             </InputOTP>
                           </FormControl>
                           <FormDescription>
-                            Enter the 6-digit code sent to your email.
+                            Enter the 6-digit code sent to your email. {" "}
+                            {`Remaining ${timer} seconds`}
                           </FormDescription>
                           <FormMessage />
                         </FormItem>
                       )}
                     />
-
-                    <FieldGroup>
-                      <Button type="submit">Verify</Button>
+                  </form>
+                  <FieldGroup className="pt-5">
+                      <Button form="otp-form" type="submit">Verify</Button>
                       <FieldDescription className="text-center">
-                        Didn&apos;t receive the code? <a href="#">Resend</a>
+                        Didn&apos;t receive the code? <Button variant="link" className={cn("px-2 py-1", {"cursor-pointer": timer === 0})}  onClick={handleSendOTP} disabled={timer !== 0} >Resend</Button>
                       </FieldDescription>
                     </FieldGroup>
-                  </form>
                 </Form>
               </CardContent>
             </Card>
@@ -145,7 +185,7 @@ export default function Verify({
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Button onClick={handleConfirm} className="w-full">
+                <Button onClick={handleSendOTP} className="w-full">
                   Confirm
                 </Button>
               </CardContent>

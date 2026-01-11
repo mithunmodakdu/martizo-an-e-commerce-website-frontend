@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-export type {ISendOTP} from "./otp.types";
+export type {ISendOTPInfo, IVerifyOTPInfo} from "./otp.types";
 
 export type {ILoginInfo} from "./auth.types";
 
