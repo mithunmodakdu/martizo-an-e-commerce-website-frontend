@@ -43,6 +43,9 @@ export default function Verify({
   const navigate = useNavigate();
   const [email] = useState(location.state);
   const [verifyOtp] = useVerifyOtpMutation();
+  const [timer, setTimer] = useState(120);
+  const [confirmed, setConfirmed] = useState(false);
+  const [sendOtp] = useSendOtpMutation();
 
   useEffect(() => {
     if(!email){
@@ -50,8 +53,15 @@ export default function Verify({
     }
   }, [email, navigate])
 
-  const [confirmed, setConfirmed] = useState(false);
-  const [sendOtp] = useSendOtpMutation();
+  useEffect(() =>{
+    const timerId = setInterval(() => {
+      if(email && confirmed){
+        setTimer((prev) => prev - 1)
+      }
+    }, 1000);
+  }, [email, confirmed])
+
+
 
   const handleSendOTP = async () => {
     const toastId = toast.loading("Sending OTP...")
@@ -90,7 +100,7 @@ export default function Verify({
       }
 
       navigate("/login")
-      
+
     } catch (error) {
       console.log(error)
     }
@@ -139,6 +149,7 @@ export default function Verify({
                           </FormControl>
                           <FormDescription>
                             Enter the 6-digit code sent to your email.
+                            {timer}
                           </FormDescription>
                           <FormMessage />
                         </FormItem>

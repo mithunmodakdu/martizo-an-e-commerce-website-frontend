@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { baseApi } from "@/redux/baseApi";
-import type { ILoginInfo } from "@/types";
+import type { ILoginInfo, IResponse } from "@/types";
 
 const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    login: builder.mutation<unknown, ILoginInfo>({
+    login: builder.mutation<IResponse<any>, ILoginInfo>({
       query: (loginInfo) => ({
         url: "/auth/login",
         method: "POST",
