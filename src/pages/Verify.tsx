@@ -21,6 +21,7 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
+import { cn } from "@/lib/utils";
 import { useSendOtpMutation, useVerifyOtpMutation } from "@/redux/features/otp/otp.api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
@@ -43,7 +44,7 @@ export default function Verify({
   const navigate = useNavigate();
   const [email] = useState(location.state);
   const [verifyOtp] = useVerifyOtpMutation();
-  const [timer, setTimer] = useState(120);
+  const [timer, setTimer] = useState(12);
   const [confirmed, setConfirmed] = useState(false);
   const [sendOtp] = useSendOtpMutation();
 
@@ -54,11 +55,20 @@ export default function Verify({
   }, [email, navigate])
 
   useEffect(() =>{
+
+    if(!email || !confirmed){
+      return;
+    }
+
     const timerId = setInterval(() => {
-      if(email && confirmed){
-        setTimer((prev) => prev - 1)
-      }
+      // if(email && confirmed){
+      // }
+      setTimer((prev) => (prev > 0? prev - 1 : 0))
+      console.log("Tick")
+
     }, 1000);
+
+    return () => clearInterval(timerId)
   }, [email, confirmed])
 
 
@@ -71,6 +81,7 @@ export default function Verify({
       if (res.success) {
         toast.success("OTP has been sent to your email.", {id: toastId});
         setConfirmed(true);
+        setTimer(12);
       }
 
     } catch (error) {
@@ -148,8 +159,8 @@ export default function Verify({
                             </InputOTP>
                           </FormControl>
                           <FormDescription>
-                            Enter the 6-digit code sent to your email.
-                            {timer}
+                            Enter the 6-digit code sent to your email. {" "}
+                            {`Remaining ${timer} seconds`}
                           </FormDescription>
                           <FormMessage />
                         </FormItem>
@@ -159,7 +170,7 @@ export default function Verify({
                   <FieldGroup className="pt-5">
                       <Button form="otp-form" type="submit">Verify</Button>
                       <FieldDescription className="text-center">
-                        Didn&apos;t receive the code? <Button variant="link" className="px-2 py-1"  onClick={handleSendOTP} >Resend</Button>
+                        Didn&apos;t receive the code? <Button variant="link" className={cn("px-2 py-1", {"cursor-pointer": timer === 0})}  onClick={handleSendOTP} disabled={timer !== 0} >Resend</Button>
                       </FieldDescription>
                     </FieldGroup>
                 </Form>
