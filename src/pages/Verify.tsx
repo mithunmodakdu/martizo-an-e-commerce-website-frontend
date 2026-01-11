@@ -21,7 +21,7 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
-import { useSendOtpMutation } from "@/redux/features/otp/otp.api";
+import { useSendOtpMutation, useVerifyOtpMutation } from "@/redux/features/otp/otp.api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -42,6 +42,7 @@ export default function Verify({
   // console.log(location.state)
   const navigate = useNavigate();
   const [email] = useState(location.state);
+  const [verifyOtp] = useVerifyOtpMutation();
 
   useEffect(() => {
     if(!email){
@@ -52,15 +53,16 @@ export default function Verify({
   const [confirmed, setConfirmed] = useState(false);
   const [sendOtp] = useSendOtpMutation();
 
-  const handleConfirm = async () => {
+  const handleSendOTP = async () => {
+    const toastId = toast.loading("Sending OTP...")
     try {
-      const result = await sendOtp({ email: email }).unwrap();
+      const res = await sendOtp({ email: email }).unwrap();
 
-      if (result.success) {
-        toast.success("OTP has been sent to your email.");
+      if (res.success) {
+        toast.success("OTP has been sent to your email.", {id: toastId});
+        setConfirmed(true);
       }
 
-      setConfirmed(true);
     } catch (error) {
       console.log(error);
     }
@@ -73,8 +75,25 @@ export default function Verify({
     },
   });
 
-  const onSubmit = (data: z.infer<typeof otpZodSchema>) => {
-    console.log(data);
+  const onSubmit = async(data: z.infer<typeof otpZodSchema>) => {
+    const verifyOtpInfo = {
+      email,
+      otp: data.otp
+    }
+    const toastId = toast.loading("Verifying OTP...")
+
+    try {
+      const res = await verifyOtp(verifyOtpInfo).unwrap();
+
+      if(res.success){
+        toast.success(res.message, {id: toastId})
+      }
+
+      navigate("/login")
+      
+    } catch (error) {
+      console.log(error)
+    }
   };
 
   return (
@@ -93,7 +112,7 @@ export default function Verify({
                 <Form {...form}>
                   <form
                     onSubmit={form.handleSubmit(onSubmit)}
-                    className="space-y-5"
+                    id="otp-form"
                   >
                     <FormField
                       control={form.control}
@@ -125,14 +144,13 @@ export default function Verify({
                         </FormItem>
                       )}
                     />
-
-                    <FieldGroup>
-                      <Button type="submit">Verify</Button>
+                  </form>
+                  <FieldGroup className="pt-5">
+                      <Button form="otp-form" type="submit">Verify</Button>
                       <FieldDescription className="text-center">
-                        Didn&apos;t receive the code? <a href="#">Resend</a>
+                        Didn&apos;t receive the code? <Button variant="link" className="px-2 py-1"  onClick={handleSendOTP} >Resend</Button>
                       </FieldDescription>
                     </FieldGroup>
-                  </form>
                 </Form>
               </CardContent>
             </Card>
@@ -145,7 +163,7 @@ export default function Verify({
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Button onClick={handleConfirm} className="w-full">
+                <Button onClick={handleSendOTP} className="w-full">
                   Confirm
                 </Button>
               </CardContent>

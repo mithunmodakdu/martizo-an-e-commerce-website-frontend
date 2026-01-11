@@ -1,16 +1,24 @@
 import { baseApi } from "@/redux/baseApi";
-import type { IResponse, ISendOTP } from "@/types";
+import type { IResponse, ISendOTPInfo, IVerifyOTPInfo } from "@/types";
 
 const otpApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    sendOtp: builder.mutation<IResponse<null>, ISendOTP>({
-      query: (otpInfo) => ({
+    sendOtp: builder.mutation<IResponse<null>, ISendOTPInfo>({
+      query: (sendOtpInfo) => ({
         url: "/otp/send",
         method: "POST",
-        data: otpInfo
+        data: sendOtpInfo
+      })
+    }),
+
+    verifyOtp: builder.mutation<IResponse<null>, IVerifyOTPInfo>({
+      query: (verifyOtpInfo) => ({
+        url: "/otp/verify",
+        method: "POST",
+        data: verifyOtpInfo
       })
     })
   })
 })
 
-export const {useSendOtpMutation} = otpApi;
+export const {useSendOtpMutation, useVerifyOtpMutation} = otpApi;
