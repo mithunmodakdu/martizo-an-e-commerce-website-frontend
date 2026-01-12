@@ -20,33 +20,51 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import myImage from "@/assets/images/me.JPG";
+import { useGetMeQuery, userApi } from "@/redux/features/users/users.api";
+import { Link } from "react-router";
+import { useLogoutMutation } from "@/redux/features/auths/auths.api";
+import { useAppDispatch } from "@/redux/hooks";
 
 export default function UserMenu() {
-  const user = { name: "Mithun", email: "mithun@gamil.com" };
+  const { data } = useGetMeQuery(undefined);
+  const [logout] = useLogoutMutation();
+  const dispatch = useAppDispatch();
+
+
+  const handleLogout = () => {
+    logout(undefined);
+    dispatch(userApi.util.resetApiState())
+  };
+
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        {user.name ? (
-          <Button variant="ghost" className=" h-auto p-2 hover:bg-transparent cursor-pointer">
+      {data?.data?.email ? (
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="ghost"
+            className=" h-auto p-2 hover:bg-transparent cursor-pointer"
+          >
             <Avatar className="h-10 w-10">
-              <AvatarImage src={myImage} alt="Profile image" />
+              <AvatarImage src={data?.data?.avatar} alt="Profile image" />
               <AvatarFallback>
                 <User />
               </AvatarFallback>
             </Avatar>
           </Button>
-        ) : (
-          <Button variant="outline" className="cursor-pointer">Login</Button>
-        )}
-      </DropdownMenuTrigger>
+        </DropdownMenuTrigger>
+      ) : (
+        <Button variant="outline" className="cursor-pointer">
+          <Link to={"/login"}>Login</Link>
+        </Button>
+      )}
+
       <DropdownMenuContent className="max-w-64" align="end">
         <DropdownMenuLabel className="flex min-w-0 flex-col">
           <span className="truncate text-sm font-medium text-foreground">
-            {user.name}
+            {data?.data?.name}
           </span>
           <span className="truncate text-xs font-normal text-muted-foreground">
-            {user.email}
+            {data?.data?.email}
           </span>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
@@ -86,7 +104,7 @@ export default function UserMenu() {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="cursor-pointer">
+        <DropdownMenuItem className="cursor-pointer" onClick={handleLogout}>
           <LogOutIcon size={16} className="opacity-60" aria-hidden="true" />
           <span>Logout</span>
         </DropdownMenuItem>
