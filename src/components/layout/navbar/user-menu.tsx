@@ -22,15 +22,21 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useGetMeQuery } from "@/redux/features/users/users.api";
 import { Link } from "react-router";
+import { useLogoutMutation } from "@/redux/features/auths/auths.api";
 
 export default function UserMenu() {
   const { data } = useGetMeQuery(undefined);
-  console.log(data);
+  const [logout] = useLogoutMutation();
+  // console.log(data);
+
+  const handleLogout = () => {
+    logout(undefined);
+  };
 
   return (
     <DropdownMenu>
-      
-        {data?.data?.name ? ( <DropdownMenuTrigger asChild>
+      {data?.data?.email ? (
+        <DropdownMenuTrigger asChild>
           <Button
             variant="ghost"
             className=" h-auto p-2 hover:bg-transparent cursor-pointer"
@@ -42,12 +48,13 @@ export default function UserMenu() {
               </AvatarFallback>
             </Avatar>
           </Button>
-         </DropdownMenuTrigger>) : (
-          <Button variant="outline" className="cursor-pointer" >
-            <Link to={"/login"}>Login</Link>
-          </Button>
-        )}
-      
+        </DropdownMenuTrigger>
+      ) : (
+        <Button variant="outline" className="cursor-pointer">
+          <Link to={"/login"}>Login</Link>
+        </Button>
+      )}
+
       <DropdownMenuContent className="max-w-64" align="end">
         <DropdownMenuLabel className="flex min-w-0 flex-col">
           <span className="truncate text-sm font-medium text-foreground">
@@ -94,7 +101,7 @@ export default function UserMenu() {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="cursor-pointer">
+        <DropdownMenuItem className="cursor-pointer" onClick={handleLogout}>
           <LogOutIcon size={16} className="opacity-60" aria-hidden="true" />
           <span>Logout</span>
         </DropdownMenuItem>
