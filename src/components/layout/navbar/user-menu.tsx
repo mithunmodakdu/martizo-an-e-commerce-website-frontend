@@ -20,17 +20,20 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useGetMeQuery } from "@/redux/features/users/users.api";
+import { useGetMeQuery, userApi } from "@/redux/features/users/users.api";
 import { Link } from "react-router";
 import { useLogoutMutation } from "@/redux/features/auths/auths.api";
+import { useAppDispatch } from "@/redux/hooks";
 
 export default function UserMenu() {
   const { data } = useGetMeQuery(undefined);
   const [logout] = useLogoutMutation();
-  // console.log(data);
+  const dispatch = useAppDispatch();
+
 
   const handleLogout = () => {
     logout(undefined);
+    dispatch(userApi.util.resetApiState())
   };
 
   return (
