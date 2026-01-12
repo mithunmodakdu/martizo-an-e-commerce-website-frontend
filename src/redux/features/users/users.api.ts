@@ -8,8 +8,15 @@ const userApi = baseApi.injectEndpoints({
         method: "POST",
         data: userInfo
       })
-    })
+    }),
+
+    getMe: builder.query({
+      query: () => ({
+        url: "/users/me",
+        method: "GET"
+      })
+    }) 
   })
 });
 
-export const {useRegisterMutation} = userApi;
+export const {useRegisterMutation, useGetMeQuery} = userApi;

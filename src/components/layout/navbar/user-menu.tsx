@@ -20,33 +20,41 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import myImage from "@/assets/images/me.JPG";
+import { useGetMeQuery } from "@/redux/features/users/users.api";
+import { Link } from "react-router";
 
 export default function UserMenu() {
-  const user = { name: "Mithun", email: "mithun@gamil.com" };
+  const { data } = useGetMeQuery(undefined);
+  console.log(data);
+
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        {user.name ? (
-          <Button variant="ghost" className=" h-auto p-2 hover:bg-transparent cursor-pointer">
+      
+        {data?.data?.name ? ( <DropdownMenuTrigger asChild>
+          <Button
+            variant="ghost"
+            className=" h-auto p-2 hover:bg-transparent cursor-pointer"
+          >
             <Avatar className="h-10 w-10">
-              <AvatarImage src={myImage} alt="Profile image" />
+              <AvatarImage src={data?.data?.avatar} alt="Profile image" />
               <AvatarFallback>
                 <User />
               </AvatarFallback>
             </Avatar>
           </Button>
-        ) : (
-          <Button variant="outline" className="cursor-pointer">Login</Button>
+         </DropdownMenuTrigger>) : (
+          <Button variant="outline" className="cursor-pointer" >
+            <Link to={"/login"}>Login</Link>
+          </Button>
         )}
-      </DropdownMenuTrigger>
+      
       <DropdownMenuContent className="max-w-64" align="end">
         <DropdownMenuLabel className="flex min-w-0 flex-col">
           <span className="truncate text-sm font-medium text-foreground">
-            {user.name}
+            {data?.data?.name}
           </span>
           <span className="truncate text-xs font-normal text-muted-foreground">
-            {user.email}
+            {data?.data?.email}
           </span>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
