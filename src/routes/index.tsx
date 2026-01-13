@@ -1,11 +1,13 @@
 import App from "@/App";
-import AdminLayout from "@/components/layout/AdminLayout";
+import DashboardLayout from "@/components/layout/DashboardLayout";
 import About from "@/pages/About";
-import Analytics from "@/pages/Analytics";
+import Analytics from "@/pages/Admin/Analytics";
 import LoginPage from "@/pages/Login";
+import Orders from "@/pages/User/Orders";
 import SignupPage from "@/pages/SignupPage";
 import Verify from "@/pages/Verify";
 import { createBrowserRouter } from "react-router";
+import AddProduct from "@/pages/Admin/AddProduct";
 
 export const router = createBrowserRouter(
   [
@@ -20,13 +22,27 @@ export const router = createBrowserRouter(
       ]
     },
     {
-      Component: AdminLayout,
+      Component: DashboardLayout,
       path: "/admin",
       children: [
         {
           Component: Analytics,
           path: "analytics"
 
+        },
+        {
+          Component: AddProduct,
+          path: "add-product"
+        }
+      ]
+    },
+    {
+      Component: DashboardLayout,
+      path: "/user",
+      children: [
+        {
+          Component: Orders,
+          path: "orders"
         }
       ]
     },
