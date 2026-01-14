@@ -24,16 +24,16 @@ import { useGetMeQuery, userApi } from "@/redux/features/users/users.api";
 import { Link } from "react-router";
 import { useLogoutMutation } from "@/redux/features/auths/auths.api";
 import { useAppDispatch } from "@/redux/hooks";
+import { role } from "@/constants/role";
 
 export default function UserMenu() {
   const { data } = useGetMeQuery(undefined);
   const [logout] = useLogoutMutation();
   const dispatch = useAppDispatch();
 
-
   const handleLogout = () => {
     logout(undefined);
-    dispatch(userApi.util.resetApiState())
+    dispatch(userApi.util.resetApiState());
   };
 
   return (
@@ -53,7 +53,7 @@ export default function UserMenu() {
           </Button>
         </DropdownMenuTrigger>
       ) : (
-        <Button variant="outline" className="cursor-pointer">
+        <Button className="cursor-pointer">
           <Link to={"/login"}>Login</Link>
         </Button>
       )}
@@ -69,14 +69,42 @@ export default function UserMenu() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="cursor-pointer">
-          <LayoutDashboard
-            size={16}
-            className="opacity-60"
-            aria-hidden="true"
-          />
-          <span>Dashboard</span>
-        </DropdownMenuItem>
+        {role.superAdmin === data?.data?.role && (
+          <Link to={"/admin"}>
+            <DropdownMenuItem className="cursor-pointer">
+              <LayoutDashboard
+                size={16}
+                className="opacity-60"
+                aria-hidden="true"
+              />
+              <span>Dashboard</span>
+            </DropdownMenuItem>
+          </Link>
+        )}
+        {role.admin === data?.data?.role && (
+          <Link to={"/admin"}>
+            <DropdownMenuItem className="cursor-pointer">
+              <LayoutDashboard
+                size={16}
+                className="opacity-60"
+                aria-hidden="true"
+              />
+              <span>Dashboard</span>
+            </DropdownMenuItem>
+          </Link>
+        )}
+        {role.user === data?.data?.role && (
+          <Link to={"/user"}>
+            <DropdownMenuItem className="cursor-pointer">
+              <LayoutDashboard
+                size={16}
+                className="opacity-60"
+                aria-hidden="true"
+              />
+              <span>Dashboard</span>
+            </DropdownMenuItem>
+          </Link>
+        )}
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem className="cursor-pointer">
