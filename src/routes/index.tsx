@@ -13,6 +13,7 @@ import DeleteProduct from "@/pages/Admin/DeleteProduct";
 import AddCategory from "@/pages/Admin/AddCategory";
 import { generateRoutes } from "@/utils/generateRoutes";
 import { adminSidebarItems } from "./adminSidebarItems";
+import { userSidebarItems } from "./userSidebarItems";
 
 export const router = createBrowserRouter(
   [
@@ -34,12 +35,7 @@ export const router = createBrowserRouter(
     {
       Component: DashboardLayout,
       path: "/user",
-      children: [
-        {
-          Component: Orders,
-          path: "orders"
-        }
-      ]
+      children: [...generateRoutes(userSidebarItems)]
     },
     {
       Component: SignupPage,

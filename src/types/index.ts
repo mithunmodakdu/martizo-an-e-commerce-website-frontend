@@ -21,3 +21,5 @@ export interface ISidebarItem {
     component: ComponentType
   }[];
 }
+
+export type TUserRole = "SUPER_ADMIN" | "ADMIN" | "USER";
