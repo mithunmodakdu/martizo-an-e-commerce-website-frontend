@@ -8,6 +8,11 @@ import SignupPage from "@/pages/SignupPage";
 import Verify from "@/pages/Verify";
 import { createBrowserRouter } from "react-router";
 import AddProduct from "@/pages/Admin/AddProduct";
+import UpdateProduct from "@/pages/Admin/UpdateProduct";
+import DeleteProduct from "@/pages/Admin/DeleteProduct";
+import AddCategory from "@/pages/Admin/AddCategory";
+import { generateRoutes } from "@/utils/generateRoutes";
+import { adminSidebarItems } from "./adminSidebarItems";
 
 export const router = createBrowserRouter(
   [
@@ -24,17 +29,7 @@ export const router = createBrowserRouter(
     {
       Component: DashboardLayout,
       path: "/admin",
-      children: [
-        {
-          Component: Analytics,
-          path: "analytics"
-
-        },
-        {
-          Component: AddProduct,
-          path: "add-product"
-        }
-      ]
+      children: [...generateRoutes(adminSidebarItems)]
     },
     {
       Component: DashboardLayout,

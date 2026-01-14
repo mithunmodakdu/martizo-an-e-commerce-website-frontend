@@ -1,3 +1,5 @@
+import type { ComponentType } from "react";
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export type {ISendOTPInfo, IVerifyOTPInfo} from "./otp.types";
 
@@ -8,4 +10,14 @@ export interface IResponse<T> {
   success: boolean;
   message: string;
   data: T;
+}
+
+export interface ISidebarItem {
+  title: string;
+  url: string;
+  items: {
+    title: string;
+    url: string;
+    component: ComponentType
+  }[];
 }
