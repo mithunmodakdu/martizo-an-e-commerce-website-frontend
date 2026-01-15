@@ -1,5 +1,7 @@
-import Orders from "@/pages/User/Orders";
 import type { ISidebarItem } from "@/types";
+import { lazy } from "react";
+
+const Orders = lazy(() => import("@/pages/User/Orders"));
 
 export const userSidebarItems: ISidebarItem[] = [
     {

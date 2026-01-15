@@ -31,8 +31,8 @@ export default function UserMenu() {
   const [logout] = useLogoutMutation();
   const dispatch = useAppDispatch();
 
-  const handleLogout = () => {
-    logout(undefined);
+  const handleLogout = async() => {
+    await logout(undefined);
     dispatch(userApi.util.resetApiState());
   };
 
@@ -132,7 +132,7 @@ export default function UserMenu() {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="cursor-pointer" onClick={handleLogout}>
+        <DropdownMenuItem className="cursor-pointer"  onClick={handleLogout}>
           <LogOutIcon size={16} className="opacity-60" aria-hidden="true" />
           <span>Logout</span>
         </DropdownMenuItem>
