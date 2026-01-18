@@ -8,6 +8,8 @@ import { createBrowserRouter, Navigate } from "react-router";
 import { generateRoutes } from "@/utils/generateRoutes";
 import { adminSidebarItems } from "./adminSidebarItems";
 import { userSidebarItems } from "./userSidebarItems";
+import { withAuth } from "@/utils/withAuth";
+import Unauthorized from "@/pages/Unauthorized";
 
 export const router = createBrowserRouter(
   [
@@ -22,7 +24,7 @@ export const router = createBrowserRouter(
       ]
     },
     {
-      Component: DashboardLayout,
+      Component: withAuth(DashboardLayout, ["SUPER_ADMIN", "ADMIN"]),
       path: "/admin",
       children: [
         {index: true, element: <Navigate to={"/admin/analytics"}/>},
@@ -30,7 +32,7 @@ export const router = createBrowserRouter(
       ]
     },
     {
-      Component: DashboardLayout,
+      Component: withAuth(DashboardLayout, ["USER"]),
       path: "/user",
       children: [
         {index: true, element: <Navigate to={"/user/orders"}/>},
@@ -48,6 +50,10 @@ export const router = createBrowserRouter(
     {
       Component: LoginPage,
       path: "/login"
+    },
+    {
+      Component: Unauthorized,
+      path: "/unauthorized"
     }
   ]
 );
