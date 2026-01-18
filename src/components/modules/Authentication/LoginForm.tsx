@@ -59,7 +59,7 @@ export function LoginForm({
   });
 
   const onSubmit = async (data: z.infer<typeof LoginZodSchema>) => {
-    console.log(data);
+    // console.log(data);
     const loginInfo = {
       email: data.email,
       password: data.password,
@@ -157,7 +157,7 @@ export function LoginForm({
                 className="cursor-pointer"
                 variant="outline"
                 type="button"
-                onClick={() => window.open(`${config.baseUrl}/auth/google`)}
+                onClick={() => window.location.href =`${config.baseUrl}/auth/google`}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                   <path
