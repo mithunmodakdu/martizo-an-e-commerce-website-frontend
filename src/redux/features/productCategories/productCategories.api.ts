@@ -7,7 +7,8 @@ export const productCategoriesApi = baseApi.injectEndpoints({
         url: "/categories/create",
         method: "POST",
         data: categoryInfo
-      })
+      }),
+      invalidatesTags: ["CATEGORY"]
     }),
 
     getProductCategories: builder.query({
@@ -15,6 +16,7 @@ export const productCategoriesApi = baseApi.injectEndpoints({
         url: "/categories",
         method: "GET"
       }),
+      providesTags: ["CATEGORY"],
       transformResponse: (response) => response.data
       
     }) 

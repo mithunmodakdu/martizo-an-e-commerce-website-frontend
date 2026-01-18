@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -8,14 +8,43 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+} from "@/components/ui/dialog";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { useCreateProductCategoryMutation } from "@/redux/features/productCategories/productCategories.api";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 export function AddProductCategoryModal() {
+  const form = useForm({
+    defaultValues: {
+      name: ""
+    }
+  });
+
+  const [createProductCategory] = useCreateProductCategoryMutation();
+
+  const onSubmit = async(data) => {
+    // console.log(data)
+    const res = await createProductCategory(data);
+    // console.log(res)
+    if(res.data.success){
+      toast.success(res.data.message)
+            
+    }
+  }
+
   return (
     <Dialog>
-      <form>
+      <div>
         <DialogTrigger asChild>
           <Button>Add Category</Button>
         </DialogTrigger>
@@ -23,28 +52,44 @@ export function AddProductCategoryModal() {
           <DialogHeader>
             <DialogTitle>Add Category</DialogTitle>
             <DialogDescription>
-              Fill in the form below to add product category. Click submit when you&apos;re
-              done.
+              Fill in the form below to add product category. Click submit when
+              you&apos;re done.
             </DialogDescription>
           </DialogHeader>
-          <div className="grid gap-4">
-            <div className="grid gap-3">
-              <Label htmlFor="name-1">Name</Label>
-              <Input id="name-1" name="name" defaultValue="Pedro Duarte" />
-            </div>
-            <div className="grid gap-3">
-              <Label htmlFor="username-1">Username</Label>
-              <Input id="username-1" name="username" defaultValue="@peduarte" />
-            </div>
-          </div>
+          <Form {...form}>
+            <form id="add-product-category" onSubmit={form.handleSubmit(onSubmit)}>
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Write here category name"
+                        type="text"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription className="sr-only">
+                      This is for category name.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </form>
+          </Form>
           <DialogFooter>
             <DialogClose asChild>
               <Button variant="outline">Cancel</Button>
             </DialogClose>
-            <Button type="submit">Save changes</Button>
+            <Button form="add-product-category" type="submit">
+              Submit
+            </Button>
           </DialogFooter>
         </DialogContent>
-      </form>
+      </div>
     </Dialog>
-  )
+  );
 }
