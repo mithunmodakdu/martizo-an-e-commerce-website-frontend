@@ -59,7 +59,7 @@ export function LoginForm({
   });
 
   const onSubmit = async (data: z.infer<typeof LoginZodSchema>) => {
-    console.log(data);
+    // console.log(data);
     const loginInfo = {
       email: data.email,
       password: data.password,
