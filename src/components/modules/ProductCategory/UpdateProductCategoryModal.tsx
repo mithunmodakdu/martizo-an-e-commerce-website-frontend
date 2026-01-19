@@ -20,39 +20,46 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import SingleImageUploader from "@/components/ui/singleImageUploader";
-import { useCreateProductCategoryMutation } from "@/redux/features/productCategories/productCategories.api";
+import {useUpdateProductCategoryMutation } from "@/redux/features/productCategories/productCategories.api";
+import { Edit2 } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-export function AddProductCategoryModal() {
+export function UpdateProductCategoryModal({category}) {
   const [image, setImage] = useState<File | null>(null);
   const [open, setOpen] = useState(false);
-  // console.log("Inside AddProductCategoryModal", image)
+
+  // console.log(category)
 
   const form = useForm({
     defaultValues: {
-      name: "",
+      name: category.name,
     },
   });
 
-  const [createProductCategory] = useCreateProductCategoryMutation();
+  const [updateProductCategory] = useUpdateProductCategoryMutation();
  
-
   const onSubmit = async (data) => {
-    // console.log(data)
     const formData = new FormData();
   
     formData.append("data", JSON.stringify(data));
     formData.append("file", image as File);
-
     // console.log(formData.get("data"))
     // console.log(formData.get("file"))
+
+    const dataToUpdate = {
+      categoryId: category._id,
+      formData: formData
+    }
+
+    // console.log(dataToUpdate)
+
     
-    const toastId = toast.loading("Creating product category...")
+    const toastId = toast.loading("Updating product category...")
 
     try {
-      const res = await createProductCategory(formData).unwrap();
+      const res = await updateProductCategory(dataToUpdate).unwrap();
       // console.log(res);
 
       if (res.success) {
@@ -69,13 +76,13 @@ export function AddProductCategoryModal() {
     <Dialog open={open} onOpenChange={setOpen}>
       <div>
         <DialogTrigger asChild>
-          <Button>Add Category</Button>
+          <Button><Edit2/></Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Add Category</DialogTitle>
+            <DialogTitle>Update Category</DialogTitle>
             <DialogDescription>
-              Fill in the form below to add product category. Click submit when
+              Fill in the form below to update product category. Click submit when
               you&apos;re done.
             </DialogDescription>
           </DialogHeader>
@@ -92,7 +99,7 @@ export function AddProductCategoryModal() {
                     <FormLabel>Category Name</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Write here category name"
+                        
                         type="text"
                         {...field}
                       />
