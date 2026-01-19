@@ -19,11 +19,16 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import SingleImageUploader from "@/components/ui/singleImageUploader";
 import { useCreateProductCategoryMutation } from "@/redux/features/productCategories/productCategories.api";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 export function AddProductCategoryModal() {
+  const [image, setImage] = useState<File | null>(null);
+  console.log("Inside AddProductCategoryModal", image)
+  
   const form = useForm({
     defaultValues: {
       name: ""
@@ -63,7 +68,7 @@ export function AddProductCategoryModal() {
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Name</FormLabel>
+                    <FormLabel>Category Name</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="Write here category name"
@@ -79,6 +84,7 @@ export function AddProductCategoryModal() {
                 )}
               />
             </form>
+            <SingleImageUploader onChange={setImage}/>
           </Form>
           <DialogFooter>
             <DialogClose asChild>
