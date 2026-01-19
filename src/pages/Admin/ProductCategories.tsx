@@ -1,8 +1,9 @@
 import { AddProductCategoryModal } from "@/components/modules/ProductCategory/AddProductCategoryModal";
+import { UpdateProductCategoryModal } from "@/components/modules/ProductCategory/UpdateProductCategoryModal";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useGetProductCategoriesQuery } from "@/redux/features/productCategories/productCategories.api";
-import { Edit2, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 
 export default function ProductCategories() {
   const { data } = useGetProductCategoriesQuery(undefined);
@@ -26,13 +27,13 @@ export default function ProductCategories() {
           </TableHeader>
           <TableBody>
             {
-              data?.map((item: {name: string, slug: string}, index: number) => (
+              data?.map((item: {_id: string, name: string, slug: string}, index: number) => (
                 <TableRow>
               <TableCell className="font-medium">{index + 1}</TableCell>
               <TableCell>{item.name}</TableCell>
               <TableCell>{item.slug}</TableCell>
               <TableCell><Button variant="destructive"><Trash2/></Button></TableCell>
-              <TableCell><Button><Edit2/></Button></TableCell>
+              <TableCell><UpdateProductCategoryModal category={item}/></TableCell>
             </TableRow>
               ))
             }
