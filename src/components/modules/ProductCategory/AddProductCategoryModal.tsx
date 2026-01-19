@@ -27,28 +27,46 @@ import { toast } from "sonner";
 
 export function AddProductCategoryModal() {
   const [image, setImage] = useState<File | null>(null);
-  console.log("Inside AddProductCategoryModal", image)
-  
+  const [open, setOpen] = useState(false);
+  // console.log("Inside AddProductCategoryModal", image)
+
   const form = useForm({
     defaultValues: {
-      name: ""
-    }
+      name: "",
+    },
   });
 
   const [createProductCategory] = useCreateProductCategoryMutation();
+ 
 
-  const onSubmit = async(data) => {
+  const onSubmit = async (data) => {
     // console.log(data)
-    const res = await createProductCategory(data);
-    // console.log(res)
-    if(res.data.success){
-      toast.success(res.data.message)
-            
+    const formData = new FormData();
+  
+    formData.append("data", JSON.stringify(data));
+    formData.append("file", image as File);
+
+    // console.log(formData.get("data"))
+    // console.log(formData.get("file"))
+    
+    const toastId = toast.loading("Creating product category...")
+
+    try {
+      const res = await createProductCategory(formData).unwrap();
+      // console.log(res);
+
+      if (res.success) {
+        toast.success(res.message, {id: toastId});
+        setOpen(false)
+      }
+    } catch (error) {
+      console.log(error);
     }
-  }
+
+  };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <div>
         <DialogTrigger asChild>
           <Button>Add Category</Button>
@@ -62,7 +80,10 @@ export function AddProductCategoryModal() {
             </DialogDescription>
           </DialogHeader>
           <Form {...form}>
-            <form id="add-product-category" onSubmit={form.handleSubmit(onSubmit)}>
+            <form
+              id="add-product-category"
+              onSubmit={form.handleSubmit(onSubmit)}
+            >
               <FormField
                 control={form.control}
                 name="name"
@@ -84,7 +105,7 @@ export function AddProductCategoryModal() {
                 )}
               />
             </form>
-            <SingleImageUploader onChange={setImage}/>
+            <SingleImageUploader onChange={setImage} />
           </Form>
           <DialogFooter>
             <DialogClose asChild>

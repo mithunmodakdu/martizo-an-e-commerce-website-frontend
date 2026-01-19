@@ -32,7 +32,7 @@ export default function SingleImageUploader({onChange}) {
 
   }, [files, onChange])
 
-  console.log("Inside SingleImageUploader", files)
+  // console.log("Inside SingleImageUploader", files)
 
   const previewUrl = files[0]?.preview || null;
 
@@ -104,20 +104,6 @@ export default function SingleImageUploader({onChange}) {
           <span>{errors[0]}</span>
         </div>
       )}
-
-      <p
-        aria-live="polite"
-        className="mt-2 text-center text-muted-foreground text-xs"
-        role="region"
-      >
-        Single image uploader w/ max size ∙{" "}
-        <a
-          className="underline hover:text-foreground"
-          href="https://github.com/cosscom/coss/blob/main/apps/origin/docs/use-file-upload.md"
-        >
-          API
-        </a>
-      </p>
     </div>
   );
 }
