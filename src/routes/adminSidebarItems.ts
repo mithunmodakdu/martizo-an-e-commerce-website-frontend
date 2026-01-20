@@ -5,8 +5,9 @@ const Analytics = lazy(() => import("@/pages/Admin/Analytics"));
 const AddProduct = lazy(() => import("@/pages/Admin/AddProduct"));
 const UpdateProduct = lazy(() => import("@/pages/Admin/UpdateProduct"));
 const DeleteProduct = lazy(() => import("@/pages/Admin/DeleteProduct"));
-const ProductCategories = lazy(() => import("@/pages/Admin/ProductCategories"))
-const UpdateCategory = lazy(() => import("@/pages/Admin/UpdateCategory"));
+const ProductCategories = lazy(() => import("@/pages/Admin/ProductCategories"));
+const ProductBrands = lazy(() => import("@/pages/Admin/ProductBrands"));
+
 
 export const adminSidebarItems: ISidebarItem[] = [
     {
@@ -31,6 +32,11 @@ export const adminSidebarItems: ISidebarItem[] = [
           component: ProductCategories
         },
         {
+          title: "Product Brands",
+          url: "/admin/product-brands",
+          component: ProductBrands
+        },
+        {
           title: "Add Product",
           url: "/admin/add-product",
           component: AddProduct
@@ -44,13 +50,9 @@ export const adminSidebarItems: ISidebarItem[] = [
           title: "Delete Product",
           url: "/admin/delete-product",
           component: DeleteProduct
-        },
-       
-        {
-          title: "Update Category",
-          url: "/admin/update-category",
-          component: UpdateCategory
         }
+       
+  
       ],
     },
    
