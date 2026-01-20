@@ -16,7 +16,7 @@ export const productCategoriesApi = baseApi.injectEndpoints({
         url: `/categories/${categoryId}`,
         method: "GET",
       }),
-    
+
       transformResponse: (response) => response.data,
     }),
 
@@ -32,7 +32,7 @@ export const productCategoriesApi = baseApi.injectEndpoints({
 
     updateProductCategory: builder.mutation({
       query: (dataToUpdate) => {
-        const { categoryId, formData} = dataToUpdate;
+        const { categoryId, formData } = dataToUpdate;
 
         return {
           url: `/categories/${categoryId}`,
@@ -44,12 +44,21 @@ export const productCategoriesApi = baseApi.injectEndpoints({
       invalidatesTags: ["CATEGORY"],
     }),
 
-    
+    deleteProductCategory: builder.mutation({
+      query: (categoryId) => ({
+        url: `/categories/${categoryId}`,
+        method: "DELETE",
+      }),
+
+      invalidatesTags: ["CATEGORY"],
+    }),
   }),
 });
 
 export const {
   useGetProductCategoriesQuery,
+  useGetProductCategoryByIdQuery,
   useCreateProductCategoryMutation,
-  useUpdateProductCategoryMutation
+  useUpdateProductCategoryMutation,
+  useDeleteProductCategoryMutation
 } = productCategoriesApi;

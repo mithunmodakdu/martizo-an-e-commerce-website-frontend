@@ -2,6 +2,7 @@ import type { ComponentType } from "react";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export type {ISendOTPInfo, IVerifyOTPInfo} from "./otp.types";
+export type {IBrand} from "./brand.types"
 
 export type {ILoginInfo} from "./auth.types";
 
