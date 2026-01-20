@@ -88,7 +88,7 @@ export function UpdateProductCategoryModal({ category }) {
     <Dialog open={open} onOpenChange={setOpen}>
       <div>
         <DialogTrigger asChild>
-          <Button>
+          <Button className="hoover: cursor-pointer">
             <Edit2 />
           </Button>
         </DialogTrigger>

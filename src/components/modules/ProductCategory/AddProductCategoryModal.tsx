@@ -119,8 +119,7 @@ export function AddProductCategoryModal() {
                     <FormControl>
                       <Select
                         onValueChange={field.onChange}
-                        disabled={categoriesLoading} 
-                        
+                        disabled={categoriesLoading}                         
                       >
                         <SelectTrigger id={id}>
                           <SelectValue placeholder="Select parent category" />
