@@ -50,6 +50,7 @@ export const productCategoriesApi = baseApi.injectEndpoints({
 
 export const {
   useGetProductCategoriesQuery,
+  useGetProductCategoryByIdQuery,
   useCreateProductCategoryMutation,
   useUpdateProductCategoryMutation
 } = productCategoriesApi;
