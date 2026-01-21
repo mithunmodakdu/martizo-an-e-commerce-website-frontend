@@ -3,6 +3,8 @@ import type { ComponentType } from "react";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export type {ISendOTPInfo, IVerifyOTPInfo} from "./otp.types";
 export type {IBrand} from "./brand.types"
+export {CreateBrandZodSchema, UpdateBrandZodSchema} from "./brand.types"
+export {SignupUserZodSchema} from "./user.types"
 
 export type {ILoginInfo} from "./auth.types";
 
