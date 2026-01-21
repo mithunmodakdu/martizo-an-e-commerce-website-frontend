@@ -3,8 +3,7 @@ import { AlertCircleIcon, ImageUpIcon, XIcon } from "lucide-react";
 import { useFileUpload } from "@/hooks/use-file-upload";
 import { useEffect } from "react";
 
-
-export default function SingleImageUploader({onChange}) {
+export default function SingleImageUploader({ onChange }) {
   const maxSizeMB = 5;
   const maxSize = maxSizeMB * 1024 * 1024; // 5MB default
 
@@ -21,21 +20,21 @@ export default function SingleImageUploader({onChange}) {
     },
   ] = useFileUpload({
     accept: "image/*",
-    maxSize
+    maxSize,
   });
 
   useEffect(() => {
-    if(files.length > 0){
-      onChange(files[0].file)
-    }else{
-      onChange(null)
+    if (files.length > 0) {
+      onChange(files[0].file);
+    } else {
+      onChange(null);
     }
-
-  }, [files, onChange])
+  }, [files, onChange]);
 
   // console.log("Inside SingleImageUploader", files)
-
+  
   const previewUrl = files[0]?.preview || null;
+
 
   return (
     <div className="flex flex-col gap-2">
@@ -57,6 +56,7 @@ export default function SingleImageUploader({onChange}) {
             aria-label="Upload file"
             className="sr-only"
           />
+
           {previewUrl ? (
             <div className="absolute inset-0">
               <img
@@ -81,19 +81,24 @@ export default function SingleImageUploader({onChange}) {
               </p>
             </div>
           )}
+
         </div>
+
         {previewUrl && (
           <div className="absolute top-4 right-4">
             <button
               aria-label="Remove image"
               className="z-50 flex size-8 cursor-pointer items-center justify-center rounded-full bg-black/60 text-white outline-none transition-[color,box-shadow] hover:bg-black/80 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
-              onClick={() => removeFile(files[0]?.id)}
+              onClick={() => removeFile(files[0]?.id )}
+              // onClick={handleRemoveImage}
               type="button"
             >
               <XIcon aria-hidden="true" className="size-4" />
             </button>
           </div>
         )}
+
+
       </div>
 
       {errors.length > 0 && (

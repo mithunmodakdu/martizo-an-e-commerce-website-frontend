@@ -1,4 +1,5 @@
 import { AddProductBrandModal } from "@/components/modules/ProductBrand/AddProductBrandModal";
+import { UpdateProductBrandModal } from "@/components/modules/ProductBrand/UpdateProductBrandModal";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -26,9 +27,9 @@ export default function ProductBrands() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-3 text-center">Sl No.</TableHead>
-              <TableHead className="w-[150px] text-center">Brand</TableHead>
-              <TableHead className="text-center">Slug</TableHead>
+              <TableHead className="w-[50px] text-center">Sl No.</TableHead>
+              <TableHead className="w-1/5 text-left">Brand</TableHead>
+              <TableHead className="w-1/5 text-left">Slug</TableHead>
               <TableHead className="text-center">Is Top Brand</TableHead>
               <TableHead className="text-center">Is Martizo Choice</TableHead>
               <TableHead className="text-center">Delete</TableHead>
@@ -38,9 +39,9 @@ export default function ProductBrands() {
           <TableBody>
             {brandData?.map((item: IBrand, index: number) => (
               <TableRow>
-                <TableCell className="font-medium text-center">{index + 1}</TableCell>
-                <TableCell className="w-[150px] text-left">
-                  <div className="flex items-center justify-center gap-3">
+                <TableCell className="w-[50px] font-medium text-center">{index + 1}</TableCell>
+                <TableCell className="w-1/5 text-left">
+                  <div className="flex items-center justify-start gap-3">
                     <img
                       alt={item.name}
                       className="rounded-full"
@@ -52,7 +53,7 @@ export default function ProductBrands() {
                   </div>
                 </TableCell>
 
-                <TableCell className="text-center">{item.slug}</TableCell>
+                <TableCell className="text-left w-1/5">{item.slug}</TableCell>
                 <TableCell className="text-center">{item.isTopBrand? "Yes" : "No"}</TableCell>
                 <TableCell className="text-center">{item.isMartizoChoice? "Yes" : "No"}</TableCell>
                 <TableCell className="text-center">
@@ -64,9 +65,7 @@ export default function ProductBrands() {
                   </Button>
                 </TableCell>
                <TableCell className="text-center">
-                 <Button className="hoover: cursor-pointer">
-                  <Edit2 />
-                </Button>
+                 <UpdateProductBrandModal brand={item}/>
                </TableCell>
               </TableRow>
             ))}

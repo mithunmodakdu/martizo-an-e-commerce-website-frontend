@@ -54,8 +54,8 @@ export function AddProductBrandModal() {
     defaultValues: {
       name: "",
       brandLogo: "",
-      isTopBrand: undefined,
-      isMartizoChoice: undefined,
+      isTopBrand: false,
+      isMartizoChoice: false,
     },
   });
 
@@ -65,8 +65,8 @@ export function AddProductBrandModal() {
     formData.append("data", JSON.stringify(data));
     formData.append("file", image as File);
 
-    // console.log(formData.get("data"));
-    // console.log(formData.get("file"));
+    console.log(formData.get("data"));
+    console.log(formData.get("file"));
 
     const toastId = toast.loading("Creating product Brand...");
 
@@ -135,7 +135,8 @@ export function AddProductBrandModal() {
                       <fieldset className="space-y-4">
                         <RadioGroup
                           className="flex flex-wrap gap-2"
-                          onValueChange={field.onChange}
+                          value={String(field.value)}
+                          onValueChange={(value) => field.onChange(value === "true")}
                         >
                           {topBrandItems.map((item) => (
                             <div
@@ -146,7 +147,7 @@ export function AddProductBrandModal() {
                                 <RadioGroupItem
                                   className="after:absolute after:inset-0"
                                   id={`${topBrandRadioId}-${item.value}`}
-                                  value={item.value}
+                                  value={String(item.value)}
                                 />
                                 <Label htmlFor={`${topBrandRadioId}-${item.value}`}>
                                   {item.label}
@@ -154,6 +155,7 @@ export function AddProductBrandModal() {
                               </div>
                             </div>
                           ))}
+                         
                         </RadioGroup>
                       </fieldset>
                     </FormControl>
