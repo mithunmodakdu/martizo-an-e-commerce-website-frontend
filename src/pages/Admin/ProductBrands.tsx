@@ -1,3 +1,4 @@
+import { AddProductBrandModal } from "@/components/modules/ProductBrand/AddProductBrandModal";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -13,19 +14,20 @@ import { Edit2, Trash2 } from "lucide-react";
 
 export default function ProductBrands() {
   const { data: brandData } = useGetProductBrandsQuery(undefined);
-  console.log(brandData);
+  // console.log(brandData);
 
   return (
     <div className="max-w-4xl w-full mx-auto space-y-5 ">
       <div className="flex justify-between">
         <h1 className="text-2xl font-bold">Product Brands</h1>
+        <AddProductBrandModal/>
       </div>
       <div className="border-2 border-muted-foreground rounded-md p-5 ">
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[50px] text-center">Sl No.</TableHead>
-              <TableHead className="w-1/5 text-center">Brand</TableHead>
+              <TableHead className="w-3 text-center">Sl No.</TableHead>
+              <TableHead className="w-[150px] text-center">Brand</TableHead>
               <TableHead className="text-center">Slug</TableHead>
               <TableHead className="text-center">Is Top Brand</TableHead>
               <TableHead className="text-center">Is Martizo Choice</TableHead>
@@ -37,7 +39,7 @@ export default function ProductBrands() {
             {brandData?.map((item: IBrand, index: number) => (
               <TableRow>
                 <TableCell className="font-medium text-center">{index + 1}</TableCell>
-                <TableCell className="w-1/5">
+                <TableCell className="w-[150px] text-left">
                   <div className="flex items-center justify-center gap-3">
                     <img
                       alt={item.name}
