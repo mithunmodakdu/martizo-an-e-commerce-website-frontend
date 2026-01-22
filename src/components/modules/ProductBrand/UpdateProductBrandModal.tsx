@@ -35,9 +35,7 @@ import { toast } from "sonner";
 import z from "zod";
 
 export function UpdateProductBrandModal({brand}) {
-  // console.log(brand)
   const [image, setImage] = useState<File | null>(null);
-  // const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
   const [updateProductBrand] = useUpdateProductBrandMutation();
   const topBrandRadioId = useId();
@@ -66,7 +64,6 @@ export function UpdateProductBrandModal({brand}) {
   useEffect(() => {
     if(brand){
       form.reset(brand);
-      // setPreviewImage(brand.brandLogo);
     }
   }, [brand, form])
 
@@ -76,19 +73,22 @@ export function UpdateProductBrandModal({brand}) {
     formData.append("data", JSON.stringify(data));
     formData.append("file", image as File);
 
-    console.log(formData.get("data"));
-    console.log(formData.get("file"));
+    const dataToUpdate = { 
+      brandId: brand._id, 
+      formData: formData
+     }
 
-    const toastId = toast.loading("Creating product Brand...");
+    const toastId = toast.loading("Updating product Brand...");
 
     try {
-      const res = await updateProductBrand(formData).unwrap();
+      const res = await updateProductBrand(dataToUpdate).unwrap();
       console.log(res);
 
       if (res.success) {
         toast.success(res.message, { id: toastId });
         setOpen(false);
       }
+
     } catch (error) {
       console.log(error);
     }
@@ -232,7 +232,7 @@ export function UpdateProductBrandModal({brand}) {
             <DialogClose asChild>
               <Button variant="outline">Cancel</Button>
             </DialogClose>
-            <Button form="add-product-category" type="submit">
+            <Button className="hoover: cursor-pointer" form="add-product-category" type="submit">
               Submit
             </Button>
           </DialogFooter>
