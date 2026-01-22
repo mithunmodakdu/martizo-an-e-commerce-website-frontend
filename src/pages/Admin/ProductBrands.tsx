@@ -9,13 +9,31 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useGetProductBrandsQuery } from "@/redux/features/productBrands/productBrands.api";
+import { useDeleteProductBrandMutation, useGetProductBrandsQuery } from "@/redux/features/productBrands/productBrands.api";
 import type { IBrand } from "@/types";
 import { Edit2, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 
 export default function ProductBrands() {
   const { data: brandData } = useGetProductBrandsQuery(undefined);
+  const [deleteProductBrand] = useDeleteProductBrandMutation();
   // console.log(brandData);
+
+  const handleDeleteBrand = async(id) =>{
+    const toastId = toast.loading("Deleting product brand...")
+
+    try {
+      const res = await deleteProductBrand(id);
+      
+      if(res?.data?.success){
+        toast.success("The brand deleted successfully.", {id: toastId})
+      }
+     
+    } catch (error) {
+      console.log(error)
+    }
+
+  }
 
   return (
     <div className="max-w-4xl w-full mx-auto space-y-5 ">
@@ -60,6 +78,7 @@ export default function ProductBrands() {
                   <Button
                     variant="destructive"
                     className="hoover: cursor-pointer"
+                    onClick={() => handleDeleteBrand(item._id)}
                   >
                     <Trash2 />
                   </Button>
