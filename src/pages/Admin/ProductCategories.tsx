@@ -1,5 +1,17 @@
 import { AddProductCategoryModal } from "@/components/modules/ProductCategory/AddProductCategoryModal";
 import { UpdateProductCategoryModal } from "@/components/modules/ProductCategory/UpdateProductCategoryModal";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogMedia,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -20,10 +32,10 @@ export default function ProductCategories() {
   const { data } = useGetProductCategoriesQuery(undefined);
   const [deleteProductCategory] = useDeleteProductCategoryMutation();
 
-  const handleDeleteProductCategory = async (categoryId: string) => {
+  const handleDelete = async (categoryId: string) => {
     const toastId = toast.loading("Deleting product category...");
     const res = await deleteProductCategory(categoryId);
-    
+
     if (res?.data?.success) {
       toast.success(res?.data?.message, { id: toastId });
     }
@@ -57,13 +69,44 @@ export default function ProductCategories() {
                   <TableCell>{item.name}</TableCell>
                   <TableCell>{item.slug}</TableCell>
                   <TableCell>
-                    <Button
-                      variant="destructive"
-                      className="hoover: cursor-pointer"
-                      onClick={() => handleDeleteProductCategory(item._id)}
-                    >
-                      <Trash2 />
-                    </Button>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button
+                          variant="destructive"
+                          className="hoover: cursor-pointer"
+                        >
+                          <Trash2 />
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent size="sm">
+                        <AlertDialogHeader>
+                          <AlertDialogMedia className="bg-destructive/10 text-destructive dark:bg-destructive/20 dark:text-destructive">
+                            <Trash2 />
+                          </AlertDialogMedia>
+                          <AlertDialogTitle>
+                            Are you sure to Delete it?
+                          </AlertDialogTitle>
+                          <AlertDialogDescription>
+                            This will permanently delete this. You won't be able
+                            to revert this!
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel variant="outline">
+                            No, cancel!
+                          </AlertDialogCancel>
+                          <AlertDialogAction variant="destructive">
+                            <Button
+                              variant="destructive"
+                              className="hoover: cursor-pointer"
+                              onClick={() => handleDelete(item._id)}
+                            >
+                              Yes, delete it!
+                            </Button>
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
                   </TableCell>
                   <TableCell>
                     <UpdateProductCategoryModal category={item} />
