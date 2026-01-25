@@ -19,6 +19,8 @@ export const ProductCreationZodSchema = z.object({
     .min(2, { error: "Title must be at least 2 characters" }),
   description: z
     .string({ error: "Product description must be string" })
+    .min(20, { error: "Product description must be at least 20 characters" })
+    .max(250, { error: "Product description must be within 250 characters" })
     .optional(),
 
   // categorization
