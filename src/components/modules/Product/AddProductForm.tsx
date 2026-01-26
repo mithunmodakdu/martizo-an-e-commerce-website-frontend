@@ -51,7 +51,7 @@ export function AddProductForm() {
     { label: "No", value: false },
   ];
 
-  const form = useForm({
+  const form = useForm<z.infer<typeof ProductCreationZodSchema>>({
     defaultValues: {
       // main details
       title: "",
@@ -78,7 +78,7 @@ export function AddProductForm() {
     },
   });
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: z.infer<typeof ProductCreationZodSchema>) => {
     console.log(data);
   };
 
@@ -447,9 +447,6 @@ export function AddProductForm() {
       </CardContent>
       <CardFooter>
         <Field orientation="horizontal">
-          <Button type="button" variant="outline" onClick={() => form.reset()}>
-            Reset
-          </Button>
           <Button type="submit" form="add-product-form">
             Submit
           </Button>
