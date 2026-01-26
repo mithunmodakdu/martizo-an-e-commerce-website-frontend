@@ -1,6 +1,5 @@
-import * as React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, type FieldValues, type SubmitHandler } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
 
@@ -39,8 +38,16 @@ import {
 import { useGetProductBrandsQuery } from "@/redux/features/productBrands/productBrands.api";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
+import SingleImageUploader from "@/components/ui/singleImageUploader";
+import { useState } from "react";
+import MultipleImagesUploader from "@/components/ui/MultipleImagesUploader";
+import type { FileMetadata } from "@/hooks/use-file-upload";
 
 export function AddProductForm() {
+  const [thumbnail, setThumbnail] = useState<File | null>(null);
+  const [images, setImages] = useState<[] | (File | FileMetadata)[]>([]);
+      console.log(thumbnail);
+    console.log(images);
   const { data: categoriesData, isLoading: categoriesLoading } =
     useGetProductCategoriesQuery(undefined);
   const { data: brandsData, isLoading: brandsLoading } =
@@ -52,6 +59,7 @@ export function AddProductForm() {
   ];
 
   const form = useForm<z.infer<typeof ProductCreationZodSchema>>({
+    resolver: zodResolver(ProductCreationZodSchema),
     defaultValues: {
       // main details
       title: "",
@@ -78,8 +86,12 @@ export function AddProductForm() {
     },
   });
 
-  const onSubmit = async (data: z.infer<typeof ProductCreationZodSchema>) => {
+  const onSubmit = async (data) => {
     console.log(data);
+    // const formData = new FormData();
+    // formData.append("data", JSON.stringify(data))
+    // formData.append("file", thumbnail)
+
   };
 
   return (
@@ -91,7 +103,11 @@ export function AddProductForm() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form id="add-product-form" onSubmit={form.handleSubmit(onSubmit)}>
+        <form
+          id="add-product-form"
+          className="my-5"
+          onSubmit={form.handleSubmit(onSubmit)}
+        >
           <FieldGroup>
             <Controller
               name="title"
@@ -223,9 +239,13 @@ export function AddProductForm() {
                     <Input
                       {...field}
                       id="add-product-form-price"
+                    
+                    
                       aria-invalid={fieldState.invalid}
                       placeholder="Write here product price"
                       autoComplete="off"
+                      
+                      
                     />
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
@@ -285,7 +305,10 @@ export function AddProductForm() {
                     <FieldLabel htmlFor="add-product-form-isNewArrival">
                       Is New Arrival
                     </FieldLabel>
-                    <fieldset id="add-product-form-isNewArrival" className="space-y-4">
+                    <fieldset
+                      id="add-product-form-isNewArrival"
+                      className="space-y-4"
+                    >
                       <RadioGroup
                         className="flex flex-wrap gap-2"
                         value={String(field.value)}
@@ -326,7 +349,10 @@ export function AddProductForm() {
                     <FieldLabel htmlFor="add-product-form-isBestSeller">
                       Is Best Seller
                     </FieldLabel>
-                    <fieldset id="add-product-form-isBestSeller" className="space-y-4">
+                    <fieldset
+                      id="add-product-form-isBestSeller"
+                      className="space-y-4"
+                    >
                       <RadioGroup
                         className="flex flex-wrap gap-2"
                         value={String(field.value)}
@@ -367,7 +393,10 @@ export function AddProductForm() {
                     <FieldLabel htmlFor="add-product-form-isFlashSale">
                       Is Flash Sale
                     </FieldLabel>
-                    <fieldset id="add-product-form-isFlashSale" className="space-y-4">
+                    <fieldset
+                      id="add-product-form-isFlashSale"
+                      className="space-y-4"
+                    >
                       <RadioGroup
                         className="flex flex-wrap gap-2"
                         value={String(field.value)}
@@ -408,7 +437,10 @@ export function AddProductForm() {
                     <FieldLabel htmlFor="add-product-form-isTrending">
                       Is Trending
                     </FieldLabel>
-                    <fieldset id="add-product-form-isTrending" className="space-y-4">
+                    <fieldset
+                      id="add-product-form-isTrending"
+                      className="space-y-4"
+                    >
                       <RadioGroup
                         className="flex flex-wrap gap-2"
                         value={String(field.value)}
@@ -444,10 +476,20 @@ export function AddProductForm() {
             </div>
           </FieldGroup>
         </form>
+        <div className="space-y-5">
+          <Field>
+            <FieldLabel htmlFor="add-product-thumbnail">Thumbnail</FieldLabel>
+            <SingleImageUploader onChange={setThumbnail} />
+          </Field>
+          <Field>
+            <FieldLabel htmlFor="add-product-images">Images</FieldLabel>
+            <MultipleImagesUploader onChange={setImages} />
+          </Field>
+        </div>
       </CardContent>
       <CardFooter>
         <Field orientation="horizontal">
-          <Button type="submit" form="add-product-form">
+          <Button type="submit" form="add-product-form" className="w-full">
             Submit
           </Button>
         </Field>

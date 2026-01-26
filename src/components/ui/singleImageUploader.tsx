@@ -1,9 +1,9 @@
 import { AlertCircleIcon, ImageUpIcon, XIcon } from "lucide-react";
 
 import { useFileUpload } from "@/hooks/use-file-upload";
-import { useEffect } from "react";
+import { useEffect, type Dispatch, type SetStateAction } from "react";
 
-export default function SingleImageUploader({ onChange }) {
+export default function SingleImageUploader({ onChange }: {onChange: Dispatch<SetStateAction<File | null>>}) {
   const maxSizeMB = 5;
   const maxSize = maxSizeMB * 1024 * 1024; // 5MB default
 
@@ -37,7 +37,7 @@ export default function SingleImageUploader({ onChange }) {
 
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 border-2">
       <div className="relative">
         {/* Drop area */}
         <div
