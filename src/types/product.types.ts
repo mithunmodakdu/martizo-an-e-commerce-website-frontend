@@ -60,7 +60,7 @@ export const ProductCreationZodSchema = z.object({
   // media
   thumbnail: z
     .string({ error: "Thumbnail image URL must be string" })
-    .min(1, "Thumbnail cannot be empty"),
+    .min(1, "Thumbnail cannot be empty").optional(),
 
   images: z.array(z.string()).optional(),
 
@@ -92,7 +92,7 @@ export const ProductCreationZodSchema = z.object({
     .optional(),
 
   // sku
-  sku: z.string({ error: "SKU must be string" }).min(1, "SKU cannot be empty"),
+  sku: z.string({ error: "SKU must be string" }).optional(),
 
   // status
   status: z

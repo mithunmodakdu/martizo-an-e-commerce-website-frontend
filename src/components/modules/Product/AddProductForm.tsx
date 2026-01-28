@@ -1,7 +1,10 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm, type FieldValues, type SubmitHandler } from "react-hook-form";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
-import * as z from "zod";
+import z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
 
 import { Button } from "@/components/ui/button";
 import {
@@ -42,16 +45,16 @@ import SingleImageUploader from "@/components/ui/singleImageUploader";
 import { useState } from "react";
 import MultipleImagesUploader from "@/components/ui/MultipleImagesUploader";
 import type { FileMetadata } from "@/hooks/use-file-upload";
+import { useCreateProductMutation } from "@/redux/features/products/products.api";
 
 export function AddProductForm() {
   const [thumbnail, setThumbnail] = useState<File | null>(null);
   const [images, setImages] = useState<[] | (File | FileMetadata)[]>([]);
-      console.log(thumbnail);
-    console.log(images);
   const { data: categoriesData, isLoading: categoriesLoading } =
     useGetProductCategoriesQuery(undefined);
   const { data: brandsData, isLoading: brandsLoading } =
     useGetProductBrandsQuery(undefined);
+  const [createProduct] = useCreateProductMutation();
 
   const radioItems = [
     { label: "Yes", value: true },
@@ -86,11 +89,28 @@ export function AddProductForm() {
     },
   });
 
-  const onSubmit = async (data) => {
-    console.log(data);
-    // const formData = new FormData();
-    // formData.append("data", JSON.stringify(data))
-    // formData.append("file", thumbnail)
+  const onSubmit = async(data: z.infer<typeof ProductCreationZodSchema>) => {
+    const toastId = toast.loading("Creating product...")
+    const formData = new FormData();
+    formData.append("data", JSON.stringify(data));
+    formData.append("file", thumbnail as File);
+    images.forEach((image) => formData.append("files", image as File))
+    // console.log(formData.get("data"))
+    // console.log(formData.get("file"))
+    // console.log(formData.get("files"))
+
+    try {
+      const res = await createProduct(formData).unwrap();
+      console.log(res)
+
+      if(res.success){
+        toast.success(res.message, {id: toastId})
+      }
+
+    } catch (error: any) {
+      console.log(error)
+      toast.error(error.data.message, {id: toastId})
+    }
 
   };
 
@@ -105,7 +125,6 @@ export function AddProductForm() {
       <CardContent>
         <form
           id="add-product-form"
-          className="my-5"
           onSubmit={form.handleSubmit(onSubmit)}
         >
           <FieldGroup>
@@ -239,11 +258,13 @@ export function AddProductForm() {
                     <Input
                       {...field}
                       id="add-product-form-price"
-                    
-                    
                       aria-invalid={fieldState.invalid}
                       placeholder="Write here product price"
                       autoComplete="off"
+                      onChange={(event) => {
+                        const value = event.target.value;
+                        field.onChange(value === "" ? "" : Number(value))
+                      }}
                       
                       
                     />
@@ -267,6 +288,10 @@ export function AddProductForm() {
                       aria-invalid={fieldState.invalid}
                       placeholder="Write here product sale price"
                       autoComplete="off"
+                      onChange={(event) => {
+                        const value = event.target.value;
+                        field.onChange(value === "" ? "" : Number(value))
+                      }}
                     />
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
@@ -288,6 +313,10 @@ export function AddProductForm() {
                       aria-invalid={fieldState.invalid}
                       placeholder="Write here product stock"
                       autoComplete="off"
+                      onChange={(event) => {
+                        const value = event.target.value;
+                        field.onChange(value === "" ? "" : Number(value))
+                      }}
                     />
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
@@ -476,7 +505,7 @@ export function AddProductForm() {
             </div>
           </FieldGroup>
         </form>
-        <div className="space-y-5">
+        <div className="space-y-5 my-5">
           <Field>
             <FieldLabel htmlFor="add-product-thumbnail">Thumbnail</FieldLabel>
             <SingleImageUploader onChange={setThumbnail} />
@@ -489,7 +518,7 @@ export function AddProductForm() {
       </CardContent>
       <CardFooter>
         <Field orientation="horizontal">
-          <Button type="submit" form="add-product-form" className="w-full">
+          <Button type="submit" form="add-product-form" className="w-full hover:cursor-pointer">
             Submit
           </Button>
         </Field>
