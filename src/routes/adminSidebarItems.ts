@@ -1,3 +1,4 @@
+import ProductsTablePage from "@/pages/Admin/ProductsTablePage";
 import type { ISidebarItem } from "@/types";
 import { lazy } from "react";
 
@@ -50,6 +51,11 @@ export const adminSidebarItems: ISidebarItem[] = [
           title: "Delete Product",
           url: "/admin/delete-product",
           component: DeleteProduct
+        },
+        {
+          title: "Products",
+          url: "/admin/products",
+          component: ProductsTablePage
         }
        
   

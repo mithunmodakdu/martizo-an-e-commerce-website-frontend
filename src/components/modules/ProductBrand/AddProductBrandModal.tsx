@@ -65,8 +65,8 @@ export function AddProductBrandModal() {
     formData.append("data", JSON.stringify(data));
     formData.append("file", image as File);
 
-    console.log(formData.get("data"));
-    console.log(formData.get("file"));
+    // console.log(formData.get("data"));
+    // console.log(formData.get("file"));
 
     const toastId = toast.loading("Creating product Brand...");
 
