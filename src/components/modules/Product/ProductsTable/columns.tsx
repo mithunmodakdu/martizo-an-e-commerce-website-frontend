@@ -21,10 +21,20 @@ export const columns: ColumnDef<IProduct>[] = [
   {
     accessorKey: "category",
     header: "Category",
+    cell: ({row}) => {
+      const categoryObject = row.getValue("category");
+      
+      return <div>{categoryObject?.name}</div>
+    }
   },
   {
     accessorKey: "brand",
     header: "Brand",
+    cell: ({row}) => {
+      const brandObject = row.getValue("brand");
+
+      return <div>{brandObject?.name}</div>
+    }
   },
   {
     accessorKey: "price",
