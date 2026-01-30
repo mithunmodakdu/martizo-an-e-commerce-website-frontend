@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   AlertDialog,
   AlertDialogAction,
@@ -11,13 +12,30 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { productsApi } from "@/redux/features/products/products.api";
+import { store } from "@/redux/store";
+
 import type { IProduct } from "@/types";
 import { type ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 
-const handleDelete = async(productId: string) => {
-  console.log(productId)
-}
+const handleDelete = async (productId: string) => {
+  const toastId = toast.loading("Deleting the product...");
+
+  try {
+    const res = await store
+      .dispatch(productsApi.endpoints.deleteProduct.initiate(productId))
+      .unwrap();
+
+    if (res.success) {
+      toast.success(res.message, { id: toastId });
+    }
+
+  } catch (error: any) {
+    toast.error(error.data?.message, { id: toastId });
+  }
+};
 
 export const columns: ColumnDef<IProduct>[] = [
   {
@@ -108,8 +126,7 @@ export const columns: ColumnDef<IProduct>[] = [
   {
     accessorKey: "_id",
     header: "Delete",
-    cell: ({row}) => {
-     
+    cell: ({ row }) => {
       return (
         <div>
           <AlertDialog>
@@ -149,5 +166,4 @@ export const columns: ColumnDef<IProduct>[] = [
       );
     },
   },
-
 ];
