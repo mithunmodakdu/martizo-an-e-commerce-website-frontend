@@ -64,7 +64,7 @@ export default function ProductCategories() {
                 item: { _id: string; name: string; slug: string },
                 index: number,
               ) => (
-                <TableRow>
+                <TableRow key={item._id}>
                   <TableCell className="font-medium">{index + 1}</TableCell>
                   <TableCell>{item.name}</TableCell>
                   <TableCell>{item.slug}</TableCell>
@@ -95,14 +95,12 @@ export default function ProductCategories() {
                           <AlertDialogCancel variant="outline">
                             No, cancel!
                           </AlertDialogCancel>
-                          <AlertDialogAction variant="destructive">
-                            <Button
-                              variant="destructive"
-                              className="hoover: cursor-pointer"
-                              onClick={() => handleDelete(item._id)}
-                            >
-                              Yes, delete it!
-                            </Button>
+                          <AlertDialogAction
+                            variant="destructive"
+                            className="hoover: cursor-pointer"
+                            onClick={() => handleDelete(item._id)}
+                          >
+                            Yes, delete it!
                           </AlertDialogAction>
                         </AlertDialogFooter>
                       </AlertDialogContent>

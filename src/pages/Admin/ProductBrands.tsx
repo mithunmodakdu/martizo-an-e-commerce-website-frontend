@@ -26,7 +26,7 @@ import {
   useGetProductBrandsQuery,
 } from "@/redux/features/productBrands/productBrands.api";
 import type { IBrand } from "@/types";
-import { Edit2, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 export default function ProductBrands() {
@@ -69,7 +69,7 @@ export default function ProductBrands() {
           </TableHeader>
           <TableBody>
             {brandData?.map((item: IBrand, index: number) => (
-              <TableRow>
+              <TableRow key={item._id}>
                 <TableCell className="w-[50px] font-medium text-center">
                   {index + 1}
                 </TableCell>
@@ -109,24 +109,24 @@ export default function ProductBrands() {
                         <AlertDialogMedia className="bg-destructive/10 text-destructive dark:bg-destructive/20 dark:text-destructive">
                           <Trash2 />
                         </AlertDialogMedia>
-                        <AlertDialogTitle>Are you sure to Delete it?</AlertDialogTitle>
+                        <AlertDialogTitle>
+                          Are you sure to Delete it?
+                        </AlertDialogTitle>
                         <AlertDialogDescription>
-                          This will permanently delete this.
-                          You won't be able to revert this!
+                          This will permanently delete this. You won't be able
+                          to revert this!
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
                         <AlertDialogCancel variant="outline">
                           No, cancel!
                         </AlertDialogCancel>
-                        <AlertDialogAction variant="destructive">
-                          <Button
-                            variant="destructive"
-                            className="hoover: cursor-pointer"
-                            onClick={() => handleDelete(item._id)}
-                          >
-                            Yes, delete it!
-                          </Button>
+                        <AlertDialogAction
+                          variant="destructive"
+                          className="hoover: cursor-pointer"
+                          onClick={() => handleDelete(item._id)}
+                        >
+                          Yes, delete it!
                         </AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>

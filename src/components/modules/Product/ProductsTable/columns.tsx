@@ -31,7 +31,6 @@ const handleDelete = async (productId: string) => {
     if (res.success) {
       toast.success(res.message, { id: toastId });
     }
-
   } catch (error: any) {
     toast.error(error.data?.message, { id: toastId });
   }
@@ -58,10 +57,6 @@ export const columns: ColumnDef<IProduct>[] = [
         </Button>
       );
     },
-    // cell: ({row}) => {
-    //   const cellValue = row.getValue("title")
-    //   return <div className="bg-red-600 w-[200px]">{cellValue}</div>
-    // }
   },
   {
     accessorKey: "category",
@@ -150,14 +145,12 @@ export const columns: ColumnDef<IProduct>[] = [
                 <AlertDialogCancel variant="outline">
                   No, cancel!
                 </AlertDialogCancel>
-                <AlertDialogAction variant="destructive">
-                  <Button
-                    variant="destructive"
-                    className="hoover: cursor-pointer"
-                    onClick={() => handleDelete(row.getValue("_id"))}
-                  >
-                    Yes, delete it!
-                  </Button>
+                <AlertDialogAction
+                  variant="destructive"
+                  className="hoover: cursor-pointer"
+                  onClick={() => handleDelete(row.getValue("_id"))}
+                >
+                  Yes, delete it!
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
