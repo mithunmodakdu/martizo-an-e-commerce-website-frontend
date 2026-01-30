@@ -1,9 +1,50 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogMedia,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { productsApi } from "@/redux/features/products/products.api";
+import { store } from "@/redux/store";
+
 import type { IProduct } from "@/types";
 import { type ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown } from "lucide-react";
+import { ArrowUpDown, Edit2, Trash2 } from "lucide-react";
+import { Link } from "react-router";
+import { toast } from "sonner";
+
+const handleDelete = async (productId: string) => {
+  const toastId = toast.loading("Deleting the product...");
+
+  try {
+    const res = await store
+      .dispatch(productsApi.endpoints.deleteProduct.initiate(productId))
+      .unwrap();
+
+    if (res.success) {
+      toast.success(res.message, { id: toastId });
+    }
+  } catch (error: any) {
+    toast.error(error.data?.message, { id: toastId });
+  }
+};
 
 export const columns: ColumnDef<IProduct>[] = [
+  {
+    header: "SL No",
+    cell: ({ row }) => {
+      const rowIndex = row.index;
+      return <div className="text-center w-8">{rowIndex + 1}</div>;
+    },
+  },
   {
     accessorKey: "title",
     header: ({ column }) => {
@@ -21,20 +62,20 @@ export const columns: ColumnDef<IProduct>[] = [
   {
     accessorKey: "category",
     header: "Category",
-    cell: ({row}) => {
+    cell: ({ row }) => {
       const categoryObject = row.getValue("category");
-      
-      return <div>{categoryObject?.name}</div>
-    }
+
+      return <div>{categoryObject?.name}</div>;
+    },
   },
   {
     accessorKey: "brand",
     header: "Brand",
-    cell: ({row}) => {
+    cell: ({ row }) => {
       const brandObject = row.getValue("brand");
 
-      return <div>{brandObject?.name}</div>
-    }
+      return <div>{brandObject?.name}</div>;
+    },
   },
   {
     accessorKey: "price",
@@ -42,12 +83,12 @@ export const columns: ColumnDef<IProduct>[] = [
       return (
         <div className="flex justify-end">
           <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Price
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Price
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
         </div>
       );
     },
@@ -77,5 +118,59 @@ export const columns: ColumnDef<IProduct>[] = [
   {
     accessorKey: "stock",
     header: "Stock",
+  },
+  {
+    accessorKey: "_id",
+    header: "Delete",
+    cell: ({ row }) => {
+      return (
+        <div>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="destructive" className="hoover: cursor-pointer">
+                <Trash2 />
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent size="sm">
+              <AlertDialogHeader>
+                <AlertDialogMedia className="bg-destructive/10 text-destructive dark:bg-destructive/20 dark:text-destructive">
+                  <Trash2 />
+                </AlertDialogMedia>
+                <AlertDialogTitle>Are you sure to Delete it?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This will permanently delete this. You won't be able to revert
+                  this!
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel variant="outline">
+                  No, cancel!
+                </AlertDialogCancel>
+                <AlertDialogAction
+                  variant="destructive"
+                  className="hoover: cursor-pointer"
+                  onClick={() => handleDelete(row.getValue("_id"))}
+                >
+                  Yes, delete it!
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "_id",
+    header: "Update",
+    cell: ({ row }) => {
+      return (
+        <div>
+           <Button className="hoover: cursor-pointer">
+            <Link to={`/admin/update-product/${row.getValue("_id")}`}><Edit2/></Link>
+          </Button>
+        </div>
+      );
+    },
   },
 ];

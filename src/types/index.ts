@@ -21,7 +21,7 @@ export interface ISidebarItem {
   title: string;
   url: string;
   items: {
-    title: string;
+    title?: string;
     url: string;
     component: ComponentType
   }[];
