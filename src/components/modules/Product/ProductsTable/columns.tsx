@@ -17,7 +17,8 @@ import { store } from "@/redux/store";
 
 import type { IProduct } from "@/types";
 import { type ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, Trash2 } from "lucide-react";
+import { ArrowUpDown, Edit2, Trash2 } from "lucide-react";
+import { Link } from "react-router";
 import { toast } from "sonner";
 
 const handleDelete = async (productId: string) => {
@@ -155,6 +156,19 @@ export const columns: ColumnDef<IProduct>[] = [
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "_id",
+    header: "Update",
+    cell: ({ row }) => {
+      return (
+        <div>
+           <Button className="hoover: cursor-pointer">
+            <Link to={`/admin/update-product/${row.getValue("_id")}`}><Edit2/></Link>
+          </Button>
         </div>
       );
     },
