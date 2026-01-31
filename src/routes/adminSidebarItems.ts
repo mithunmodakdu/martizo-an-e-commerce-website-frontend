@@ -43,7 +43,7 @@ export const adminSidebarItems: ISidebarItem[] = [
           component: AddProduct
         },
         {
-          url: "/admin/update-product/:id",
+          url: "/admin/update-product/:slug",
           component: UpdateProduct
         },
         {

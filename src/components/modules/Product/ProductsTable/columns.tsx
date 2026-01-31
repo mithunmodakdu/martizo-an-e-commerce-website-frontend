@@ -161,13 +161,13 @@ export const columns: ColumnDef<IProduct>[] = [
     },
   },
   {
-    accessorKey: "_id",
+    accessorKey: "slug",
     header: "Update",
     cell: ({ row }) => {
       return (
         <div>
            <Button className="hoover: cursor-pointer">
-            <Link to={`/admin/update-product/${row.getValue("_id")}`}><Edit2/></Link>
+            <Link to={`/admin/update-product/${row.getValue("slug")}`}><Edit2/></Link>
           </Button>
         </div>
       );
