@@ -102,6 +102,7 @@ export const ProductCreationZodSchema = z.object({
     .optional(),
 });
 
+
 export const ProductUpdateZodSchema = z.object({
   // main details
   title: z
