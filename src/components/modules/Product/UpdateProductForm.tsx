@@ -39,10 +39,11 @@ import { useGetProductBrandsQuery } from "@/redux/features/productBrands/product
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import SingleImageUploader from "@/components/ui/singleImageUploader";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MultipleImagesUploader from "@/components/ui/MultipleImagesUploader";
 import type { FileMetadata } from "@/hooks/use-file-upload";
 import { useParams } from "react-router";
+import { useGetProductBySlugQuery } from "@/redux/features/products/products.api";
 
 export function UpdateProductForm() {
   const [thumbnail, setThumbnail] = useState<File | null>(null);
@@ -51,10 +52,9 @@ export function UpdateProductForm() {
     useGetProductCategoriesQuery(undefined);
   const { data: brandsData, isLoading: brandsLoading } =
     useGetProductBrandsQuery(undefined);
-
   const params = useParams();
   const productSlug = params.slug;
-    console.log(productSlug)
+  const {data} = useGetProductBySlugQuery(productSlug)
 
   const radioItems = [
     { label: "Yes", value: true },
@@ -88,6 +88,12 @@ export function UpdateProductForm() {
       status: "ACTIVE",
     },
   });
+
+  useEffect(()=> {
+    if(data){
+      form.reset(data)
+    }
+  }, [data, form])
 
   const onSubmit = async(data: z.infer<typeof ProductUpdateZodSchema>) => {
     const formData = new FormData();
