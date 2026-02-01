@@ -49,8 +49,7 @@ import Loading from "@/utils/Loading";
 export function UpdateProductForm() {
   const [thumbnail, setThumbnail] = useState<File | null>(null);
   const [images, setImages] = useState<[] | (File | FileMetadata)[]>([]);
- 
- 
+
   const { data: categoriesData, isLoading: categoriesLoading } =
     useGetProductCategoriesQuery(undefined);
   const { data: brandsData, isLoading: brandsLoading } =
@@ -59,9 +58,15 @@ export function UpdateProductForm() {
   const params = useParams();
   const productSlug = params.slug;
   const { data, isLoading } = useGetProductBySlugQuery(productSlug);
-  const [existedImages, setExistedImages] = useState<string[]>(data.images);
-      console.log(data)
-       console.log(existedImages)
+  const [existedImages, setExistedImages] = useState<string[]>(data?.images);
+  const [deleteImages, setDeleteImages] = useState<string[]>([]);
+  const [existedThumbnail, setExistedThumbnail] = useState<string | null>(
+    data?.thumbnail,
+  );
+  const [deleteThumbnail, setDeleteThumbnail] = useState<string | null>();
+  console.log(data);
+  console.log(existedThumbnail);
+  console.log(deleteThumbnail);
 
   const radioItems = [
     { label: "Yes", value: true },
@@ -506,37 +511,72 @@ export function UpdateProductForm() {
               </FieldGroup>
             </form>
             <div className="space-y-5 my-5">
+              {existedThumbnail ? (
+                <Field>
+                  <FieldLabel>Existed Thumbnail</FieldLabel>
+
+                  <div className="relative">
+                    <img
+                      src={existedThumbnail}
+                      className="h-32 w-full object-cover rounded"
+                    />
+                    <button
+                      onClick={() => {
+                        setExistedThumbnail(null);
+
+                        setDeleteThumbnail(existedThumbnail);
+                      }}
+                      className="absolute top-1 right-1 bg-red-500 text-white rounded px-2"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                </Field>
+              ) : (
+                ""
+              )}
               <Field>
                 <FieldLabel htmlFor="add-product-thumbnail">
-                  Thumbnail
+                  Add New Thumbnail
                 </FieldLabel>
                 <SingleImageUploader onChange={setThumbnail} />
               </Field>
+              {existedImages.length > 0 ? (
+                <Field>
+                  <FieldLabel>Existed Images</FieldLabel>
+                  <div className="grid grid-cols-4 gap-4">
+                    {existedImages?.map((url, index) => (
+                      <div key={index} className="relative">
+                        <img
+                          src={url}
+                          className="h-32 w-full object-cover rounded"
+                        />
+                        <button
+                          onClick={() => {
+                            setExistedImages((prev) =>
+                              prev.filter((_, i) => i !== index),
+                            );
+
+                            setDeleteImages((prev) => [
+                              ...prev,
+                              existedImages[index],
+                            ]);
+                          }}
+                          className="absolute top-1 right-1 bg-red-500 text-white rounded px-2"
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </Field>
+              ) : (
+                ""
+              )}
               <Field>
-                <FieldLabel>Existed Images</FieldLabel>
-                <div className="grid grid-cols-4 gap-4">
-                  {existedImages.map((url, index) => (
-                    <div key={index} className="relative">
-                      <img
-                        src={url}
-                        className="h-32 w-full object-cover rounded"
-                      />
-                      <button
-                        onClick={() =>
-                          setExistedImages((prev) =>
-                            prev.filter((_, i) => i !== index),
-                          )
-                        }
-                        className="absolute top-1 right-1 bg-red-500 text-white rounded px-2"
-                      >
-                        ✕
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="add-product-images">Add New Images</FieldLabel>
+                <FieldLabel htmlFor="add-product-images">
+                  Add New Images
+                </FieldLabel>
                 <MultipleImagesUploader onChange={setImages} />
               </Field>
             </div>
