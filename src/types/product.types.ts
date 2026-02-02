@@ -117,8 +117,7 @@ export const ProductUpdateZodSchema = z.object({
 
   // categorization
   category: z
-    .string({ error: "Category ID is required" })
-    .min(1, { error: "Category ID cannot be empty" })
+    .string()
     .optional(),
   subCategory: z.string().optional(),
   brand: z.string().optional(),

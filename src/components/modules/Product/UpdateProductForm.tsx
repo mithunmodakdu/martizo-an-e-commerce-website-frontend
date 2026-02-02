@@ -43,7 +43,7 @@ import { useEffect, useState } from "react";
 import MultipleImagesUploader from "@/components/ui/MultipleImagesUploader";
 import type { FileMetadata } from "@/hooks/use-file-upload";
 import { useParams } from "react-router";
-import { useGetProductBySlugQuery } from "@/redux/features/products/products.api";
+import { useGetProductBySlugQuery, useUpdateProductMutation } from "@/redux/features/products/products.api";
 import Loading from "@/utils/Loading";
 
 export function UpdateProductForm() {
@@ -58,7 +58,6 @@ export function UpdateProductForm() {
   const params = useParams();
   const productSlug = params.slug;
   const { data, isLoading } = useGetProductBySlugQuery(productSlug);
-
   const [existedImages, setExistedImages] = useState<string[]>([]);
   const [deleteImages, setDeleteImages] = useState<string[]>([]);
 
@@ -66,6 +65,7 @@ export function UpdateProductForm() {
     null
   );
   const [deleteThumbnail, setDeleteThumbnail] = useState<string | null>();
+  const [updateProduct] = useUpdateProductMutation();
 
   useEffect(() => {
     if(data?.images){
@@ -90,8 +90,8 @@ export function UpdateProductForm() {
       description: "",
 
       // categorization
-      category: data.category,
-      brand: data.brand,
+      category: "",
+      brand: "",
 
       // pricing
       price: 0,
@@ -118,17 +118,26 @@ export function UpdateProductForm() {
 
   const onSubmit = async (data: z.infer<typeof ProductUpdateZodSchema>) => {
     const formData = new FormData();
-    const productUpdateData = {
+    const productData = {
       ...data,
       deleteThumbnail,
       deleteImages
     }
-    formData.append("data", JSON.stringify(productUpdateData));
+    console.log(productData)
+    formData.append("data", JSON.stringify(productData));
     formData.append("file", thumbnail as File);
     images.forEach((image) => formData.append("files", image as File));
-    console.log(formData.get("data"))
-    // console.log(formData.get("file"))
-    // console.log(formData.get("files"))
+
+    const dataToUpdate = {
+      productSlug: productSlug,
+      formData: formData
+    }
+    console.log(dataToUpdate)
+
+    const res = await updateProduct(dataToUpdate).unwrap();
+    console.log(res)
+   
+
   };
 
   return (
