@@ -43,7 +43,7 @@ import { useEffect, useState } from "react";
 import MultipleImagesUploader from "@/components/ui/MultipleImagesUploader";
 import type { FileMetadata } from "@/hooks/use-file-upload";
 import { useParams } from "react-router";
-import { useGetProductBySlugQuery } from "@/redux/features/products/products.api";
+import { useGetProductBySlugQuery, useUpdateProductMutation } from "@/redux/features/products/products.api";
 import Loading from "@/utils/Loading";
 
 export function UpdateProductForm() {
@@ -58,15 +58,24 @@ export function UpdateProductForm() {
   const params = useParams();
   const productSlug = params.slug;
   const { data, isLoading } = useGetProductBySlugQuery(productSlug);
-  const [existedImages, setExistedImages] = useState<string[]>(data?.images);
+  const [existedImages, setExistedImages] = useState<string[]>([]);
   const [deleteImages, setDeleteImages] = useState<string[]>([]);
+
   const [existedThumbnail, setExistedThumbnail] = useState<string | null>(
-    data?.thumbnail,
+    null
   );
   const [deleteThumbnail, setDeleteThumbnail] = useState<string | null>();
-  console.log(data);
-  console.log(existedThumbnail);
-  console.log(deleteThumbnail);
+  const [updateProduct] = useUpdateProductMutation();
+
+  useEffect(() => {
+    if(data?.images){
+      setExistedImages(data.images)
+    }
+
+    if(data?.thumbnail){
+      setExistedThumbnail(data.thumbnail)
+    }
+  }, [data])
 
   const radioItems = [
     { label: "Yes", value: true },
@@ -109,12 +118,26 @@ export function UpdateProductForm() {
 
   const onSubmit = async (data: z.infer<typeof ProductUpdateZodSchema>) => {
     const formData = new FormData();
-    formData.append("data", JSON.stringify(data));
+    const productData = {
+      ...data,
+      deleteThumbnail,
+      deleteImages
+    }
+    console.log(productData)
+    formData.append("data", JSON.stringify(productData));
     formData.append("file", thumbnail as File);
     images.forEach((image) => formData.append("files", image as File));
-    // console.log(formData.get("data"))
-    // console.log(formData.get("file"))
-    // console.log(formData.get("files"))
+
+    const dataToUpdate = {
+      productSlug: productSlug,
+      formData: formData
+    }
+    console.log(dataToUpdate)
+
+    const res = await updateProduct(dataToUpdate).unwrap();
+    console.log(res)
+   
+
   };
 
   return (
@@ -140,12 +163,12 @@ export function UpdateProductForm() {
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor="add-product-form-title">
+                      <FieldLabel htmlFor="update-product-form-title">
                         Title
                       </FieldLabel>
                       <Input
                         {...field}
-                        id="add-product-form-title"
+                        id="update-product-form-title"
                         aria-invalid={fieldState.invalid}
                         placeholder="Write here product title"
                         autoComplete="off"
@@ -161,13 +184,13 @@ export function UpdateProductForm() {
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor="add-product-form-description">
+                      <FieldLabel htmlFor="update-product-form-description">
                         Description
                       </FieldLabel>
                       <InputGroup>
                         <InputGroupTextarea
                           {...field}
-                          id="add-product-form-description"
+                          id="update-product-form-description"
                           placeholder="Type here product description..."
                           rows={6}
                           className="min-h-24 resize-none"
@@ -195,14 +218,15 @@ export function UpdateProductForm() {
                     control={form.control}
                     render={({ field, fieldState }) => (
                       <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor="add-product-form-category">
+                        <FieldLabel htmlFor="update-product-form-category">
                           Category
                         </FieldLabel>
                         <Select
+                          value={field.value}
                           onValueChange={field.onChange}
                           disabled={categoriesLoading}
                         >
-                          <SelectTrigger id="add-product-form-category">
+                          <SelectTrigger id="update-product-form-category">
                             <SelectValue placeholder="Select product category" />
                           </SelectTrigger>
                           <SelectContent>
@@ -226,14 +250,15 @@ export function UpdateProductForm() {
                     control={form.control}
                     render={({ field, fieldState }) => (
                       <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor="add-product-form-brand">
+                        <FieldLabel htmlFor="update-product-form-brand">
                           Brand
                         </FieldLabel>
                         <Select
+                          value={field.value}
                           onValueChange={field.onChange}
                           disabled={brandsLoading}
                         >
-                          <SelectTrigger id="add-product-form-brand">
+                          <SelectTrigger id="update-product-form-brand">
                             <SelectValue placeholder="Select product brand" />
                           </SelectTrigger>
                           <SelectContent>
@@ -259,12 +284,12 @@ export function UpdateProductForm() {
                     control={form.control}
                     render={({ field, fieldState }) => (
                       <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor="add-product-form-price">
+                        <FieldLabel htmlFor="update-product-form-price">
                           Price
                         </FieldLabel>
                         <Input
                           {...field}
-                          id="add-product-form-price"
+                          id="update-product-form-price"
                           aria-invalid={fieldState.invalid}
                           placeholder="Write here product price"
                           autoComplete="off"
@@ -284,12 +309,12 @@ export function UpdateProductForm() {
                     control={form.control}
                     render={({ field, fieldState }) => (
                       <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor="add-product-form-salePrice">
+                        <FieldLabel htmlFor="update-product-form-salePrice">
                           Sale Price
                         </FieldLabel>
                         <Input
                           {...field}
-                          id="add-product-form-salePrice"
+                          id="update-product-form-salePrice"
                           aria-invalid={fieldState.invalid}
                           placeholder="Write here product sale price"
                           autoComplete="off"
@@ -309,12 +334,12 @@ export function UpdateProductForm() {
                     control={form.control}
                     render={({ field, fieldState }) => (
                       <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor="add-product-form-stock">
+                        <FieldLabel htmlFor="update-product-form-stock">
                           Stock
                         </FieldLabel>
                         <Input
                           {...field}
-                          id="add-product-form-stock"
+                          id="update-product-form-stock"
                           aria-invalid={fieldState.invalid}
                           placeholder="Write here product stock"
                           autoComplete="off"
@@ -336,11 +361,11 @@ export function UpdateProductForm() {
                     control={form.control}
                     render={({ field, fieldState }) => (
                       <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor="add-product-form-isNewArrival">
+                        <FieldLabel htmlFor="update-product-form-isNewArrival">
                           Is New Arrival
                         </FieldLabel>
                         <fieldset
-                          id="add-product-form-isNewArrival"
+                          id="update-product-form-isNewArrival"
                           className="space-y-4"
                         >
                           <RadioGroup
@@ -380,11 +405,11 @@ export function UpdateProductForm() {
                     control={form.control}
                     render={({ field, fieldState }) => (
                       <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor="add-product-form-isBestSeller">
+                        <FieldLabel htmlFor="update-product-form-isBestSeller">
                           Is Best Seller
                         </FieldLabel>
                         <fieldset
-                          id="add-product-form-isBestSeller"
+                          id="update-product-form-isBestSeller"
                           className="space-y-4"
                         >
                           <RadioGroup
@@ -424,11 +449,11 @@ export function UpdateProductForm() {
                     control={form.control}
                     render={({ field, fieldState }) => (
                       <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor="add-product-form-isFlashSale">
+                        <FieldLabel htmlFor="update-product-form-isFlashSale">
                           Is Flash Sale
                         </FieldLabel>
                         <fieldset
-                          id="add-product-form-isFlashSale"
+                          id="update-product-form-isFlashSale"
                           className="space-y-4"
                         >
                           <RadioGroup
@@ -468,11 +493,11 @@ export function UpdateProductForm() {
                     control={form.control}
                     render={({ field, fieldState }) => (
                       <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor="add-product-form-isTrending">
+                        <FieldLabel htmlFor="update-product-form-isTrending">
                           Is Trending
                         </FieldLabel>
                         <fieldset
-                          id="add-product-form-isTrending"
+                          id="update-product-form-isTrending"
                           className="space-y-4"
                         >
                           <RadioGroup
@@ -536,12 +561,12 @@ export function UpdateProductForm() {
                 ""
               )}
               <Field>
-                <FieldLabel htmlFor="add-product-thumbnail">
+                <FieldLabel htmlFor="update-product-thumbnail">
                   Add New Thumbnail
                 </FieldLabel>
                 <SingleImageUploader onChange={setThumbnail} />
               </Field>
-              {existedImages.length > 0 ? (
+              {existedImages?.length > 0 ? (
                 <Field>
                   <FieldLabel>Existed Images</FieldLabel>
                   <div className="grid grid-cols-4 gap-4">
@@ -574,7 +599,7 @@ export function UpdateProductForm() {
                 ""
               )}
               <Field>
-                <FieldLabel htmlFor="add-product-images">
+                <FieldLabel htmlFor="update-product-images">
                   Add New Images
                 </FieldLabel>
                 <MultipleImagesUploader onChange={setImages} />

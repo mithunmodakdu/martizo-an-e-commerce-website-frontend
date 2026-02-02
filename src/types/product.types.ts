@@ -60,10 +60,10 @@ export const ProductCreationZodSchema = z.object({
   // media
   thumbnail: z
     .string({ error: "Thumbnail image URL must be string" })
-    .min(1, "Thumbnail cannot be empty").optional(),
-
+    .optional(),
+  
   images: z.array(z.string()).optional(),
-
+  
   // shop labels
   isNewArrival: z.boolean().optional(),
   isBestSeller: z.boolean().optional(),
@@ -100,6 +100,8 @@ export const ProductCreationZodSchema = z.object({
       error: "Status must be ACTIVE or INACTIVE",
     })
     .optional(),
+
+  
 });
 
 
@@ -115,8 +117,7 @@ export const ProductUpdateZodSchema = z.object({
 
   // categorization
   category: z
-    .string({ error: "Category ID is required" })
-    .min(1, { error: "Category ID cannot be empty" })
+    .string()
     .optional(),
   subCategory: z.string().optional(),
   brand: z.string().optional(),
@@ -153,8 +154,8 @@ export const ProductUpdateZodSchema = z.object({
   // media
   thumbnail: z
     .string({ error: "Thumbnail image URL must be string" })
-    .min(1, "Thumbnail cannot be empty")
     .optional(),
+  deleteThumbnail: z.string().optional(),
 
   images: z.array(z.string()).optional(),
   deleteImages: z.array(z.string()).optional(),
