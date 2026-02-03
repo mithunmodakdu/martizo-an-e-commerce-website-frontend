@@ -45,6 +45,7 @@ import type { FileMetadata } from "@/hooks/use-file-upload";
 import { useParams } from "react-router";
 import { useGetProductBySlugQuery, useUpdateProductMutation } from "@/redux/features/products/products.api";
 import Loading from "@/utils/Loading";
+import { toast } from "sonner";
 
 export function UpdateProductForm() {
   const [thumbnail, setThumbnail] = useState<File | null>(null);
@@ -90,8 +91,8 @@ export function UpdateProductForm() {
       description: "",
 
       // categorization
-      category: "",
-      brand: "",
+      category: data?.category,
+      brand: data?.brand,
 
       // pricing
       price: 0,
@@ -123,7 +124,7 @@ export function UpdateProductForm() {
       deleteThumbnail,
       deleteImages
     }
-    console.log(productData)
+
     formData.append("data", JSON.stringify(productData));
     formData.append("file", thumbnail as File);
     images.forEach((image) => formData.append("files", image as File));
@@ -132,12 +133,22 @@ export function UpdateProductForm() {
       productSlug: productSlug,
       formData: formData
     }
-    console.log(dataToUpdate)
 
-    const res = await updateProduct(dataToUpdate).unwrap();
-    console.log(res)
-   
+    const toastId = toast.loading("Updating product...")
 
+    try {
+      const res = await updateProduct(dataToUpdate).unwrap();
+      console.log(res)
+      if(res.success){
+        toast.success(res.message, {id: toastId})
+      }
+    } catch (error: any) {
+      console.log(error)
+      if(!error.data.success){
+        toast.error(error.data.message, {id: toastId})
+      }
+    }
+    
   };
 
   return (
