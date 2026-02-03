@@ -10,7 +10,7 @@ export default function ProductsTablePage() {
       {isLoading ? (
         <Loading/>
       ) : (
-        <DataTable columns={columns} data={data.data} />
+        <DataTable columns={columns} data={data?.data} />
       )}
     </div>
   );
