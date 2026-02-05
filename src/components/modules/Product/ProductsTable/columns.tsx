@@ -117,7 +117,10 @@ export const columns: ColumnDef<IProduct>[] = [
   },
   {
     accessorKey: "stock",
-    header: "Stock",
+    header: () => <div className="text-center">Stock</div>,
+    cell: ({row}) => {
+      return <div className="mx-5 text-center">{row.getValue("stock")}</div>
+    }
   },
   {
     accessorKey: "_id",

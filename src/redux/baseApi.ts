@@ -8,6 +8,6 @@ export const baseApi = createApi({
   //   credentials: "include"
   // }),
   baseQuery: axiosBaseQuery(),
-  tagTypes: ["USER", "CATEGORY", "BRAND", "PRODUCT"],
+  tagTypes: ["USER", "CATEGORY", "BRAND", "PRODUCTS", "PRODUCT"],
   endpoints: () => ({})
 });

@@ -8,7 +8,7 @@ export const productsApi = baseApi.injectEndpoints({
         method: "GET",
         
       }),
-      providesTags: ["PRODUCT"]
+      providesTags: ["PRODUCTS"]
     }),
 
     getProductBySlug: builder.query({
@@ -17,6 +17,7 @@ export const productsApi = baseApi.injectEndpoints({
         method: "GET"
       }),
       transformResponse: (response) => response.data,
+      providesTags: ["PRODUCT"]
     }),
 
 
@@ -25,7 +26,7 @@ export const productsApi = baseApi.injectEndpoints({
         url: `/products/${productId}`,
         method: "DELETE"
       }),
-      invalidatesTags: ["PRODUCT"]
+      invalidatesTags: ["PRODUCTS", "PRODUCT"]
     }),
 
     updateProduct: builder.mutation({
@@ -38,7 +39,8 @@ export const productsApi = baseApi.injectEndpoints({
           method: "PATCH",
           data: formData
         }
-      }
+      },
+      invalidatesTags: ["PRODUCTS", "PRODUCT"]
       
     }),
 
@@ -48,7 +50,7 @@ export const productsApi = baseApi.injectEndpoints({
         method: "POST",
         data: formData
       }),
-      invalidatesTags: ["PRODUCT"]
+      invalidatesTags: ["PRODUCTS"]
     })
   })
 });
