@@ -9,6 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Price, PriceValue } from "./price";
+import { Button } from "@/components/ui/button";
 
 interface ProductPrice {
   regular: number;
@@ -117,11 +118,8 @@ const ProductCard = ({
   const { regular, sale, currency } = price;
 
   return (
-    <a
-      href={link}
-      className="block h-full w-full max-w-md transition-opacity hover:opacity-80"
-    >
-      <Card className="h-full overflow-hidden p-0 rounded-tr-3xl">
+    <div className="relative group">
+      <Card className="h-full overflow-hidden p-0 rounded-tl-none rounded-tr-3xl rounded-bl-3xl rounded-br-3xl">
         <CardHeader className="relative block p-0">
           <AspectRatio ratio={1.5} className="overflow-hidden">
             <img
@@ -158,8 +156,13 @@ const ProductCard = ({
           </div>
         </CardContent>
       </Card>
-    </a>
+      <div
+        className="h-full absolute overflow-hidden p-0 rounded-tl-none rounded-tr-3xl rounded-bl-3xl rounded-br-3xl inset-0 bg-muted-foreground flex items-center justify-center gap-3
+        opacity-0 group-hover:opacity-80 transition-all duration-300 ease-in-out"
+      >
+        <Button className="transform translate-y-72 group-hover:translate-y-0 transition-transform duration-500 ease-in-out">Add to Cart</Button>
+        <Button variant={"secondary"} className="transform -translate-y-72 group-hover:translate-y-0 transition-transform duration-500 ease-in-out">View Details</Button>
+      </div>
+    </div>
   );
 };
-
-
