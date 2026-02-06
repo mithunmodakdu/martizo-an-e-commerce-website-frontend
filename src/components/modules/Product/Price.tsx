@@ -40,7 +40,7 @@ function formatCurrency(value: number, currency = "USD", locale = "en-US") {
   return formatterCache.get(key)!.format(value);
 }
 
-const Price = ({ className, children, onSale }: PriceProps) => {
+export const Price = ({ className, children, onSale }: PriceProps) => {
   return (
     <PriceContext.Provider value={{ onSale }}>
       <div className={cn("flex flex-wrap items-center gap-x-2", className)}>
@@ -50,7 +50,7 @@ const Price = ({ className, children, onSale }: PriceProps) => {
   );
 };
 
-const PriceValue = ({
+export const PriceValue = ({
   price,
   currency = "USD",
   variant = "regular",
@@ -77,4 +77,4 @@ const PriceValue = ({
   );
 };
 
-export { Price, PriceValue };
+

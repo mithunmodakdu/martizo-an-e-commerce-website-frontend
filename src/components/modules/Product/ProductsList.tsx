@@ -1,6 +1,4 @@
 import { cn } from "@/lib/utils";
-
-import { Price, PriceValue } from "@/components/price";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -10,6 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Price, PriceValue } from "./price";
 
 interface ProductPrice {
   regular: number;
@@ -89,13 +88,13 @@ const PRODUCTS_LIST: ProductList = [
   },
 ];
 
-interface ProductList1Props {
+interface ProductListProps {
   className?: string;
 }
 
-export const ProductsList = ({ className }: ProductList1Props) => {
+export const ProductsList = ({ className }: ProductListProps) => {
   return (
-    <section className={cn("py-32", className)}>
+    <section className={cn("px-10 py-32", className)}>
       <div className="container">
         <div className="grid place-items-center gap-6 md:grid-cols-2 xl:grid-cols-3">
           {PRODUCTS_LIST.map((item, index) => (
@@ -122,13 +121,13 @@ const ProductCard = ({
       href={link}
       className="block h-full w-full max-w-md transition-opacity hover:opacity-80"
     >
-      <Card className="h-full overflow-hidden p-0">
+      <Card className="h-full overflow-hidden p-0 rounded-tr-3xl">
         <CardHeader className="relative block p-0">
-          <AspectRatio ratio={1.268115942} className="overflow-hidden">
+          <AspectRatio ratio={1.5} className="overflow-hidden">
             <img
               src={image.src}
               alt={image.alt}
-              className="block size-full object-cover object-center"
+              className="h-56 w-full rounded-tr-3xl rounded-bl-3xl object-cover sm:h-64 lg:h-72"
             />
           </AspectRatio>
           {badge && (
