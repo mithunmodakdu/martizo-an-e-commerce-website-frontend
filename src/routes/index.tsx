@@ -10,6 +10,7 @@ import { adminSidebarItems } from "./adminSidebarItems";
 import { userSidebarItems } from "./userSidebarItems";
 import { withAuth } from "@/utils/withAuth";
 import Unauthorized from "@/pages/Unauthorized";
+import ProductsPage from "@/pages/ProductsPage";
 
 export const router = createBrowserRouter(
   [
@@ -17,6 +18,10 @@ export const router = createBrowserRouter(
       Component: App,
       path: "/",
       children: [
+        {
+          Component: ProductsPage,
+          path: "products"
+        },
         {
           Component: About,
           path: "about"
