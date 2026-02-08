@@ -1,10 +1,10 @@
-import { ProductsList } from "@/components/modules/Product/ProductsList";
+import { ProductCardsContainer } from "@/components/modules/Product/ProductCardsContainer";
 
 
 export default function ProductsPage() {
   return (
     <div>
-      <ProductsList/>
+      <ProductCardsContainer/>
     </div>
   );
 }
