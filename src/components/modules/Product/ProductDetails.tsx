@@ -104,13 +104,13 @@ interface ProductDetail1Props {
 }
 
 export const ProductDetails = ({ className, productData }: ProductDetail1Props) => {
-  console.log(productData.images.toString())
+  console.log(productData)
   const PRODUCT_DETAILS = {
   name: productData.title,
   color: "blue",
   size: "m",
   reviews: {
-    rate: 3.5,
+    rate: 2.5,
     totalReviewers: "5.8k",
   },
   description: productData.description,

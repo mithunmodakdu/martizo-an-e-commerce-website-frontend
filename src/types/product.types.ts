@@ -22,6 +22,12 @@ export const ProductCreationZodSchema = z.object({
     .min(20, { error: "Product description must be at least 20 characters" })
     .max(250, { error: "Product description must be within 250 characters" })
     .optional(),
+  features: z.array(z.object(
+    {
+      name: z.string().min(1, {error: "Feature name is required"}),
+      value: z.string().min(1, {error: "Feature value is required"})
+    }
+  )).optional(),
 
   // categorization
   category: z
@@ -114,6 +120,12 @@ export const ProductUpdateZodSchema = z.object({
   description: z
     .string({ error: "Product description must be string" })
     .optional(),
+  features: z.array(z.object(
+    {
+      name: z.string().min(1, {error: "Feature name is required"}),
+      value: z.string().min(1, {error: "Feature value is required"})
+    }
+  )).optional(),
 
   // categorization
   category: z
