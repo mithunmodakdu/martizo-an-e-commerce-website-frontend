@@ -9,19 +9,19 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { useGetAllProductsQuery } from "@/redux/features/products/products.api";
 import type { IProduct } from "@/types";
 import { Price, PriceValue } from "./Price";
 import { Link } from "react-router";
 
 interface ProductPrice {
   regular: number;
-  sale?: number;
+  sale?: number | undefined;
   currency: string;
 }
 
 interface IProductCard {
   name: string;
+  slug: string;
   image: {
     src: string;
     alt: string;
@@ -52,6 +52,7 @@ export const ProductCardsContainer = ({
   const productCardsData: TProductCards = productsData?.map(
     (item: IProduct) => ({
       name: item.title,
+      slug: item.slug,
       image: {
         src: item.thumbnail,
         alt: `Thumbnail of ${item.title}`,
@@ -101,6 +102,7 @@ export const ProductCardsContainer = ({
 
 const ProductCard = ({
   name,
+  slug,
   description,
   image,
   badges,
@@ -161,14 +163,14 @@ const ProductCard = ({
         opacity-0 group-hover:opacity-80 transition-all duration-300 ease-in-out"
       >
         <Link to={"/cart"} className="asChild">
-          <Button className="transform translate-y-24 group-hover:translate-y-0 transition-transform duration-500 ease-in-out ">
+          <Button className="transform translate-y-24 group-hover:translate-y-0 transition-transform duration-500 ease-in-out hover:cursor-pointer">
             Add to Cart
           </Button>
         </Link>
-        <Link to={"/product-details"} className="asChild">
+        <Link to={`/product-details/${slug}`} className="asChild">
           <Button
             variant={"secondary"}
-            className="transform -translate-y-24 group-hover:translate-y-0 transition-transform duration-500 ease-in-out"
+            className="transform -translate-y-24 group-hover:translate-y-0 transition-transform duration-500 ease-in-out hover:cursor-pointer"
           >
             View Details
           </Button>

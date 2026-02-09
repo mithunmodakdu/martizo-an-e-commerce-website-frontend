@@ -25,7 +25,7 @@ export const router = createBrowserRouter(
         },
         {
           Component: ProductDetailsPage,
-          path: "product-details"
+          path: "product-details/:slug"
         },
         {
           Component: About,

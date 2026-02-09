@@ -24,6 +24,7 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import type { IProduct } from "@/types";
 
 type StockStatusCode = "IN_STOCK" | "OUT_OF_STOCK";
 
@@ -51,12 +52,12 @@ interface Hinges {
 
 interface ProductImagesProps {
   images: Array<{
-    srcset: string;
+    srcset?: string;
     src: string;
     alt: string;
     width: number;
     height: number;
-    sizes: string;
+    sizes?: string;
   }>;
 }
 
@@ -96,19 +97,26 @@ interface ProductFormProps {
 
 const MAX_STARS = 5;
 
-const PRODUCT_DETAILS = {
-  name: "Urban Chill Jacket",
+
+interface ProductDetail1Props {
+  className?: string;
+  productData: IProduct
+}
+
+export const ProductDetails = ({ className, productData }: ProductDetail1Props) => {
+  console.log(productData.images.toString())
+  const PRODUCT_DETAILS = {
+  name: productData.title,
   color: "blue",
   size: "m",
   reviews: {
     rate: 3.5,
     totalReviewers: "5.8k",
   },
-  description:
-    "This denim puffer jacket blends warmth and street style, featuring tonal blue shades for a distinctive look that's both bold and versatile. Designed for comfort in any season.",
+  description: productData.description,
   price: {
-    regular: 80.0,
-    sale: 69.0,
+    regular: productData.price,
+    sale: productData.salePrice,
     currency: "USD",
   },
   hinges: {
@@ -160,51 +168,16 @@ const PRODUCT_DETAILS = {
       ],
     },
   } as Record<FieldName, Hinges>,
-  images: [
-    {
-      srcset:
-        "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/pexels-cottonbro-6764033-3.jpg 1920w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/pexels-cottonbro-6764033-2.jpg 1280w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/pexels-cottonbro-6764033-1.jpg 640w",
-      src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/pexels-cottonbro-6764033-3.jpg",
-      alt: "",
+  images: productData.images.map(url => (
+      {
+      src: url,
+      alt: `Image of ${productData.title}`,
       width: 1920,
       height: 2880,
-      sizes: "(min-width: 1920px) 1920px, (min-width: 1280px) 1280px, 100vw",
-    },
-    {
-      srcset:
-        "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/pexels-cottonbro-6764699-3.jpg 1920w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/pexels-cottonbro-6764699-2.jpg 1280w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/pexels-cottonbro-6764699-2.jpg 640w",
-      src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/pexels-cottonbro-6764699-3.jpg",
-      alt: "",
-      width: 1920,
-      height: 2880,
-      sizes: "(min-width: 1920px) 1920px, (min-width: 1280px) 1280px, 100vw",
-    },
-    {
-      srcset:
-        "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/pexels-cottonbro-6764036-3.jpg 1920w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/pexels-cottonbro-6764036-2.jpg 1280w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/pexels-cottonbro-6764036-1.jpg 640w",
-      src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/pexels-cottonbro-6764036-3.jpg",
-      alt: "",
-      width: 1920,
-      height: 2880,
-      sizes: "(min-width: 1920px) 1920px, (min-width: 1280px) 1280px, 100vw",
-    },
-    {
-      srcset:
-        "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/pexels-cottonbro-6764040-3.jpg 1920w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/pexels-cottonbro-6764040-2.jpg 1280w, https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/pexels-cottonbro-6764040-1.jpg 640w",
-      src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/pexels-cottonbro-6764040-3.jpg",
-      alt: "",
-      width: 1920,
-      height: 2880,
-      sizes: "(min-width: 1920px) 1920px, (min-width: 1280px) 1280px, 100vw",
-    },
-  ],
+    }
+  )),
 };
 
-interface ProductDetail1Props {
-  className?: string;
-}
-
-export const ProductDetails = ({ className }: ProductDetail1Props) => {
   return (
     <section className={cn("py-32", className)}>
       <div className="container">
@@ -324,15 +297,14 @@ const ProductImages = ({ images }: ProductImagesProps) => {
         {images.map((img, index) => (
           <CarouselItem
             className="first:col-span-3 md:p-0"
-            key={`product-detail-1-image-${index}`}
+            key={`product-detail-image-${index}`}
           >
             <AspectRatio ratio={1} className="overflow-hidden rounded-lg">
               <img
-                srcSet={img.srcset}
+                src={img.src}
                 alt={img.alt}
                 width={img.width}
                 height={img.height}
-                sizes={img.sizes}
                 className="block size-full object-cover object-center"
               />
             </AspectRatio>
