@@ -129,14 +129,7 @@ export const ProductUpdateZodSchema = z.object({
     .optional(),
 
   salePrice: z
-    .number({ error: "Sale Price must be a number" })
-    .positive("Sale price must be a positive number")
-    .optional(),
-
-  discountPercentage: z
-    .number()
-    .min(0, "Discount percentage cannot be negative")
-    .max(100, "Discount percentage cannot exceed 100")
+    .union([z.number().min(0), z.undefined()])
     .optional(),
 
   // stock

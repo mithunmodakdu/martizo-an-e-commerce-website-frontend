@@ -109,7 +109,7 @@ export function UpdateProductForm() {
 
       // pricing
       price: 0,
-      salePrice: 0,
+      salePrice: undefined,
 
       // stock + variants
       stock: 0,
@@ -356,7 +356,7 @@ export function UpdateProductForm() {
                         autoComplete="off"
                         onChange={(event) => {
                           const value = event.target.value;
-                          field.onChange(value === "" ? "" : Number(value));
+                          field.onChange(value === "" ? undefined : Number(value));
                         }}
                       />
                       {fieldState.invalid && (

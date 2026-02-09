@@ -11,6 +11,7 @@ import { userSidebarItems } from "./userSidebarItems";
 import { withAuth } from "@/utils/withAuth";
 import Unauthorized from "@/pages/Unauthorized";
 import ProductsPage from "@/pages/ProductsPage";
+import ProductDetailsPage from "@/pages/ProductDetailsPage";
 
 export const router = createBrowserRouter(
   [
@@ -21,6 +22,10 @@ export const router = createBrowserRouter(
         {
           Component: ProductsPage,
           path: "products"
+        },
+        {
+          Component: ProductDetailsPage,
+          path: "product-details/:slug"
         },
         {
           Component: About,
