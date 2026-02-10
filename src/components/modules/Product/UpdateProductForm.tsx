@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useFieldArray, useForm } from "react-hook-form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
@@ -50,6 +50,7 @@ import {
 } from "@/redux/features/products/products.api";
 import Loading from "@/utils/Loading";
 import { toast } from "sonner";
+import { PlusCircleIcon } from "lucide-react";
 
 export function UpdateProductForm() {
   const [thumbnail, setThumbnail] = useState<File | null>(null);
@@ -102,6 +103,7 @@ export function UpdateProductForm() {
       // main details
       title: "",
       description: "",
+      features: [{ name: "", value: "" }],
 
       // categorization
       category: "",
@@ -124,16 +126,31 @@ export function UpdateProductForm() {
     },
   });
 
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "features",
+  });
+
   useEffect(() => {
     if (productData) {
       // console.log("reset category:", productData.category, typeof productData.category);
       // console.log("reset brand:", productData.brand, typeof productData.brand);
 
-      form.reset(productData);
+      form.reset({
+        ...productData,
+        features: productData.features
+      });
     }
   }, [productData, form]);
 
   const onSubmit = async (data: z.infer<typeof ProductUpdateZodSchema>) => {
+    // console.log(data)
+
+    // if(data.salePrice === undefined){
+    //   data.salePrice = undefined;
+    // }else{
+    //   data.salePrice = Number(data.salePrice);
+    // }
     const formData = new FormData();
     const productDataToUpdate = {
       ...data,
@@ -144,6 +161,8 @@ export function UpdateProductForm() {
     formData.append("data", JSON.stringify(productDataToUpdate));
     formData.append("file", thumbnail as File);
     images.forEach((image) => formData.append("files", image as File));
+
+    console.log(formData.get("data"))
 
     const dataToUpdate = {
       productSlug: productSlug,
@@ -232,6 +251,78 @@ export function UpdateProductForm() {
                   </Field>
                 )}
               />
+
+              <div>
+                <div>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => append({ name: "", value: "" })}
+                  >
+                    <PlusCircleIcon/> Add Product Feature
+                  </Button>
+                </div>
+                <div className="mt-5 space-y-5">
+                  {fields.map((field, index) => (
+                    <div key={field.id} className="flex gap-3 items-start">
+                      {/* Feature Name */}
+                      <Controller
+                        control={form.control}
+                        name={`features.${index}.name`}
+                        render={({ field, fieldState }) => (
+                          <Field data-invalid={fieldState.invalid}>
+                            <FieldLabel htmlFor="update-product-form-feature-name">
+                              Feature Name
+                            </FieldLabel>
+                            <Input
+                              {...field}
+                              id="update-product-form-feature-name"
+                              aria-invalid={fieldState.invalid}
+                              placeholder="Write here product feature name"
+                              autoComplete="off"
+                            />
+                            {fieldState.invalid && (
+                              <FieldError errors={[fieldState.error]} />
+                            )}
+                          </Field>
+                        )}
+                      />
+
+                      {/* Feature Value */}
+                      <Controller
+                        control={form.control}
+                        name={`features.${index}.value`}
+                        render={({ field, fieldState }) => (
+                          <Field data-invalid={fieldState.invalid}>
+                            <FieldLabel htmlFor="update-product-form-feature-value">
+                              Feature Value
+                            </FieldLabel>
+                            <Input
+                              {...field}
+                              id="update-product-form-feature-value"
+                              aria-invalid={fieldState.invalid}
+                              placeholder="Write here product feature value"
+                              autoComplete="off"
+                            />
+                            {fieldState.invalid && (
+                              <FieldError errors={[fieldState.error]} />
+                            )}
+                          </Field>
+                        )}
+                      />
+
+                      {/* Remove button */}
+                      <Button
+                        type="button"
+                        variant="destructive"
+                        onClick={() => remove(index)}
+                      >
+                        ✕
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              </div>
 
               <div className="flex gap-5">
                 <Controller
@@ -356,7 +447,9 @@ export function UpdateProductForm() {
                         autoComplete="off"
                         onChange={(event) => {
                           const value = event.target.value;
-                          field.onChange(value === "" ? undefined : Number(value));
+                          field.onChange(
+                            value === "" ? undefined : Number(value),
+                          );
                         }}
                       />
                       {fieldState.invalid && (

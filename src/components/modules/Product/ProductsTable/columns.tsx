@@ -112,7 +112,7 @@ export const columns: ColumnDef<IProduct>[] = [
         currency: "USD",
       }).format(salePrice);
 
-      return <div className="text-right font-medium">{formatted}</div>;
+      return <div className="text-right font-medium">{salePrice? formatted : "---"}</div>;
     },
   },
   {

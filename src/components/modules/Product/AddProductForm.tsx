@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-
 
 import { Button } from "@/components/ui/button";
 import {
@@ -46,6 +45,7 @@ import { useState } from "react";
 import MultipleImagesUploader from "@/components/ui/MultipleImagesUploader";
 import type { FileMetadata } from "@/hooks/use-file-upload";
 import { useCreateProductMutation } from "@/redux/features/products/products.api";
+import { PlusCircleIcon } from "lucide-react";
 
 export function AddProductForm() {
   const [thumbnail, setThumbnail] = useState<File | null>(null);
@@ -67,6 +67,7 @@ export function AddProductForm() {
       // main details
       title: "",
       description: "",
+      features: [{ name: "", value: "" }],
 
       // categorization
       category: "",
@@ -89,29 +90,32 @@ export function AddProductForm() {
     },
   });
 
-  const onSubmit = async(data: z.infer<typeof ProductCreationZodSchema>) => {
-    const toastId = toast.loading("Creating product...")
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "features",
+  });
+
+  const onSubmit = async (data: z.infer<typeof ProductCreationZodSchema>) => {
+    const toastId = toast.loading("Creating product...");
     const formData = new FormData();
     formData.append("data", JSON.stringify(data));
     formData.append("file", thumbnail as File);
-    images.forEach((image) => formData.append("files", image as File))
+    images.forEach((image) => formData.append("files", image as File));
     // console.log(formData.get("data"))
     // console.log(formData.get("file"))
     // console.log(formData.get("files"))
 
     try {
       const res = await createProduct(formData).unwrap();
-      console.log(res)
+      console.log(res);
 
-      if(res.success){
-        toast.success(res.message, {id: toastId})
+      if (res.success) {
+        toast.success(res.message, { id: toastId });
       }
-
     } catch (error: any) {
-      console.log(error)
-      toast.error(error.data.message, {id: toastId})
+      console.log(error);
+      toast.error(error.data.message, { id: toastId });
     }
-
   };
 
   return (
@@ -123,10 +127,7 @@ export function AddProductForm() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form
-          id="add-product-form"
-          onSubmit={form.handleSubmit(onSubmit)}
-        >
+        <form id="add-product-form" onSubmit={form.handleSubmit(onSubmit)}>
           <FieldGroup>
             <Controller
               name="title"
@@ -181,6 +182,78 @@ export function AddProductForm() {
                 </Field>
               )}
             />
+
+            <div>
+              <div>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => append({ name: "", value: "" })}
+                >
+                  <PlusCircleIcon /> Add Product Feature
+                </Button>
+              </div>
+              <div className="mt-5 space-y-5">
+                {fields.map((field, index) => (
+                  <div key={field.id} className="flex gap-3 items-start">
+                    {/* Feature Name */}
+                    <Controller
+                      control={form.control}
+                      name={`features.${index}.name`}
+                      render={({ field, fieldState }) => (
+                        <Field data-invalid={fieldState.invalid}>
+                          <FieldLabel htmlFor="add-product-form-feature-name">
+                            Feature Name
+                          </FieldLabel>
+                          <Input
+                            {...field}
+                            id="add-product-form-feature-name"
+                            aria-invalid={fieldState.invalid}
+                            placeholder="Write here product feature name"
+                            autoComplete="off"
+                          />
+                          {fieldState.invalid && (
+                            <FieldError errors={[fieldState.error]} />
+                          )}
+                        </Field>
+                      )}
+                    />
+
+                    {/* Feature Value */}
+                    <Controller
+                      control={form.control}
+                      name={`features.${index}.value`}
+                      render={({ field, fieldState }) => (
+                        <Field data-invalid={fieldState.invalid}>
+                          <FieldLabel htmlFor="add-product-form-feature-value">
+                            Feature Value
+                          </FieldLabel>
+                          <Input
+                            {...field}
+                            id="add-product-form-feature-value"
+                            aria-invalid={fieldState.invalid}
+                            placeholder="Write here product feature value"
+                            autoComplete="off"
+                          />
+                          {fieldState.invalid && (
+                            <FieldError errors={[fieldState.error]} />
+                          )}
+                        </Field>
+                      )}
+                    />
+
+                    {/* Remove button */}
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      onClick={() => remove(index)}
+                    >
+                      ✕
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            </div>
 
             <div className="flex gap-5">
               <Controller
@@ -263,10 +336,8 @@ export function AddProductForm() {
                       autoComplete="off"
                       onChange={(event) => {
                         const value = event.target.value;
-                        field.onChange(value === "" ? "" : Number(value))
+                        field.onChange(value === "" ? "" : Number(value));
                       }}
-                      
-                      
                     />
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
@@ -290,7 +361,7 @@ export function AddProductForm() {
                       autoComplete="off"
                       onChange={(event) => {
                         const value = event.target.value;
-                        field.onChange(value === "" ? "" : Number(value))
+                        field.onChange(value === "" ? "" : Number(value));
                       }}
                     />
                     {fieldState.invalid && (
@@ -315,7 +386,7 @@ export function AddProductForm() {
                       autoComplete="off"
                       onChange={(event) => {
                         const value = event.target.value;
-                        field.onChange(value === "" ? "" : Number(value))
+                        field.onChange(value === "" ? "" : Number(value));
                       }}
                     />
                     {fieldState.invalid && (
@@ -518,7 +589,11 @@ export function AddProductForm() {
       </CardContent>
       <CardFooter>
         <Field orientation="horizontal">
-          <Button type="submit" form="add-product-form" className="w-full hover:cursor-pointer">
+          <Button
+            type="submit"
+            form="add-product-form"
+            className="w-full hover:cursor-pointer"
+          >
             Submit
           </Button>
         </Field>
