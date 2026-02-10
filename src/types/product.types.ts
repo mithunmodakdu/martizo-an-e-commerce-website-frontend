@@ -219,6 +219,7 @@ export interface IProduct {
   title: string;
   slug: string;
   description: string;
+  features: [{name: string; value: string}]
 
   // categorization
   category: string;
@@ -227,7 +228,7 @@ export interface IProduct {
 
   // pricing
   price: number;
-  salePrice?: number;
+  salePrice?: number | undefined;
   discountPercentage?: number;
   
   // stock + variants

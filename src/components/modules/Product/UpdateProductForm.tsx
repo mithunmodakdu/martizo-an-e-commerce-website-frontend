@@ -145,6 +145,12 @@ export function UpdateProductForm() {
 
   const onSubmit = async (data: z.infer<typeof ProductUpdateZodSchema>) => {
     // console.log(data)
+
+    // if(data.salePrice === undefined){
+    //   data.salePrice = undefined;
+    // }else{
+    //   data.salePrice = Number(data.salePrice);
+    // }
     const formData = new FormData();
     const productDataToUpdate = {
       ...data,
@@ -155,6 +161,8 @@ export function UpdateProductForm() {
     formData.append("data", JSON.stringify(productDataToUpdate));
     formData.append("file", thumbnail as File);
     images.forEach((image) => formData.append("files", image as File));
+
+    console.log(formData.get("data"))
 
     const dataToUpdate = {
       productSlug: productSlug,

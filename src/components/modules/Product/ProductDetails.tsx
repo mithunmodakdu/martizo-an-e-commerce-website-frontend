@@ -97,86 +97,92 @@ interface ProductFormProps {
 
 const MAX_STARS = 5;
 
-
 interface ProductDetail1Props {
   className?: string;
-  productData: IProduct
+  productData: IProduct;
 }
 
-export const ProductDetails = ({ className, productData }: ProductDetail1Props) => {
-  console.log(productData)
+export const ProductDetails = ({
+  className,
+  productData,
+}: ProductDetail1Props) => {
+  console.log(productData);
   const PRODUCT_DETAILS = {
-  name: productData.title,
-  color: "blue",
-  size: "m",
-  reviews: {
-    rate: 2.5,
-    totalReviewers: "5.8k",
-  },
-  description: productData.description,
-  price: {
-    regular: productData.price,
-    sale: productData.salePrice,
-    currency: "USD",
-  },
-  hinges: {
-    size: {
-      label: "Select size",
-      id: "size",
-      name: "size",
-      options: [
-        {
-          id: "xs",
-          label: "xs",
-          value: "xs",
-          stockInfo: {
-            stockStatusCode: "OUT_OF_STOCK",
-          },
-        },
-        {
-          id: "s",
-          label: "s",
-          value: "s",
-          stockInfo: {
-            stockStatusCode: "OUT_OF_STOCK",
-          },
-        },
-        {
-          id: "m",
-          label: "m",
-          value: "m",
-          stockInfo: {
-            stockStatusCode: "IN_STOCK",
-          },
-        },
-        {
-          id: "l",
-          label: "l",
-          value: "l",
-          stockInfo: {
-            stockStatusCode: "IN_STOCK",
-          },
-        },
-        {
-          id: "xl",
-          label: "xl",
-          value: "xl",
-          stockInfo: {
-            stockStatusCode: "IN_STOCK",
-          },
-        },
-      ],
+    name: productData.title,
+    color: "blue",
+    size: "m",
+    reviews: {
+      rate: 2.5,
+      totalReviewers: "5.8k",
     },
-  } as Record<FieldName, Hinges>,
-  images: productData.images.map(url => (
-      {
+    description: productData.description,
+    price: {
+      regular: productData.price,
+      sale: productData.salePrice,
+      currency: "USD",
+    },
+    hinges: {
+      size: {
+        label: "Select size",
+        id: "size",
+        name: "size",
+        options: [
+          {
+            id: "xs",
+            label: "xs",
+            value: "xs",
+            stockInfo: {
+              stockStatusCode: "OUT_OF_STOCK",
+            },
+          },
+          {
+            id: "s",
+            label: "s",
+            value: "s",
+            stockInfo: {
+              stockStatusCode: "OUT_OF_STOCK",
+            },
+          },
+          {
+            id: "m",
+            label: "m",
+            value: "m",
+            stockInfo: {
+              stockStatusCode: "IN_STOCK",
+            },
+          },
+          {
+            id: "l",
+            label: "l",
+            value: "l",
+            stockInfo: {
+              stockStatusCode: "IN_STOCK",
+            },
+          },
+          {
+            id: "xl",
+            label: "xl",
+            value: "xl",
+            stockInfo: {
+              stockStatusCode: "IN_STOCK",
+            },
+          },
+        ],
+      },
+    } as Record<FieldName, Hinges>,
+    images: productData.images.map((url) => ({
       src: url,
       alt: `Image of ${productData.title}`,
       width: 1920,
       height: 2880,
-    }
-  )),
-};
+    })),
+  };
+
+  const productFeatures = productData?.features?.map((feature) => ({
+    label: feature.name,
+    value: feature.value,
+  }));
+  
 
   return (
     <section className={cn("py-32", className)}>
@@ -224,34 +230,7 @@ export const ProductDetails = ({ className, productData }: ProductDetail1Props) 
               }}
             />
 
-            <ProductInfo
-              info={[
-                {
-                  label: "Material",
-                  value: "100% Premium Denim",
-                },
-                {
-                  label: "Style",
-                  value: "Puffer Jacket",
-                },
-                {
-                  label: "Season",
-                  value: "All Season",
-                },
-                {
-                  label: "Care",
-                  value: "Machine Washable",
-                },
-                {
-                  label: "Origin",
-                  value: "Made in Italy",
-                },
-                {
-                  label: "Fit",
-                  value: "Regular Fit",
-                },
-              ]}
-            />
+            <ProductInfo info={productFeatures} />
           </div>
         </div>
       </div>
@@ -264,7 +243,7 @@ const ProductInfo = ({ info }: ProductInfoProps) => {
 
   return (
     <div>
-      <h2 className="mb-4 text-lg font-semibold">Product Details</h2>
+      <h2 className="mb-4 text-lg font-semibold">Product Features</h2>
       <dl>
         {info.map((item, index) => (
           <div
@@ -499,4 +478,3 @@ const SizeOption = ({ id, label, stockInfo, value }: SizeOptionProps) => {
     </FormLabel>
   );
 };
-
