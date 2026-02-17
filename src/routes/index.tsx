@@ -42,7 +42,7 @@ export const router = createBrowserRouter(
       ]
     },
     {
-      Component: withAuth(DashboardLayout, ["USER"]),
+      Component: withAuth(DashboardLayout, ["USER", "SUPER_ADMIN"]),
       path: "/user",
       children: [
         {index: true, element: <Navigate to={"/user/orders"}/>},
