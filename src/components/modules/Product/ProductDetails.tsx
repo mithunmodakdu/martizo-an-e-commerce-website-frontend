@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/form";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import type { IProduct } from "@/types";
+import { Link } from "react-router";
 
 type StockStatusCode = "IN_STOCK" | "OUT_OF_STOCK";
 
@@ -217,9 +218,11 @@ export const ProductDetails = ({
               </p>
             </div>
 
-            <Button size="lg" className="w-full">
+            <Link to={"/user/checkout"}>
+            <Button size="lg" className="w-full cursor-pointer">
               Buy Now
             </Button>
+            </Link>
 
             <ProductForm
               hinges={PRODUCT_DETAILS.hinges}
