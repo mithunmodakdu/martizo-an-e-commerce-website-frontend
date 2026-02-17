@@ -1,4 +1,5 @@
 import z from "zod";
+import type { ICartItem } from "../Cart/cart.types";
 
 export const PAYMENT_METHODS = {
   creditCard: "creditCard",
@@ -74,3 +75,8 @@ export const checkoutFormSchema = z.object({
 });
 
 export type CheckoutFormType = z.infer<typeof checkoutFormSchema>;
+
+export interface ICheckoutProps {
+  cartItems?: ICartItem[];
+  className?: string;
+}
