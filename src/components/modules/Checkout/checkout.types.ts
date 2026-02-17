@@ -1,6 +1,6 @@
 import z from "zod";
 
-const PAYMENT_METHODS = {
+export const PAYMENT_METHODS = {
   creditCard: "creditCard",
   paypal: "paypal",
   onlineBankTransfer: "onlineBankTransfer",
