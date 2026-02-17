@@ -1,5 +1,5 @@
 import type { UseFormReturn } from "react-hook-form";
-import type z from "zod";
+import type { CheckoutFormType } from "../Checkout/checkout.types";
 
 export interface IProductPrice {
   regular: number;
