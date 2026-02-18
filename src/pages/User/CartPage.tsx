@@ -5,7 +5,7 @@ import { FormProvider, useForm } from "react-hook-form";
 export default function CartPage() {
   const cartItems: ICartItem[] = [
     {
-      product_id: "product-1",
+      productId: "product-1",
       link: "#",
       name: "Stylish Maroon Sneaker",
       image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/stylish-maroon-sneaker.png",
@@ -26,7 +26,7 @@ export default function CartPage() {
       ],
     },
     {
-      product_id: "product-2",
+      productId: "product-2",
       link: "#",
       name: "Bicolor Sweatshirt with Embroidered Logo",
       image:
@@ -48,7 +48,7 @@ export default function CartPage() {
       ],
     },
     {
-      product_id: "product-4",
+      productId: "product-4",
       link: "#",
       name: "Maroon Leather Handbag",
       image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/maroon-leather-handbag.png",
@@ -67,7 +67,7 @@ export default function CartPage() {
   ];
 
   const defaultProducts = cartItems.map((item) => ({
-    product_id: item.product_id,
+    productId: item.productId,
     quantity: item.quantity,
     price: item.price.sale ?? item.price.regular,
   }));
