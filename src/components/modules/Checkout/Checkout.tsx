@@ -3,8 +3,6 @@ import { checkoutFormSchema, PAYMENT_METHODS, type CheckoutFormType, type ICheck
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { cn } from "@/lib/utils";
-import { Logo, LogoImageDesktop, LogoImageMobile } from "@/components/logo";
-import logoImage from "@/assets/images/martizo-logo.png";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Minus, Plus } from "lucide-react";
 import { ContactFields } from "./ContactFields";
@@ -17,7 +15,7 @@ import type { ICartItem } from "../Cart/cart.types";
 
  const cart_Items: ICartItem[] = [
     {
-      product_id: "product-1",
+      productId: "product-1",
       link: "#",
       name: "Stylish Maroon Sneaker",
       image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/stylish-maroon-sneaker.png",
@@ -38,7 +36,7 @@ import type { ICartItem } from "../Cart/cart.types";
       ],
     },
     {
-      product_id: "product-2",
+      productId: "product-2",
       link: "#",
       name: "Bicolor Sweatshirt with Embroidered Logo",
       image:
@@ -60,7 +58,7 @@ import type { ICartItem } from "../Cart/cart.types";
       ],
     },
     {
-      product_id: "product-4",
+      productId: "product-4",
       link: "#",
       name: "Maroon Leather Handbag",
       image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/ecommerce/clothes/maroon-leather-handbag.png",
@@ -81,7 +79,7 @@ import type { ICartItem } from "../Cart/cart.types";
 export const Checkout = ({ cartItems = cart_Items, className }: ICheckoutProps) => {
   const [activeAccordion, setActiveAccordion] = useState("item-1");
   const defaultProducts = cartItems.map((item) => ({
-    product_id: item.product_id,
+    productId: item.productId,
     quantity: item.quantity,
     price: item.price.sale ?? item.price.regular,
   }));

@@ -67,7 +67,7 @@ export const checkoutFormSchema = z.object({
   payment: PaymentSchema,
   products: z
     .object({
-      product_id: z.string(),
+      productId: z.string(),
       quantity: z.number(),
       price: z.number(),
     })

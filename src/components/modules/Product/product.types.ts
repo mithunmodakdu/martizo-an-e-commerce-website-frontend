@@ -203,6 +203,14 @@ export const ProductUpdateZodSchema = z.object({
     .optional(),
 });
 
+export interface ICategory {
+  _id?: string;
+  name: string;
+  slug: string;
+  parent?: string | null;
+  icon?: string;
+}
+
 export interface IVariant{
   name: string;
   value: string;
@@ -222,7 +230,7 @@ export interface IProduct {
   features: [{name: string; value: string}]
 
   // categorization
-  category: string;
+  category: ICategory | string;
   subCategory?: string;
   brand?: string;
 
@@ -258,4 +266,37 @@ export interface IProduct {
   sku?: string;
   status: "ACTIVE" | "INACTIVE"; 
 
+}
+
+export interface ProductPrice {
+  regular: number;
+  sale?: number | undefined;
+  currency: string;
+}
+
+export interface IProductCard {
+  _id: string;
+  name: string;
+  category: ICategory | string;
+  slug: string;
+  image: {
+    src: string;
+    alt: string;
+  };
+  description: string;
+  price: ProductPrice;
+  variants?: IVariant[],
+  badges?: {
+    text: string;
+    color?: string;
+  }[];
+}
+
+export type TProductCardProps = IProductCard;
+
+export type TProductCards = Array<IProductCard>;
+
+export interface IProductCardsContainerProps {
+  className?: string;
+  productsData?: IProduct[];
 }

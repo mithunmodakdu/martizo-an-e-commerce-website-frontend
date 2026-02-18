@@ -1,47 +1,8 @@
 import { cn } from "@/lib/utils";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import type { IProduct } from "@/types";
-import { Price, PriceValue } from "./Price";
-import { Link } from "react-router";
+import type { IProduct, IProductCardsContainerProps, TProductCards } from "./product.types";
+import { ProductCard } from "./ProductCard";
 
-interface ProductPrice {
-  regular: number;
-  sale?: number | undefined;
-  currency: string;
-}
 
-interface IProductCard {
-  name: string;
-  slug: string;
-  image: {
-    src: string;
-    alt: string;
-  };
-  description: string;
-  price: ProductPrice;
-  badges?: {
-    text: string;
-    color?: string;
-  }[];
-}
-
-type TProductCardProps = IProductCard;
-
-type TProductCards = Array<IProductCard>;
-
-interface IProductCardsContainerProps {
-  className?: string;
-  productsData?: IProduct[];
-}
 
 export const ProductCardsContainer = ({
   className,
@@ -51,8 +12,10 @@ export const ProductCardsContainer = ({
 
   const productCardsData: TProductCards = productsData?.map(
     (item: IProduct) => ({
+      _id: item._id,
       name: item.title,
       slug: item.slug,
+      category: item.category,
       image: {
         src: item.thumbnail,
         alt: `Thumbnail of ${item.title}`,
@@ -66,6 +29,7 @@ export const ProductCardsContainer = ({
         sale: item.salePrice,
         currency: "USD",
       },
+      variants: item.variants,
       badges: [
         {
           text: item?.isFlashSale && "Flash Sale",
@@ -84,6 +48,7 @@ export const ProductCardsContainer = ({
           color: item?.isNewArrival && "oklch(0.448 0.119 151.328)",
         },
       ],
+
     }),
   );
 
@@ -100,82 +65,4 @@ export const ProductCardsContainer = ({
   );
 };
 
-const ProductCard = ({
-  name,
-  slug,
-  description,
-  image,
-  badges,
-  price,
-}: TProductCardProps) => {
-  const { regular, sale, currency } = price;
 
-  return (
-    <div className="relative group ">
-      <Card className="min-w-[350px] min-h-[420px] overflow-hidden p-0 rounded-tl-none rounded-tr-3xl rounded-bl-3xl rounded-br-3xl">
-        <CardHeader className="relative block p-0">
-          <AspectRatio ratio={1.5} className="overflow-hidden">
-            <img
-              src={image.src}
-              alt={image.alt}
-              className="h-56 w-full rounded-tr-3xl rounded-bl-3xl object-cover sm:h-64 lg:h-72"
-            />
-          </AspectRatio>
-          <div className="absolute start-4 top-4">
-            <div className="flex gap-3">
-              {badges?.map((badge) => (
-                <div>
-                  {badge.text ? (
-                    <Badge
-                      style={{
-                        backgroundColor: badge.color,
-                      }}
-                    >
-                      {badge.text}
-                    </Badge>
-                  ) : (
-                    ""
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        </CardHeader>
-        <CardContent className="flex h-full flex-col gap-4 pb-6">
-          <CardTitle className="text-xl font-semibold">{name}</CardTitle>
-          <CardDescription className="font-medium text-muted-foreground">
-            {description}
-          </CardDescription>
-          <div className="mt-auto">
-            <Price onSale={sale != null} className="text-lg font-semibold">
-              <PriceValue price={sale} currency={currency} variant="sale" />
-              <PriceValue
-                price={regular}
-                currency={currency}
-                variant="regular"
-              />
-            </Price>
-          </div>
-        </CardContent>
-      </Card>
-      <div
-        className="absolute min-w-[300px] min-h-[400px] p-0 rounded-tl-none rounded-tr-3xl rounded-bl-3xl rounded-br-3xl inset-0 bg-muted-foreground flex items-center justify-center gap-3
-        opacity-0 group-hover:opacity-80 transition-all duration-300 ease-in-out"
-      >
-        <Link to={"/cart"} className="asChild">
-          <Button className="transform translate-y-24 group-hover:translate-y-0 transition-transform duration-500 ease-in-out hover:cursor-pointer">
-            Add to Cart
-          </Button>
-        </Link>
-        <Link to={`/product-details/${slug}`} className="asChild">
-          <Button
-            variant={"secondary"}
-            className="transform -translate-y-24 group-hover:translate-y-0 transition-transform duration-500 ease-in-out hover:cursor-pointer"
-          >
-            View Details
-          </Button>
-        </Link>
-      </div>
-    </div>
-  );
-};

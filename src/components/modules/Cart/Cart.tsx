@@ -42,7 +42,7 @@ export const Cart = ({ cartItems, form }: ICartProps) => {
             <li key={field.id}>
               <CartItem
                 {...(cartItems.find(
-                  (p) => p.product_id === field.product_id,
+                  (p) => p.productId === field.productId,
                 ) as ICartItem)}
                 onRemoveClick={() => handleRemove(index)()}
                 onQuantityChange={(newQty: number) =>
