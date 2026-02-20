@@ -2,6 +2,14 @@ import { baseApi } from "@/redux/baseApi";
 
 export const cartsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
+    getCart: builder.query({
+      query: () => ({
+        url: "/carts",
+        method: "GET"
+      }),
+      providesTags: ["CART"]
+    }),
+
     addToCart: builder.mutation({
       query: (cartData) => ({
         url: "/carts/add",
@@ -14,5 +22,6 @@ export const cartsApi = baseApi.injectEndpoints({
 });
 
 export const {
+  useGetCartQuery,
   useAddToCartMutation
 } = cartsApi;

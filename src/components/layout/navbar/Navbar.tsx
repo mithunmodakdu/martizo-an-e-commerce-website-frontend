@@ -1,5 +1,5 @@
 import { useId } from "react";
-import { CircleIcon, Heart, SearchIcon } from "lucide-react";
+import { CircleIcon, Heart, SearchIcon, ShoppingCart } from "lucide-react";
 import logoImage from "@/assets/images/martizo-logo.png";
 import UserMenu from "@/components/layout/navbar/user-menu";
 import { Button } from "@/components/ui/button";
@@ -14,7 +14,6 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { Link } from "react-router";
-import CartSheet from "../../ui/cart-sheet";
 import { ListItem } from "./ListItem";
 import { ModeToggler } from "../MoodToggler";
 import {
@@ -22,8 +21,15 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { useGetCartQuery } from "@/redux/features/cart/cart.api";
 
 export default function Navbar() {
+  const {data: cartData, isLoading: cartLoading} = useGetCartQuery(undefined);
+  if(!cartLoading){
+    console.log(cartData)
+    console.log(cartData.data.totalItems)
+  }
+  
   const id = useId();
   const wishlistLength = 5;
 
@@ -342,7 +348,15 @@ export default function Navbar() {
           </Button>
 
           {/* cart */}
-          <CartSheet />
+           <Button className="cursor-pointer" variant="outline">
+            <span>
+              <ShoppingCart />
+            </span>
+            {
+              !cartLoading && cartData.data.totalItems > 0 && <sup>{cartData.data.totalItems}</sup>
+            }
+            
+          </Button>
 
           {/* User menu */}
           <UserMenu />
