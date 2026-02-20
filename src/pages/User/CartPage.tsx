@@ -72,20 +72,16 @@ export default function CartPage() {
     price: item.price.sale ?? item.price.regular,
   }));
 
-  const form = useForm({
-    // resolver: zodResolver(checkoutFormSchema),
+  const form = useForm({ 
     defaultValues: {
-      // payment: {
-      //   method: PAYMENT_METHODS.creditCard,
-      // },
       products: defaultProducts,
-    },
+    }, 
   });
   
   return (
     <div className="mx-auto">
       <FormProvider {...form}>
-        <Cart cartItems={cartItems} form={form}/>
+        <Cart cartItems={cartItems}/>
       </FormProvider>
     </div>
   );

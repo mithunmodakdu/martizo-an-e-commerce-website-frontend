@@ -4,7 +4,7 @@ import { createContext, useContext } from "react";
 import { cn } from "@/lib/utils";
 
 const PriceContext = createContext<{ onSale?: boolean }>({ onSale: false });
-export const usePriceContext = () => useContext(PriceContext);
+const usePriceContext = () => useContext(PriceContext);
 
 interface PriceProps {
   className?: string;

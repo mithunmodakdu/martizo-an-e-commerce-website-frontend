@@ -14,9 +14,9 @@ export interface ICartItem {
   link?: string;
   name: string;
   category: string;
-  image?: {src: string, alt: string};
   price: IProductPrice;
   quantity: number;
+  image?: {src: string, alt: string};
   variant?: IVariant;
   details?: {
     label: string;
