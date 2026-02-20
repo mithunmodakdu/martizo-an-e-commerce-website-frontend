@@ -26,6 +26,7 @@ export const QuantityInput = ({
   const { min = 1, max = 99 } = props;
 
   const clamp = (num: number) => Math.max(min, Math.min(max, num));
+  
   const handleIncrement = () => {
     const newValue = clamp((inputProps?.value as number) + 1 || min);
     onValueChange?.(newValue);

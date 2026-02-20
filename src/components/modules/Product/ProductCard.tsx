@@ -13,6 +13,7 @@ import { Link } from "react-router";
 import { Button } from "@/components/ui/button";
 import type { ICartItem } from "../Cart/cart.types";
 import { useAddToCartMutation } from "@/redux/features/cart/cart.api";
+import { toast } from "sonner";
 
 export const ProductCard = ({
   _id,
@@ -22,7 +23,6 @@ export const ProductCard = ({
   description,
   image,
   price,
-  variants,
   badges,
 }: TProductCardProps) => {
   const [addToCart] = useAddToCartMutation()
@@ -32,17 +32,24 @@ export const ProductCard = ({
     productId: _id,
     name,
     category: category?._id,
-    image,
     price,
     quantity: 1,
-    variant: variants[0] 
+    image,
   };
   
 
   const handleAddToCart = async (data: ICartItem) => {
-    console.log(data)
-    const res = await addToCart(data);
-    console.log(res)
+    // console.log(data)
+    const toastId = toast.loading("Adding product to cart...")
+    try {
+      const res = await addToCart(data);
+      // console.log(res)
+      if(res.data.success){
+        toast.success(res.data.message, {id: toastId})
+      }
+    } catch (error) {
+      console.log(error)
+    }
   };
 
   return (

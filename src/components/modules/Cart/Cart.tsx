@@ -1,17 +1,19 @@
-import { useFieldArray } from "react-hook-form";
+import { useFieldArray, useFormContext} from "react-hook-form";
 import type { ICartItem, ICartProps } from "./cart.types";
 import { useCallback } from "react";
 import { CartItem } from "./CartItem";
 import { Price, PriceValue } from "../Product/Price";
 
 
-export const Cart = ({ cartItems, form }: ICartProps) => {
+export const Cart = ({ cartItems}: ICartProps) => {
+  const {watch, control} = useFormContext();
+  
   const { fields, remove, update } = useFieldArray({
-    control: form.control,
+    control,
     name: "products",
   });
 
-  const formItems = form.watch("products");
+  const formItems = watch("products");
 
   const totalPrice = formItems?.reduce(
     (sum, p) => sum + p.price * p.quantity,
