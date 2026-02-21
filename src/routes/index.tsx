@@ -12,6 +12,7 @@ import { withAuth } from "@/utils/withAuth";
 import Unauthorized from "@/pages/Unauthorized";
 import ProductsPage from "@/pages/ProductsPage";
 import ProductDetailsPage from "@/pages/ProductDetailsPage";
+import CartPage from "@/pages/CartPage";
 
 export const router = createBrowserRouter(
   [
@@ -60,6 +61,10 @@ export const router = createBrowserRouter(
     {
       Component: LoginPage,
       path: "/login"
+    },
+    {
+      Component: withAuth(CartPage, ["SUPER_ADMIN", "ADMIN", "USER"]),
+      path: "/cart"
     },
     {
       Component: Unauthorized,

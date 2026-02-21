@@ -1,4 +1,4 @@
-import CartPage from "@/pages/User/CartPage";
+import CartPage from "@/pages/CartPage";
 import CheckoutPage from "@/pages/User/CheckoutPage";
 import type { ISidebarItem } from "@/types";
 import { lazy } from "react";
@@ -20,12 +20,7 @@ export const userSidebarItems: ISidebarItem[] = [
           url: "/user/checkout",
           component: CheckoutPage
         },
-        {
-          title: "Cart",
-          url: "/user/cart",
-          component: CartPage
-        }
-        
+                
       ],
     }
     

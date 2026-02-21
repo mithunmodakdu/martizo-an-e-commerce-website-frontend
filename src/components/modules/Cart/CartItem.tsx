@@ -25,8 +25,8 @@ export const CartItem = ({
         <div className="shrink-0 basis-25">
           <AspectRatio ratio={1} className="overflow-hidden rounded-lg">
             <img
-              src={image}
-              alt={name}
+              src={image?.src}
+              alt={image?.alt}
               className="block size-full object-cover object-center"
             />
           </AspectRatio>
@@ -55,7 +55,7 @@ export const CartItem = ({
                 index={index}
                 onQuantityChange={onQuantityChange}
               />
-              <Button size="icon" variant="ghost" onClick={onRemoveClick}>
+              <Button size="icon" variant="destructive" onClick={onRemoveClick}>
                 <Trash />
               </Button>
             </div>
