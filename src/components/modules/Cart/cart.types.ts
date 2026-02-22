@@ -8,7 +8,6 @@ export interface IProductPrice {
   currency: string;
 }
 
-
 export interface ICartItem {
   productId: string;
   link?: string;
@@ -26,9 +25,7 @@ export interface ICartItem {
 
 
 export interface ICartItemProps extends ICartItem {
-  index: number;
   onRemoveClick: () => void;
-  onQuantityChange: (newQty: number) => void;
 }
 
 export interface ICartProps {

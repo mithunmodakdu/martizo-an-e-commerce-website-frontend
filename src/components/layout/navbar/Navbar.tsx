@@ -25,10 +25,6 @@ import { useGetCartQuery } from "@/redux/features/cart/cart.api";
 
 export default function Navbar() {
   const {data: cartData, isLoading: cartLoading} = useGetCartQuery(undefined);
-  if(!cartLoading){
-    console.log(cartData)
-    console.log(cartData.data.totalItems)
-  }
   
   const id = useId();
   const wishlistLength = 5;
@@ -348,15 +344,17 @@ export default function Navbar() {
           </Button>
 
           {/* cart */}
+         <Link className="asChild" to={"/cart"}>
            <Button className="cursor-pointer" variant="outline">
             <span>
               <ShoppingCart />
             </span>
             {
-              !cartLoading && cartData.data.totalItems > 0 && <sup>{cartData.data.totalItems}</sup>
+              !cartLoading && cartData?.data?.totalItems > 0 && <sup>{cartData?.data?.totalItems}</sup>
             }
             
           </Button>
+         </Link>
 
           {/* User menu */}
           <UserMenu />
