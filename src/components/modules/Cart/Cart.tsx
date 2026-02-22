@@ -2,11 +2,13 @@
 import type { ICartItem } from "./cart.types";
 import { CartItem } from "./CartItem";
 import { Price, PriceValue } from "../Product/Price";
-import { useGetCartQuery } from "@/redux/features/cart/cart.api";
+import { useDeleteCartItemMutation, useGetCartQuery } from "@/redux/features/cart/cart.api";
 import Loading from "@/utils/Loading";
+import { toast } from "sonner";
 
 export const Cart = () => {
   const { data: cartData, isLoading: cartLoading } = useGetCartQuery(undefined);
+  const [deleteCartItem] = useDeleteCartItemMutation();
 
   const cartItems: ICartItem[] | [] =
     cartData?.data?.items?.map((item: ICartItem) => ({
@@ -44,7 +46,16 @@ export const Cart = () => {
   const tax = totalPrice * 0.05;
 
   const handleRemove = async (productId: string) => {
-    console.log(productId);
+    const toastId = toast.loading("Removing product from the cart...")
+    try {
+      const res = await deleteCartItem(productId);
+      if(res.data.success){
+        toast.success(res?.data?.message, {id: toastId})
+      }
+      
+    } catch (error) {
+      console.log(error)
+    }
   };
 
   const handleQuantityChange = async (productId: string) => {

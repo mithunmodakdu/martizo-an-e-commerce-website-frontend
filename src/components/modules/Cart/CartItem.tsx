@@ -57,7 +57,7 @@ export const CartItem = ({
                 onQuantityChange={onQuantityChange}
               /> */}
               <QuantityHandler onValueChange={onQuantityChange}/>
-              <Button size="icon" variant="destructive" onClick={onRemoveClick}>
+              <Button className="cursor-pointer" size="icon" variant="destructive" onClick={onRemoveClick}>
                 <Trash />
               </Button>
             </div>
