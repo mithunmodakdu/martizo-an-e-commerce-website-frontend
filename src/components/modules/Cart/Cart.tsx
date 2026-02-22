@@ -1,4 +1,3 @@
-// import { useFieldArray, useFormContext} from "react-hook-form";
 import type { ICartItem } from "./cart.types";
 import { CartItem } from "./CartItem";
 import { Price, PriceValue } from "../Product/Price";
@@ -37,13 +36,16 @@ export const Cart = () => {
       ],
     })) || [];
 
-  const totalPrice = cartItems?.reduce(
+    console.log(cartItems)
+
+  const subTotal = cartItems?.reduce(
     (total, item) =>
       total + (item.price.sale ?? item.price.regular) * item.quantity,
     0,
   );
 
-  const tax = totalPrice * 0.05;
+  const tax = (subTotal * 0.05).toFixed(2);
+  const totalPrice = Number(subTotal) + Number(tax);
 
   const handleRemove = async (productId: string) => {
     const toastId = toast.loading("Removing product from the cart...")
@@ -56,10 +58,6 @@ export const Cart = () => {
     } catch (error) {
       console.log(error)
     }
-  };
-
-  const handleQuantityChange = async (productId: string) => {
-    console.log(productId);
   };
 
   return (
@@ -81,7 +79,6 @@ export const Cart = () => {
                 <CartItem
                   {...item}
                   onRemoveClick={() => handleRemove(item.productId)}
-                  onQuantityChange={() => handleQuantityChange(item.productId)}
                 />
               </li>
             );
@@ -94,7 +91,7 @@ export const Cart = () => {
             <p className="text-sm">Subtotal</p>
             <Price className="text-sm font-normal">
               <PriceValue
-                price={totalPrice}
+                price={subTotal}
                 currency={cartItems?.[0]?.price?.currency || "USD"}
                 variant="regular"
               />
