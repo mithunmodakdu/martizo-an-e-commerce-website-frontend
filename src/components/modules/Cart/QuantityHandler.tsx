@@ -15,7 +15,7 @@ export interface QuantityProps {
   inputProps?: React.ComponentProps<"input">;
 }
 
-export const QuantityInput = ({
+export const QuantityHandler = ({
   onValueChange,
   inputProps,
   className,
@@ -47,7 +47,7 @@ export const QuantityInput = ({
   return (
     <div
       className={clsx(
-        "flex h-9 w-full items-center overflow-hidden rounded-full border shadow-xs",
+        "flex h-9 w-full max-w-28 items-center overflow-hidden rounded-full border shadow-xs",
         className,
       )}
       aria-label="quantity"

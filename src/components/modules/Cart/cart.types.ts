@@ -26,7 +26,7 @@ export interface ICartItem {
 
 
 export interface ICartItemProps extends ICartItem {
-  index: number;
+  // index: number;
   onRemoveClick: () => void;
   onQuantityChange: (newQty: number) => void;
 }

@@ -2,10 +2,11 @@ import { Card, CardTitle } from "@/components/ui/card";
 import type { ICartItemProps } from "./cart.types";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { CartProductDetails } from "./CartProductDetails";
-import { QuantityField } from "./QuantityField";
+// import { QuantityField } from "./QuantityField";
 import { Button } from "@/components/ui/button";
 import { Trash } from "lucide-react";
 import { Price, PriceValue } from "../Product/Price";
+import { QuantityHandler } from "./QuantityHandler";
 
 export const CartItem = ({
   image,
@@ -13,7 +14,7 @@ export const CartItem = ({
   link,
   details,
   price,
-  index,
+  // index,
   onQuantityChange,
   onRemoveClick,
 }: ICartItemProps) => {
@@ -51,10 +52,11 @@ export const CartItem = ({
               </div>
             </div>
             <div className="flex w-full justify-between gap-3">
-              <QuantityField
+              {/* <QuantityField
                 index={index}
                 onQuantityChange={onQuantityChange}
-              />
+              /> */}
+              <QuantityHandler onValueChange={onQuantityChange}/>
               <Button size="icon" variant="destructive" onClick={onRemoveClick}>
                 <Trash />
               </Button>
