@@ -13,62 +13,66 @@ import Unauthorized from "@/pages/Unauthorized";
 import ProductsPage from "@/pages/ProductsPage";
 import ProductDetailsPage from "@/pages/ProductDetailsPage";
 import CartPage from "@/pages/CartPage";
+import CheckoutPage from "@/pages/CheckoutPage";
 
-export const router = createBrowserRouter(
-  [
-    {
-      Component: App,
-      path: "/",
-      children: [
-        {
-          Component: ProductsPage,
-          path: "products"
-        },
-        {
-          Component: ProductDetailsPage,
-          path: "product-details/:slug"
-        },
-        {
-          Component: About,
-          path: "about"
-        }
-      ]
-    },
-    {
-      Component: withAuth(DashboardLayout, ["SUPER_ADMIN", "ADMIN"]),
-      path: "/admin",
-      children: [
-        {index: true, element: <Navigate to={"/admin/analytics"}/>},
-        ...generateRoutes(adminSidebarItems)
-      ]
-    },
-    {
-      Component: withAuth(DashboardLayout, ["USER", "SUPER_ADMIN"]),
-      path: "/user",
-      children: [
-        {index: true, element: <Navigate to={"/user/orders"}/>},
-        ...generateRoutes(userSidebarItems)
-      ]
-    },
-    {
-      Component: SignupPage,
-      path: "/signup"
-    },
-    {
-      Component: Verify,
-      path: "/verify"
-    },
-    {
-      Component: LoginPage,
-      path: "/login"
-    },
-    {
-      Component: withAuth(CartPage, ["SUPER_ADMIN", "ADMIN", "USER"]),
-      path: "/cart"
-    },
-    {
-      Component: Unauthorized,
-      path: "/unauthorized"
-    }
-  ]
-);
+export const router = createBrowserRouter([
+  {
+    Component: App,
+    path: "/",
+    children: [
+      {
+        Component: ProductsPage,
+        path: "products",
+      },
+      {
+        Component: ProductDetailsPage,
+        path: "product-details/:slug",
+      },
+      {
+        Component: About,
+        path: "about",
+      },
+      {
+        Component: withAuth(CartPage, ["SUPER_ADMIN", "ADMIN", "USER"]),
+        path: "/cart",
+      },
+      {
+        Component: withAuth(CheckoutPage, ["SUPER_ADMIN", "ADMIN", "USER"]),
+        path: "/checkout"
+      }
+    ],
+  },
+  {
+    Component: withAuth(DashboardLayout, ["SUPER_ADMIN", "ADMIN"]),
+    path: "/admin",
+    children: [
+      { index: true, element: <Navigate to={"/admin/analytics"} /> },
+      ...generateRoutes(adminSidebarItems),
+    ],
+  },
+  {
+    Component: withAuth(DashboardLayout, ["USER", "SUPER_ADMIN"]),
+    path: "/user",
+    children: [
+      { index: true, element: <Navigate to={"/user/orders"} /> },
+      ...generateRoutes(userSidebarItems),
+    ],
+  },
+  {
+    Component: SignupPage,
+    path: "/signup",
+  },
+  {
+    Component: Verify,
+    path: "/verify",
+  },
+  {
+    Component: LoginPage,
+    path: "/login",
+  },
+
+  {
+    Component: Unauthorized,
+    path: "/unauthorized",
+  },
+]);

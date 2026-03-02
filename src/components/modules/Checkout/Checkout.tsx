@@ -94,7 +94,7 @@ export const Checkout = ({ cartItems = cart_Items, className }: ICheckoutProps) 
     },
   });
 
-  const onSubmit = (data: CheckoutFormType) => {
+  const onSubmit = (data: any) => {
     console.log(data);
   };
 
@@ -112,9 +112,9 @@ export const Checkout = ({ cartItems = cart_Items, className }: ICheckoutProps) 
         <div className="flex flex-col gap-6 pb-8 md:flex-row md:items-center md:justify-between md:gap-8">
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-2">
-              <h1 className="text-4xl font-bold tracking-tight md:text-5xl">
+              <h2 className="text-4xl font-semibold tracking-tight md:text-5xl">
                 Checkout
-              </h1>
+              </h2>
               <p className="text-sm text-muted-foreground md:text-base">
                 Complete your purchase securely
               </p>
@@ -202,7 +202,7 @@ export const Checkout = ({ cartItems = cart_Items, className }: ICheckoutProps) 
                       <div className="space-y-7">
                         <PaymentFields />
                         <Button type="submit" className="w-full">
-                          Checkout
+                          Place Order
                         </Button>
                       </div>
                     </AccordionContent>
@@ -210,7 +210,7 @@ export const Checkout = ({ cartItems = cart_Items, className }: ICheckoutProps) 
                 </Accordion>
               </div>
               <div>
-                <Cart form={form} cartItems={cartItems} />
+                <Cart/>
               </div>
             </div>
           </form>
