@@ -4,6 +4,8 @@ import { Price, PriceValue } from "../Product/Price";
 import { useDeleteCartItemMutation, useGetCartQuery } from "@/redux/features/cart/cart.api";
 import Loading from "@/utils/Loading";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router";
 
 export const Cart = () => {
   const { data: cartData, isLoading: cartLoading } = useGetCartQuery(undefined);
@@ -61,10 +63,7 @@ export const Cart = () => {
   };
 
   return (
-    <div>
-      <div className="border-b py-7">
-        <h2 className="text-lg leading-relaxed font-semibold">Your Cart</h2>
-      </div>
+    <div className="max-w-xl mx-auto">
       <ul className="space-y-12 py-7">
         {cartLoading ? (
           <li>

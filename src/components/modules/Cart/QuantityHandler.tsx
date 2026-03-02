@@ -87,7 +87,7 @@ export const QuantityHandler = ({
         variant="ghost"
         type="button"
         size="icon"
-        className="shrink-0 rounded-none"
+        className="shrink-0 rounded-none cursor-pointer"
       >
         {renderLeftIcon?.() ?? <Minus />}
       </Button>
@@ -103,7 +103,7 @@ export const QuantityHandler = ({
         variant="ghost"
         type="button"
         size="icon"
-        className="shrink-0 rounded-none"
+        className="shrink-0 rounded-none cursor-pointer"
       >
         {renderRightIcon?.() ?? <Plus />}
       </Button>
