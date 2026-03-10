@@ -28,7 +28,6 @@ import {
   InputGroupText,
   InputGroupTextarea,
 } from "@/components/ui/input-group";
-import { ProductCreationZodSchema } from "@/types";
 import { useGetProductCategoriesQuery } from "@/redux/features/productCategories/productCategories.api";
 import {
   Select,
@@ -46,6 +45,7 @@ import MultipleImagesUploader from "@/components/ui/MultipleImagesUploader";
 import type { FileMetadata } from "@/hooks/use-file-upload";
 import { useCreateProductMutation } from "@/redux/features/products/products.api";
 import { PlusCircleIcon } from "lucide-react";
+import { ProductCreationZodSchema } from "./product.types";
 
 export function AddProductForm() {
   const [thumbnail, setThumbnail] = useState<File | null>(null);

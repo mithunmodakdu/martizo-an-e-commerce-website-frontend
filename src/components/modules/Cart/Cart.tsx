@@ -4,12 +4,15 @@ import { Price, PriceValue } from "../Product/Price";
 import { useDeleteCartItemMutation, useGetCartQuery } from "@/redux/features/cart/cart.api";
 import Loading from "@/utils/Loading";
 import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
-import { Link } from "react-router";
+import { useLocation } from "react-router";
+import { useState } from "react";
 
-export const Cart = () => {
+export const Cart = ({city=""}) => {
+  // const [isCartPage, setIsCartPage] = useState(true);
   const { data: cartData, isLoading: cartLoading } = useGetCartQuery(undefined);
   const [deleteCartItem] = useDeleteCartItemMutation();
+  const location = useLocation();
+  const pathname = location.pathname;
 
   const cartItems: ICartItem[] | [] =
     cartData?.data?.items?.map((item: ICartItem) => ({
@@ -38,16 +41,18 @@ export const Cart = () => {
       ],
     })) || [];
 
-    console.log(cartItems)
+    // console.log(cartItems)
 
-  const subTotal = cartItems?.reduce(
+  const subTotal = Number(cartItems?.reduce(
     (total, item) =>
       total + (item.price.sale ?? item.price.regular) * item.quantity,
     0,
-  );
-
-  const tax = (subTotal * 0.05).toFixed(2);
-  const totalPrice = Number(subTotal) + Number(tax);
+  ));
+    
+  const shippingCost = city?.toLowerCase() === "dhaka" ? 60 : 120;
+    
+  const tax = Number((subTotal * 0.075).toFixed(2));
+  const totalPrice = subTotal + shippingCost + tax;
 
   const handleRemove = async (productId: string) => {
     const toastId = toast.loading("Removing product from the cart...")
@@ -84,7 +89,28 @@ export const Cart = () => {
           })
         )}
       </ul>
-      <div>
+      {
+        pathname === "/cart" && (
+          <div>
+        <div className="space-y-3.5 border-y py-7">
+          <div className="flex justify-between gap-3">
+            <p className="text-sm">Subtotal</p>
+            <Price className="text-sm font-normal">
+              <PriceValue
+                price={subTotal}
+                currency={cartItems?.[0]?.price?.currency || "USD"}
+                variant="regular"
+              />
+            </Price>
+          </div>
+          
+        </div>
+      </div>
+        )
+      }
+      {
+        !(pathname === "/cart") && (
+          <div>
         <div className="space-y-3.5 border-y py-7">
           <div className="flex justify-between gap-3">
             <p className="text-sm">Subtotal</p>
@@ -98,11 +124,23 @@ export const Cart = () => {
           </div>
           <div className="flex justify-between gap-3">
             <p className="text-sm">Shipping</p>
-            <p className="text-sm">Free</p>
+            <Price className="text-sm font-normal">
+              <PriceValue
+                price={shippingCost}
+                currency={"USD"}
+                variant="regular"
+              />
+            </Price>
           </div>
           <div className="flex justify-between gap-3">
             <p className="text-sm">Estimated Tax</p>
-            <p className="text-sm">${tax}</p>
+            <Price className="text-sm font-normal">
+              <PriceValue
+                price={tax}
+                currency={"USD"}
+                variant="regular"
+              />
+            </Price>
           </div>
         </div>
         <div className="py-7">
@@ -118,6 +156,8 @@ export const Cart = () => {
           </div>
         </div>
       </div>
+        )
+      }
     </div>
   );
 };
