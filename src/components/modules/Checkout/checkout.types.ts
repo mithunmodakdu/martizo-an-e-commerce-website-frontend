@@ -15,9 +15,29 @@ export const PAYMENT_METHODS = {
 export type TPaymentMethod = keyof typeof PAYMENT_METHODS;
 
 
+export const CodPayment = z.object({
+  method: z.literal(PAYMENT_METHODS.COD)
+});
+
+export const SslCommerzPayment = z.object({
+  method: z.literal(PAYMENT_METHODS.SSL_COMMERZ)
+});
+
+export const StripePayment = z.object({
+  method: z.literal(PAYMENT_METHODS.STRIPE)
+});
+
 export const PayPalPayment = z.object({
   method: z.literal(PAYMENT_METHODS.PAYPAL),
   payPalEmail: z.string(),
+});
+
+export const BkashPayment = z.object({
+  method: z.literal(PAYMENT_METHODS.BKASH)
+});
+
+export const NagadPayment = z.object({
+  method: z.literal(PAYMENT_METHODS.NAGAD)
 });
 
 export const CreditCardPayment = z.object({
@@ -50,8 +70,13 @@ export const BankTransferPayment = z.object({
 });
 
 export const PaymentSchema = z.discriminatedUnion("method", [
-  CreditCardPayment,
+  CodPayment,
+  SslCommerzPayment,
+  StripePayment,
   PayPalPayment,
+  BkashPayment,
+  NagadPayment,
+  CreditCardPayment,
   BankTransferPayment,
 ]);
 
@@ -62,37 +87,6 @@ export interface IShippingAddress {
   city: string;
   postalCode?: string;
   country?: string;
-}
-
-export const checkoutFormSchema = z.object({
-  contactInfo: z.object({
-    email: z.string(),
-    subscribe: z.boolean().optional(),
-  }).optional(),
-  shippingAddress: z.object({
-    name: z.string(),
-    phone: z.string(),
-    address: z.string(),
-    city: z.string(),
-    postalCode: z.string(),
-    country: z.string(),
-  }),
-  shippingMethod: z.string().optional(),
-  payment: PaymentSchema,
-  products: z
-    .object({
-      productId: z.string(),
-      quantity: z.number(),
-      price: z.number(),
-    })
-    .array(),
-});
-
-export type CheckoutFormType = z.infer<typeof checkoutFormSchema>;
-
-export interface ICheckoutProps {
-  cartItems?: ICartItem[];
-  className?: string;
 }
 
 export interface IVariant{
@@ -114,20 +108,18 @@ export interface IOrderItem {
   image?: string | null;
 }
 
-
-
-
-
-export enum EOrderStatus {
-  PENDING = "PENDING",
-  PAID = "PAID",
-  PROCESSING = "PROCESSING",
-  SHIPPED = "SHIPPED",
-  DELIVERED = "DELIVERED",
-  FAILED = "FAILED",
-  CANCELLED = "CANCELLED",
-  REFUNDED = "REFUNDED"
+export const OrderStatus = {
+  PENDING: "PENDING",
+  PAID: "PAID",
+  PROCESSING: "PROCESSING",
+  SHIPPED: "SHIPPED",
+  DELIVERED: "DELIVERED",
+  FAILED: "FAILED",
+  CANCELLED: "CANCELLED",
+  REFUNDED: "REFUNDED"
 }
+
+export type TOrderStatus = keyof typeof OrderStatus;
 
 export interface IOrder {
   userId: string;
@@ -139,9 +131,9 @@ export interface IOrder {
   shippingPrice: number;
   totalPrice: number;
   
-  paymentMethod: EPaymentMethod;
-  paymentId?: Types.ObjectId;
-  status: EOrderStatus
+  paymentMethod: TPaymentMethod;
+  paymentId?: string;
+  status: TOrderStatus
 
   paidAt?: Date | null;
   shippedAt?: Date | null;
@@ -152,4 +144,29 @@ export interface IOrder {
   createdAt?: Date;
   invoiceNo: string;
 
+}
+
+export const checkoutFormSchema = z.object({
+  contactInfo: z.object({
+    email: z.string(),
+    subscribe: z.boolean().optional(),
+  }).optional(),
+  shippingAddress: z.object({
+    name: z.string(),
+    phone: z.string(),
+    address: z.string(),
+    city: z.string(),
+    postalCode: z.string(),
+    country: z.string(),
+  }).optional(),
+  shippingMethod: z.string().optional(),
+  // payment: PaymentSchema.optional(),
+  
+});
+
+export type CheckoutFormType = z.infer<typeof checkoutFormSchema>;
+
+export interface ICheckoutProps {
+  cartItems?: ICartItem[];
+  className?: string;
 }
