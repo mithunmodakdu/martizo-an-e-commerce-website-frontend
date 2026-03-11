@@ -1,7 +1,6 @@
 import { useState } from "react";
 import {
-  checkoutFormSchema,
-  PAYMENT_METHODS,
+  CheckoutFormZodSchema,
   type CheckoutFormType,
   type ICheckoutProps,
 } from "./checkout.types";
@@ -23,11 +22,24 @@ import { PaymentMethodFields } from "./PaymentMethodFields";
 export const Checkout = ({ className }: ICheckoutProps) => {
   const [activeAccordion, setActiveAccordion] = useState("item-1");
 
-  const form = useForm();
-  const city = form.watch("shippingAddress.city")
-  console.log(city)
+  const form = useForm({
+    resolver: zodResolver(CheckoutFormZodSchema),
+    defaultValues: {
+      shippingAddress: {
+        name: "",
+        phone: "",
+        address: "",
+        city: "",
+        postalCode: "",
+        country: "",
+      },
+      paymentMethod: "",
+    },
+  });
 
-  const onSubmit = (data: any) => {
+  const city = form.watch("shippingAddress.city");
+
+  const onSubmit = (data: CheckoutFormType) => {
     console.log(data);
   };
 
@@ -60,14 +72,19 @@ export const Checkout = ({ className }: ICheckoutProps) => {
           </div>
           <FormProvider {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
-              <div>
-                <Accordion
+              <div className="space-y-7">
+                <AddressFields/>
+                <PaymentMethodFields/>
+                 <Button type="submit" className="w-full">
+                          Place Order
+                        </Button>
+                {/* <Accordion
                   type="single"
                   collapsible
                   className="w-full"
                   value={activeAccordion}
                   onValueChange={handleOnValueChange}
-                >                
+                >
                   <AccordionItem value="item-1">
                     <AccordionTrigger className="px-1 py-7 text-lg font-semibold hover:no-underline [&>svg:last-child]:hidden [&[data-state=closed]>svg:nth-of-type(2)]:hidden [&[data-state=open]>svg:nth-of-type(1)]:hidden [&[data-state=open]>svg:nth-of-type(2)]:block">
                       Shipping Address
@@ -96,14 +113,12 @@ export const Checkout = ({ className }: ICheckoutProps) => {
                     </AccordionTrigger>
                     <AccordionContent className="px-1 pb-7">
                       <div className="space-y-7">
-                        <PaymentMethodFields/>
-                        <Button type="submit" className="w-full"> 
-                          Place Order
-                        </Button>
+                        <PaymentMethodFields />
+                       
                       </div>
                     </AccordionContent>
                   </AccordionItem>
-                </Accordion>
+                </Accordion> */}
               </div>
             </form>
           </FormProvider>

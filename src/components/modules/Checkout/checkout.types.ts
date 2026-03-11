@@ -1,5 +1,4 @@
 import z from "zod";
-import type { ICartItem } from "../Cart/cart.types";
 
 export const PAYMENT_METHODS = {
   COD: "COD",                  // Cash on Delivery
@@ -23,77 +22,39 @@ export interface IShippingAddress {
   country?: string;
 }
 
-export interface IVariant{
-  name: string;
-  value: string;
-  additionalPrice?: number;
-  stock?: number;
-  images?: [string];
-  sku?: string
-} 
-
-export interface IOrderItem {
-  productId: string;
-  name: string;
-  categoryName: string;
-  quantity: number;
-  price: number;
-  variant?: IVariant | null;
-  image?: string | null;
-}
-
-export const OrderStatus = {
-  PENDING: "PENDING",
-  PAID: "PAID",
-  PROCESSING: "PROCESSING",
-  SHIPPED: "SHIPPED",
-  DELIVERED: "DELIVERED",
-  FAILED: "FAILED",
-  CANCELLED: "CANCELLED",
-  REFUNDED: "REFUNDED"
-}
-
-export type TOrderStatus = keyof typeof OrderStatus;
-
-export interface IOrder {
-  userId: string;
-  shippingAddress: IShippingAddress;
-
-  items: IOrderItem[];
-  itemsPrice : number;
-  taxPrice: number;
-  shippingPrice: number;
-  totalPrice: number;
+export const ShippingAddressZodSchema = z.object({
+  name: z
+    .string({ message: "Name must be string" })
+    .min(2, {
+      message: "Name is too short. It must have minimum 2 characters.",
+    })
+    .max(50, {
+      message: "Name is too long. It must have maximum 50 characters.",
+    }),
+  phone: z
+    .string({ message: "Phone number must be string" })
+    .regex(/^(?:\+8801\d{9}|01\d{9})$/, {
+      message:
+        "Phone number must be valid for Bangladesh.   Format: +8801XXXXXXXXX or 01XXXXXXXXX",
+    })
+    .min(1, { error: "Phone number is required" }),
+  address: z
+    .string({ error: "Address must be a string" })
+    .min(2, { error: "Address is required" })
+    .max(200, { message: "Address can not exceed 200 characters" }),
+  city: z.string({ error: "City must be a string" }).min(1, {error: "City is required"}),
+  postalCode: z.string({ error: "Postal code must be a string" }).optional(),
+  country: z.string({ error: "Country must be a string" }).optional(),
   
-  paymentMethod: TPaymentMethod;
-  paymentId?: string;
-  status: TOrderStatus
+});
 
-  paidAt?: Date | null;
-  shippedAt?: Date | null;
-  deliveredAt?: Date | null;
-  cancelledAt?: Date | null;
-  refundedAt?: Date | null;
-
-  createdAt?: Date;
-  invoiceNo: string;
-
-}
-
-export const checkoutFormSchema = z.object({
-  shippingAddress: z.object({
-    name: z.string(),
-    phone: z.string(),
-    address: z.string(),
-    city: z.string(),
-    postalCode: z.string(),
-    country: z.string(),
-  }),
+export const CheckoutFormZodSchema = z.object({
+  shippingAddress: ShippingAddressZodSchema,
   paymentMethod: z.enum(Object.values(PAYMENT_METHODS)),
   
 });
 
-export type CheckoutFormType = z.infer<typeof checkoutFormSchema>;
+export type CheckoutFormType = z.infer<typeof CheckoutFormZodSchema>;
 
 export interface ICheckoutProps {
   className?: string;

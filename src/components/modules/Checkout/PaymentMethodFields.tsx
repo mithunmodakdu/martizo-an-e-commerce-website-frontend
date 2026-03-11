@@ -21,6 +21,7 @@ export const PaymentMethodFields = () => {
         control={form.control}
         render={({ field, fieldState }) => (
           <FieldSet>
+            <FieldLegend className="font-bold">Payment Method</FieldLegend>
             <RadioGroup
               name={field.name}
               value={field.value}
