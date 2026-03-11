@@ -15,11 +15,10 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Minus, Plus } from "lucide-react";
-import { ContactFields } from "./ContactFields";
 import { Button } from "@/components/ui/button";
 import { AddressFields } from "./AddressFields";
-import { ShippingMethodFields } from "./ShippingMethodFields";
 import { Cart } from "../Cart/Cart";
+import { PaymentMethodFields } from "./PaymentMethodFields";
 
 export const Checkout = ({ className }: ICheckoutProps) => {
   const [activeAccordion, setActiveAccordion] = useState("item-1");
@@ -56,6 +55,9 @@ export const Checkout = ({ className }: ICheckoutProps) => {
           </div>
         </div>
         <div className="grid grid-cols-1 gap-0 lg:grid-cols-2 lg:gap-17.5">
+          <div>
+            <Cart city={city} />
+          </div>
           <FormProvider {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
               <div>
@@ -65,16 +67,16 @@ export const Checkout = ({ className }: ICheckoutProps) => {
                   className="w-full"
                   value={activeAccordion}
                   onValueChange={handleOnValueChange}
-                >
+                >                
                   <AccordionItem value="item-1">
                     <AccordionTrigger className="px-1 py-7 text-lg font-semibold hover:no-underline [&>svg:last-child]:hidden [&[data-state=closed]>svg:nth-of-type(2)]:hidden [&[data-state=open]>svg:nth-of-type(1)]:hidden [&[data-state=open]>svg:nth-of-type(2)]:block">
-                      Contact Information
+                      Shipping Address
                       <Plus className="pointer-events-none size-4 shrink-0 self-center text-muted-foreground" />
                       <Minus className="pointer-events-none hidden size-4 shrink-0 self-center text-muted-foreground" />
                     </AccordionTrigger>
                     <AccordionContent className="px-1 pb-7">
                       <div className="space-y-7">
-                        <ContactFields />
+                        <AddressFields />
                         <Button
                           type="button"
                           className="w-full"
@@ -88,53 +90,13 @@ export const Checkout = ({ className }: ICheckoutProps) => {
                   </AccordionItem>
                   <AccordionItem value="item-2">
                     <AccordionTrigger className="px-1 py-7 text-lg font-semibold hover:no-underline [&>svg:last-child]:hidden [&[data-state=closed]>svg:nth-of-type(2)]:hidden [&[data-state=open]>svg:nth-of-type(1)]:hidden [&[data-state=open]>svg:nth-of-type(2)]:block">
-                      Shipping Address
-                      <Plus className="pointer-events-none size-4 shrink-0 self-center text-muted-foreground" />
-                      <Minus className="pointer-events-none hidden size-4 shrink-0 self-center text-muted-foreground" />
-                    </AccordionTrigger>
-                    <AccordionContent className="px-1 pb-7">
-                      <div className="space-y-7">
-                        <AddressFields />
-                        <Button
-                          type="button"
-                          className="w-full"
-                          variant="secondary"
-                          onClick={() => onContinue("item-3")}
-                        >
-                          Continue
-                        </Button>
-                      </div>
-                    </AccordionContent>
-                  </AccordionItem>
-                  <AccordionItem value="item-3">
-                    <AccordionTrigger className="px-1 py-7 text-lg font-semibold hover:no-underline [&>svg:last-child]:hidden [&[data-state=closed]>svg:nth-of-type(2)]:hidden [&[data-state=open]>svg:nth-of-type(1)]:hidden [&[data-state=open]>svg:nth-of-type(2)]:block">
-                      Shipping Method
-                      <Plus className="pointer-events-none size-4 shrink-0 self-center text-muted-foreground" />
-                      <Minus className="pointer-events-none hidden size-4 shrink-0 self-center text-muted-foreground" />
-                    </AccordionTrigger>
-                    <AccordionContent className="px-1 pb-7">
-                      <div className="space-y-7">
-                        <ShippingMethodFields />
-                        <Button
-                          type="button"
-                          className="w-full"
-                          variant="secondary"
-                          onClick={() => onContinue("item-4")}
-                        >
-                          Continue
-                        </Button>
-                      </div>
-                    </AccordionContent>
-                  </AccordionItem>
-                  <AccordionItem value="item-4">
-                    <AccordionTrigger className="px-1 py-7 text-lg font-semibold hover:no-underline [&>svg:last-child]:hidden [&[data-state=closed]>svg:nth-of-type(2)]:hidden [&[data-state=open]>svg:nth-of-type(1)]:hidden [&[data-state=open]>svg:nth-of-type(2)]:block">
                       Payment Method
                       <Plus className="pointer-events-none size-4 shrink-0 self-center text-muted-foreground" />
                       <Minus className="pointer-events-none hidden size-4 shrink-0 self-center text-muted-foreground" />
                     </AccordionTrigger>
                     <AccordionContent className="px-1 pb-7">
                       <div className="space-y-7">
-                        
+                        <PaymentMethodFields/>
                         <Button type="submit" className="w-full"> 
                           Place Order
                         </Button>
@@ -145,9 +107,6 @@ export const Checkout = ({ className }: ICheckoutProps) => {
               </div>
             </form>
           </FormProvider>
-          <div>
-            <Cart city={city} />
-          </div>
         </div>
       </div>
     </section>
