@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   CheckoutFormZodSchema,
   type CheckoutFormType,
@@ -7,20 +6,14 @@ import {
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { cn } from "@/lib/utils";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import { Minus, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AddressFields } from "./AddressFields";
 import { Cart } from "../Cart/Cart";
 import { PaymentMethodFields } from "./PaymentMethodFields";
+import { useCreateOrderMutation } from "@/redux/features/order/order.api";
 
 export const Checkout = ({ className }: ICheckoutProps) => {
-  const [activeAccordion, setActiveAccordion] = useState("item-1");
+  const [createOrder] = useCreateOrderMutation();
 
   const form = useForm({
     resolver: zodResolver(CheckoutFormZodSchema),
@@ -39,16 +32,9 @@ export const Checkout = ({ className }: ICheckoutProps) => {
 
   const city = form.watch("shippingAddress.city");
 
-  const onSubmit = (data: CheckoutFormType) => {
-    console.log(data);
-  };
-
-  const onContinue = (value: string) => {
-    setActiveAccordion(value);
-  };
-
-  const handleOnValueChange = (value: string) => {
-    setActiveAccordion(value);
+  const onSubmit = async(data: CheckoutFormType) => {
+    const res = await createOrder(data);
+    console.log(res)
   };
 
   return (
@@ -73,52 +59,11 @@ export const Checkout = ({ className }: ICheckoutProps) => {
           <FormProvider {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
               <div className="space-y-7">
-                <AddressFields/>
-                <PaymentMethodFields/>
-                 <Button type="submit" className="w-full">
-                          Place Order
-                        </Button>
-                {/* <Accordion
-                  type="single"
-                  collapsible
-                  className="w-full"
-                  value={activeAccordion}
-                  onValueChange={handleOnValueChange}
-                >
-                  <AccordionItem value="item-1">
-                    <AccordionTrigger className="px-1 py-7 text-lg font-semibold hover:no-underline [&>svg:last-child]:hidden [&[data-state=closed]>svg:nth-of-type(2)]:hidden [&[data-state=open]>svg:nth-of-type(1)]:hidden [&[data-state=open]>svg:nth-of-type(2)]:block">
-                      Shipping Address
-                      <Plus className="pointer-events-none size-4 shrink-0 self-center text-muted-foreground" />
-                      <Minus className="pointer-events-none hidden size-4 shrink-0 self-center text-muted-foreground" />
-                    </AccordionTrigger>
-                    <AccordionContent className="px-1 pb-7">
-                      <div className="space-y-7">
-                        <AddressFields />
-                        <Button
-                          type="button"
-                          className="w-full"
-                          variant="secondary"
-                          onClick={() => onContinue("item-2")}
-                        >
-                          Continue
-                        </Button>
-                      </div>
-                    </AccordionContent>
-                  </AccordionItem>
-                  <AccordionItem value="item-2">
-                    <AccordionTrigger className="px-1 py-7 text-lg font-semibold hover:no-underline [&>svg:last-child]:hidden [&[data-state=closed]>svg:nth-of-type(2)]:hidden [&[data-state=open]>svg:nth-of-type(1)]:hidden [&[data-state=open]>svg:nth-of-type(2)]:block">
-                      Payment Method
-                      <Plus className="pointer-events-none size-4 shrink-0 self-center text-muted-foreground" />
-                      <Minus className="pointer-events-none hidden size-4 shrink-0 self-center text-muted-foreground" />
-                    </AccordionTrigger>
-                    <AccordionContent className="px-1 pb-7">
-                      <div className="space-y-7">
-                        <PaymentMethodFields />
-                       
-                      </div>
-                    </AccordionContent>
-                  </AccordionItem>
-                </Accordion> */}
+                <AddressFields />
+                <PaymentMethodFields />
+                <Button type="submit" className="w-full">
+                  Place Order
+                </Button>
               </div>
             </form>
           </FormProvider>
