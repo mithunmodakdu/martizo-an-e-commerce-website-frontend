@@ -8,7 +8,6 @@ export const ordersApi = baseApi.injectEndpoints({
         method: "POST",
         data: checkoutData,
       }),
-      invalidatesTags: ["ORDERS"],
     }),
   }),
 });

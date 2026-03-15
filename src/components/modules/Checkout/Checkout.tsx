@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   CheckoutFormZodSchema,
   type CheckoutFormType,
@@ -11,6 +12,7 @@ import { AddressFields } from "./AddressFields";
 import { Cart } from "../Cart/Cart";
 import { PaymentMethodFields } from "./PaymentMethodFields";
 import { useCreateOrderMutation } from "@/redux/features/order/order.api";
+import { toast } from "sonner";
 
 export const Checkout = ({ className }: ICheckoutProps) => {
   const [createOrder] = useCreateOrderMutation();
@@ -32,9 +34,22 @@ export const Checkout = ({ className }: ICheckoutProps) => {
 
   const city = form.watch("shippingAddress.city");
 
-  const onSubmit = async(data: CheckoutFormType) => {
-    const res = await createOrder(data);
-    console.log(res)
+  const onSubmit = async (data: CheckoutFormType) => {
+    const toastId = toast.loading("Placing order...");
+
+    try {
+      const res = await createOrder(data);
+      console.log(res);
+      if (res?.data?.success) {
+        toast.success(res.data.message, { id: toastId });
+
+        if (res?.data?.data?.order?.paymentMethod === "SSL_COMMERZ") {
+          window.location.href = res.data.data.paymentGateWayUrl;
+        }
+      }
+    } catch (error: any) {
+      console.log(error);
+    }
   };
 
   return (
@@ -61,7 +76,7 @@ export const Checkout = ({ className }: ICheckoutProps) => {
               <div className="space-y-7">
                 <AddressFields />
                 <PaymentMethodFields />
-                <Button type="submit" className="w-full">
+                <Button type="submit" className="w-full cursor-pointer">
                   Place Order
                 </Button>
               </div>

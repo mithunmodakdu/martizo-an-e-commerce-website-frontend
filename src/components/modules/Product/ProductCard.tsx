@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Card,
   CardContent,
@@ -41,15 +42,22 @@ export const ProductCard = ({
   const handleAddToCart = async (data: ICartItem) => {
     // console.log(data)
     const toastId = toast.loading("Adding product to cart...")
+
     try {
-      const res = await addToCart(data);
+      const res = await addToCart(data).unwrap();
       // console.log(res)
       if(res.data.success){
         toast.success(res.data.message, {id: toastId})
       }
-    } catch (error) {
-      console.log(error)
+
+      
+    } catch (error: any) {
+      // console.log("from error catch", error)
+      if(!error.data.success){
+        toast.error(error.data.message, {id: toastId})
+      }
     }
+    
   };
 
   return (

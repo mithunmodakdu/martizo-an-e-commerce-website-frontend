@@ -51,7 +51,7 @@ export const Cart = ({ city = "" }) => {
     ),
   );
 
-  const shippingCost = city?.toLowerCase() === "dhaka" ? 60 : 120;
+  const shippingCost = subTotal > 0? (city?.toLowerCase() === "dhaka" ? 60 : 120) : 0;
 
   const tax = Number((subTotal * 0.075).toFixed(2));
   const totalPrice = subTotal + shippingCost + tax;
