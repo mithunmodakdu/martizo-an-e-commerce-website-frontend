@@ -46,8 +46,8 @@ export const ProductCard = ({
     try {
       const res = await addToCart(data).unwrap();
       // console.log(res)
-      if(res.data.success){
-        toast.success(res.data.message, {id: toastId})
+      if(res.success){
+        toast.success(res.message, {id: toastId})
       }
 
       
@@ -61,8 +61,8 @@ export const ProductCard = ({
   };
 
   return (
-    <div className="relative group ">
-      <Card className="min-w-[350px] min-h-[420px] overflow-hidden p-0 rounded-tl-none rounded-tr-3xl rounded-bl-3xl rounded-br-3xl">
+    <div className="relative group">
+      <Card className="overflow-hidden w-[300px] h-[350px] p-0 rounded-tl-none rounded-tr-3xl rounded-bl-3xl rounded-br-3xl">
         <CardHeader className="relative block p-0">
           <AspectRatio ratio={1.5} className="overflow-hidden">
             <img
@@ -109,7 +109,7 @@ export const ProductCard = ({
         </CardContent>
       </Card>
       <div
-        className="absolute min-w-[300px] min-h-[400px] p-0 rounded-tl-none rounded-tr-3xl rounded-bl-3xl rounded-br-3xl inset-0 bg-muted-foreground flex items-center justify-center gap-3
+        className="absolute w-[300px] h-[350px] p-0 rounded-tl-none rounded-tr-3xl rounded-bl-3xl rounded-br-3xl inset-0 bg-muted-foreground flex items-center justify-center gap-3
         opacity-0 group-hover:opacity-80 transition-all duration-300 ease-in-out"
       >
         
