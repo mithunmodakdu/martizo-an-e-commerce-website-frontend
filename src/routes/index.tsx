@@ -44,6 +44,10 @@ export const router = createBrowserRouter([
       {
         Component: withAuth(PaymentMessagePage, ["SUPER_ADMIN", "ADMIN", "USER"]),
         path: "/payments/success"
+      },
+      {
+        Component: withAuth(PaymentMessagePage, ["SUPER_ADMIN", "ADMIN", "USER"]),
+        path: "/payments/fail"
       }
     ],
   },
