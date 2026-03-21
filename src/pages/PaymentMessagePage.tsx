@@ -1,3 +1,4 @@
+import PaymentCancelled from "@/components/modules/Payment/PaymentCancelled";
 import PaymentFailed from "@/components/modules/Payment/PaymentFailed";
 import PaymentSuccess from "@/components/modules/Payment/PaymentSuccess";
 import { useLocation } from "react-router";
@@ -13,6 +14,9 @@ export default function PaymentMessagePage() {
       }
       {
         search.status === "failed" && <PaymentFailed search ={search}/>
+      }
+      {
+        search.status === "cancelled" && <PaymentCancelled search ={search}/>
       }
       
     </div>

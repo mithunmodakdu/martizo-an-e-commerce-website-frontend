@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button";
-import { XCircle } from "lucide-react";
+import { Ban } from "lucide-react";
 import { Link } from "react-router";
 import type { ISearchProps } from "./payment.interfaces";
 
-export default function PaymentFailed({search}: ISearchProps) {
+export default function PaymentCancelled({search}: ISearchProps) {
   const { message } = search;
 
   return (
@@ -11,11 +11,11 @@ export default function PaymentFailed({search}: ISearchProps) {
       <div className="w-full max-w-md rounded-2xl bg-background text-foreground p-8 shadow-lg shadow-gray-500 text-center">
         {/* Icon */}
         <div className="flex justify-center mb-4">
-          <XCircle className="h-16 w-16 text-red-500" />
+          <Ban className="h-16 w-16 text-red-500" />
         </div>
 
         {/* Title */}
-        <h1 className="text-2xl font-bold mb-2">Payment Failed</h1>
+        <h1 className="text-2xl font-bold mb-2">Payment Cancelled</h1>
 
         {/* Message */}
         {message && <p className="mb-6">{message}</p>}
