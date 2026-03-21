@@ -1,14 +1,15 @@
 import type { ICartItem } from "./cart.types";
 import { CartItem } from "./CartItem";
 import { Price, PriceValue } from "../Product/Price";
-import { useDeleteCartItemMutation, useGetCartQuery } from "@/redux/features/cart/cart.api";
+import {
+  useDeleteCartItemMutation,
+  useGetCartQuery,
+} from "@/redux/features/cart/cart.api";
 import Loading from "@/utils/Loading";
 import { toast } from "sonner";
 import { useLocation } from "react-router";
-import { useState } from "react";
 
-export const Cart = ({city=""}) => {
-  // const [isCartPage, setIsCartPage] = useState(true);
+export const Cart = ({ city = "" }) => {
   const { data: cartData, isLoading: cartLoading } = useGetCartQuery(undefined);
   const [deleteCartItem] = useDeleteCartItemMutation();
   const location = useLocation();
@@ -41,29 +42,29 @@ export const Cart = ({city=""}) => {
       ],
     })) || [];
 
-    // console.log(cartItems)
 
-  const subTotal = Number(cartItems?.reduce(
-    (total, item) =>
-      total + (item.price.sale ?? item.price.regular) * item.quantity,
-    0,
-  ));
-    
-  const shippingCost = city?.toLowerCase() === "dhaka" ? 60 : 120;
-    
+  const subTotal = Number(
+    cartItems?.reduce(
+      (total, item) =>
+        total + (item.price.sale ?? item.price.regular) * item.quantity,
+      0,
+    ),
+  );
+
+  const shippingCost = subTotal > 0? (city?.toLowerCase() === "dhaka" ? 60 : 120) : 0;
+
   const tax = Number((subTotal * 0.075).toFixed(2));
   const totalPrice = subTotal + shippingCost + tax;
 
   const handleRemove = async (productId: string) => {
-    const toastId = toast.loading("Removing product from the cart...")
+    const toastId = toast.loading("Removing product from the cart...");
     try {
       const res = await deleteCartItem(productId);
-      if(res.data.success){
-        toast.success(res?.data?.message, {id: toastId})
+      if (res.data.success) {
+        toast.success(res?.data?.message, { id: toastId });
       }
-      
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   };
 
@@ -89,75 +90,66 @@ export const Cart = ({city=""}) => {
           })
         )}
       </ul>
-      {
-        pathname === "/cart" && (
-          <div>
-        <div className="space-y-3.5 border-y py-7">
-          <div className="flex justify-between gap-3">
-            <p className="text-sm">Subtotal</p>
-            <Price className="text-sm font-normal">
-              <PriceValue
-                price={subTotal}
-                currency={cartItems?.[0]?.price?.currency || "USD"}
-                variant="regular"
-              />
-            </Price>
-          </div>
-          
-        </div>
-      </div>
-        )
-      }
-      {
-        !(pathname === "/cart") && (
-          <div>
-        <div className="space-y-3.5 border-y py-7">
-          <div className="flex justify-between gap-3">
-            <p className="text-sm">Subtotal</p>
-            <Price className="text-sm font-normal">
-              <PriceValue
-                price={subTotal}
-                currency={cartItems?.[0]?.price?.currency || "USD"}
-                variant="regular"
-              />
-            </Price>
-          </div>
-          <div className="flex justify-between gap-3">
-            <p className="text-sm">Shipping</p>
-            <Price className="text-sm font-normal">
-              <PriceValue
-                price={shippingCost}
-                currency={"USD"}
-                variant="regular"
-              />
-            </Price>
-          </div>
-          <div className="flex justify-between gap-3">
-            <p className="text-sm">Estimated Tax</p>
-            <Price className="text-sm font-normal">
-              <PriceValue
-                price={tax}
-                currency={"USD"}
-                variant="regular"
-              />
-            </Price>
+      {pathname === "/cart" && (
+        <div>
+          <div className="space-y-3.5 border-y py-7">
+            <div className="flex justify-between gap-3">
+              <p className="text-sm">Subtotal</p>
+              <Price className="text-sm font-normal">
+                <PriceValue
+                  price={subTotal}
+                  currency={cartItems?.[0]?.price?.currency || "USD"}
+                  variant="regular"
+                />
+              </Price>
+            </div>
           </div>
         </div>
-        <div className="py-7">
-          <div className="flex justify-between gap-3">
-            <p className="text-lg leading-tight font-medium">Total</p>
-            <Price className="text-xl font-medium">
-              <PriceValue
-                price={totalPrice}
-                currency={cartItems?.[0]?.price?.currency || "USD"}
-                variant="regular"
-              />
-            </Price>
+      )}
+      {!(pathname === "/cart") && (
+        <div>
+          <div className="space-y-3.5 border-y py-7">
+            <div className="flex justify-between gap-3">
+              <p className="text-sm">Subtotal</p>
+              <Price className="text-sm font-normal">
+                <PriceValue
+                  price={subTotal}
+                  currency={cartItems?.[0]?.price?.currency || "USD"}
+                  variant="regular"
+                />
+              </Price>
+            </div>
+            <div className="flex justify-between gap-3">
+              <p className="text-sm">Shipping</p>
+              <Price className="text-sm font-normal">
+                <PriceValue
+                  price={shippingCost}
+                  currency={"USD"}
+                  variant="regular"
+                />
+              </Price>
+            </div>
+            <div className="flex justify-between gap-3">
+              <p className="text-sm">Estimated Tax</p>
+              <Price className="text-sm font-normal">
+                <PriceValue price={tax} currency={"USD"} variant="regular" />
+              </Price>
+            </div>
+          </div>
+          <div className="py-7">
+            <div className="flex justify-between gap-3">
+              <p className="text-lg leading-tight font-medium">Total</p>
+              <Price className="text-xl font-medium">
+                <PriceValue
+                  price={totalPrice}
+                  currency={cartItems?.[0]?.price?.currency || "USD"}
+                  variant="regular"
+                />
+              </Price>
+            </div>
           </div>
         </div>
-      </div>
-        )
-      }
+      )}
     </div>
   );
 };
