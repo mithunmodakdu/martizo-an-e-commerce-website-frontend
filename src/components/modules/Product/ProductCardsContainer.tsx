@@ -27,7 +27,7 @@ export const ProductCardsContainer = ({
       price: {
         regular: item.price,
         sale: item.salePrice,
-        currency: "USD",
+        currency: "BDT",
       },
       variants: item.variants,
       badges: [

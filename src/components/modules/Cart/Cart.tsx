@@ -114,7 +114,7 @@ export const Cart = ({ city = "" }) => {
               <Price className="text-sm font-normal">
                 <PriceValue
                   price={subTotal}
-                  currency={cartItems?.[0]?.price?.currency || "USD"}
+                  currency={cartItems?.[0]?.price?.currency || "BDT"}
                   variant="regular"
                 />
               </Price>
@@ -124,7 +124,7 @@ export const Cart = ({ city = "" }) => {
               <Price className="text-sm font-normal">
                 <PriceValue
                   price={shippingCost}
-                  currency={"USD"}
+                  currency={cartItems?.[0]?.price?.currency || "BDT"}
                   variant="regular"
                 />
               </Price>
@@ -132,7 +132,11 @@ export const Cart = ({ city = "" }) => {
             <div className="flex justify-between gap-3">
               <p className="text-sm">Estimated Tax</p>
               <Price className="text-sm font-normal">
-                <PriceValue price={tax} currency={"USD"} variant="regular" />
+                <PriceValue 
+                  price={tax} 
+                  currency={cartItems?.[0]?.price?.currency || "BDT"} 
+                  variant="regular" 
+                />
               </Price>
             </div>
           </div>
@@ -142,7 +146,7 @@ export const Cart = ({ city = "" }) => {
               <Price className="text-xl font-medium">
                 <PriceValue
                   price={totalPrice}
-                  currency={cartItems?.[0]?.price?.currency || "USD"}
+                  currency={cartItems?.[0]?.price?.currency || "BDT"}
                   variant="regular"
                 />
               </Price>
