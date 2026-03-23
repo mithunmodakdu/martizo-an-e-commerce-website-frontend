@@ -7,10 +7,18 @@ const paymentsApi = baseApi.injectEndpoints({
         url: `/payments/${transactionId}`,
         method: "GET"
       })
-    })
+    }),
+
+    initSslPayment: builder.mutation({
+      query: (orderId) => ({
+        url: `/payments/init/${orderId}`,
+        method: "POST"
+      })
+    }),
   })
 });
 
 export const {
-  useGetPaymentByTransactionIdQuery
+  useGetPaymentByTransactionIdQuery,
+  useInitSslPaymentMutation
 } = paymentsApi;

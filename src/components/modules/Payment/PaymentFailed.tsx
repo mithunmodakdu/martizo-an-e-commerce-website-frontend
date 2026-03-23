@@ -2,13 +2,33 @@ import { Button } from "@/components/ui/button";
 import { XCircle } from "lucide-react";
 import { Link } from "react-router";
 import type { ISearchProps } from "./payment.interfaces";
-import { useGetPaymentByTransactionIdQuery } from "@/redux/features/payments/payments.api";
+import {
+  useGetPaymentByTransactionIdQuery,
+  useInitSslPaymentMutation,
+} from "@/redux/features/payments/payments.api";
+import { toast } from "sonner";
 
-export default function PaymentFailed({search}: ISearchProps) {
-  const {transactionId, message } = search;
-  const {data: paymentData} = useGetPaymentByTransactionIdQuery(transactionId);
+export default function PaymentFailed({ search }: ISearchProps) {
+  const { transactionId, message } = search;
+  const { data: paymentData, isLoading: isPaymentLoading } =
+    useGetPaymentByTransactionIdQuery(transactionId);
+  const [initSslPayment] = useInitSslPaymentMutation();
 
-  console.log(paymentData)
+  const handleInitSslPayment = async (orderId: string) => {
+    if (isPaymentLoading) {
+      toast.error("Payment data is loading...");
+    }
+
+    try {
+      const res = await initSslPayment(orderId).unwrap();
+
+      if (res.success) {
+        window.location.href = res.data.paymentGateWayUrl;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="flex min-h-screen items-center justify-center px-4">
@@ -26,9 +46,12 @@ export default function PaymentFailed({search}: ISearchProps) {
 
         {/* Actions */}
         <div className="flex flex-col gap-3">
-          <Link to="/orders">
-            <Button className="w-full cursor-pointer">Try Again to Pay</Button>
-          </Link>
+          <Button
+            onClick={() => handleInitSslPayment(paymentData.data.orderId)}
+            className="w-full cursor-pointer"
+          >
+            Try Again to Pay
+          </Button>
 
           <Link to="/products">
             <Button className="w-full cursor-pointer" variant="outline">

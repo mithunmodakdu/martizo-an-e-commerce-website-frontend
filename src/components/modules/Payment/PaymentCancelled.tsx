@@ -2,9 +2,33 @@ import { Button } from "@/components/ui/button";
 import { Ban } from "lucide-react";
 import { Link } from "react-router";
 import type { ISearchProps } from "./payment.interfaces";
+import { toast } from "sonner";
+import {
+  useGetPaymentByTransactionIdQuery,
+  useInitSslPaymentMutation,
+} from "@/redux/features/payments/payments.api";
 
-export default function PaymentCancelled({search}: ISearchProps) {
-  const { message } = search;
+export default function PaymentCancelled({ search }: ISearchProps) {
+  const { transactionId, message } = search;
+  const { data: paymentData, isLoading: isPaymentLoading } =
+    useGetPaymentByTransactionIdQuery(transactionId);
+  const [initSslPayment] = useInitSslPaymentMutation();
+
+  const handleInitSslPayment = async (orderId: string) => {
+    if (isPaymentLoading) {
+      toast.error("Payment data is loading...");
+    }
+
+    try {
+      const res = await initSslPayment(orderId).unwrap();
+
+      if (res.success) {
+        window.location.href = res.data.paymentGateWayUrl;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="flex min-h-screen items-center justify-center px-4">
@@ -22,9 +46,12 @@ export default function PaymentCancelled({search}: ISearchProps) {
 
         {/* Actions */}
         <div className="flex flex-col gap-3">
-          <Link to="/orders">
-            <Button className="w-full cursor-pointer">Pay Now</Button>
-          </Link>
+          <Button
+            onClick={() => handleInitSslPayment(paymentData.data.orderId)}
+            className="w-full cursor-pointer"
+          >
+            Pay Now
+          </Button>
 
           <Link to="/products">
             <Button className="w-full cursor-pointer" variant="outline">
