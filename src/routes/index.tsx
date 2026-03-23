@@ -15,6 +15,7 @@ import ProductDetailsPage from "@/pages/ProductDetailsPage";
 import CartPage from "@/pages/CartPage";
 import CheckoutPage from "@/pages/CheckoutPage";
 import PaymentMessagePage from "@/pages/PaymentMessagePage";
+import OrderSummaryPage from "@/pages/OrderSummaryPage";
 
 export const router = createBrowserRouter([
   {
@@ -52,6 +53,10 @@ export const router = createBrowserRouter([
       {
         Component: withAuth(PaymentMessagePage, ["SUPER_ADMIN", "ADMIN", "USER"]),
         path: "/payments/cancel"
+      },
+      {
+        Component: withAuth(OrderSummaryPage, ["SUPER_ADMIN", "ADMIN", "USER"]),
+        path: "/orders/summary"
       }
     ],
   },
