@@ -23,7 +23,7 @@ export default function PaymentCancelled({search}: ISearchProps) {
         {/* Actions */}
         <div className="flex flex-col gap-3">
           <Link to="/orders">
-            <Button className="w-full cursor-pointer">Try again to pay</Button>
+            <Button className="w-full cursor-pointer">Pay Now</Button>
           </Link>
 
           <Link to="/products">

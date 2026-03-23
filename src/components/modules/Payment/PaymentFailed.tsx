@@ -2,9 +2,13 @@ import { Button } from "@/components/ui/button";
 import { XCircle } from "lucide-react";
 import { Link } from "react-router";
 import type { ISearchProps } from "./payment.interfaces";
+import { useGetPaymentByTransactionIdQuery } from "@/redux/features/payments/payments.api";
 
 export default function PaymentFailed({search}: ISearchProps) {
-  const { message } = search;
+  const {transactionId, message } = search;
+  const {data: paymentData} = useGetPaymentByTransactionIdQuery(transactionId);
+
+  console.log(paymentData)
 
   return (
     <div className="flex min-h-screen items-center justify-center px-4">
@@ -23,7 +27,7 @@ export default function PaymentFailed({search}: ISearchProps) {
         {/* Actions */}
         <div className="flex flex-col gap-3">
           <Link to="/orders">
-            <Button className="w-full cursor-pointer">Try again to pay</Button>
+            <Button className="w-full cursor-pointer">Try Again to Pay</Button>
           </Link>
 
           <Link to="/products">
