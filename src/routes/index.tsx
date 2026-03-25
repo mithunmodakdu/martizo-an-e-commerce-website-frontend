@@ -56,7 +56,7 @@ export const router = createBrowserRouter([
       },
       {
         Component: withAuth(OrderSummaryPage, ["SUPER_ADMIN", "ADMIN", "USER"]),
-        path: "/orders/summary"
+        path: "/orders/summary/:transactionId"
       }
     ],
   },

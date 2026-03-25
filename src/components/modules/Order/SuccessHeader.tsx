@@ -15,7 +15,7 @@ export default function SuccessHeader() {
       <p className="text-muted-foreground">
         Your invoice has been sent to your email{" "}
         <span className="font-medium text-foreground">
-          {meData.data.email}
+          {meData?.data?.email}
         </span>
       </p>
     </div>
