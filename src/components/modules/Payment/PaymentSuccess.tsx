@@ -39,7 +39,7 @@ export default function PaymentSuccess({search}: ISearchProps) {
 
         {/* Actions */}
         <div className="flex flex-col gap-3">
-          <Link to="/orders">
+          <Link to={`/orders/summary/${transactionId}`}>
             <Button className="w-full cursor-pointer">View Orders</Button>
           </Link>
 
