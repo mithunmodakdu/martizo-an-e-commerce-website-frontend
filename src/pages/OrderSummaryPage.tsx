@@ -1,5 +1,6 @@
 import OrderInfoBar from "@/components/modules/Order/OrderInfoBar";
 import OrderItems from "@/components/modules/Order/OrderItems";
+import ShippingAddress from "@/components/modules/Order/ShippingAddress";
 import SuccessHeader from "@/components/modules/Order/SuccessHeader";
 
 export default function OrderSummaryPage() {
@@ -9,6 +10,7 @@ export default function OrderSummaryPage() {
         <SuccessHeader/>
         <OrderInfoBar/>
         <OrderItems/>
+        <ShippingAddress/>
       </div>
     </section>
   );

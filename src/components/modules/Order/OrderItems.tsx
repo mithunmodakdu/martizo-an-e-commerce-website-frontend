@@ -12,7 +12,6 @@ export default function OrderItems() {
   const { data: orderData } = useGetOrderByTransactionIdQuery(
     params.transactionId,
   );
-  console.log(orderData);
 
   return (
     <div className="grid gap-6 lg:grid-cols-2">
