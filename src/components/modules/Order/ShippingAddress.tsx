@@ -8,7 +8,6 @@ export default function ShippingAddress() {
   const { data: orderData } = useGetOrderByTransactionIdQuery(
     params.transactionId,
   );
-  console.log(orderData);
 
   return (
     <Card className="shadow-none my-6">

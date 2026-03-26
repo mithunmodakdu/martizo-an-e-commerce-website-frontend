@@ -2,6 +2,13 @@ import { baseApi } from "@/redux/baseApi";
 
 const paymentsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
+    getInvoiceDownloadUrl: builder.query({
+      query: (paymentId) => ({
+        url: `/payments/invoice/${paymentId}`,
+        method: "GET"
+      })
+    }),
+
     getPaymentByTransactionId: builder.query({
       query: (transactionId) => ({
         url: `/payments/${transactionId}`,
@@ -19,6 +26,7 @@ const paymentsApi = baseApi.injectEndpoints({
 });
 
 export const {
+  useGetInvoiceDownloadUrlQuery,
   useGetPaymentByTransactionIdQuery,
   useInitSslPaymentMutation
 } = paymentsApi;
