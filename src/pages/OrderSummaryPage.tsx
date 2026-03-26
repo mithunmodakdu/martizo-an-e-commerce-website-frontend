@@ -11,11 +11,22 @@ import { useParams } from "react-router";
 
 export default function OrderSummaryPage() {
   const params = useParams();
-  const {data: orderData} = useGetOrderByTransactionIdQuery(params.transactionId);
-  const {data: invoiceUrlData} = useGetInvoiceDownloadUrlQuery(orderData?.data?.paymentId);
-  console.log(invoiceUrlData?.data)
+  const { data: orderData } = useGetOrderByTransactionIdQuery(
+    params.transactionId,
+  );
+  const { data: invoiceUrlData } = useGetInvoiceDownloadUrlQuery(
+    orderData?.data?.paymentId,
+  );
+  console.log(invoiceUrlData?.data);
 
-  
+  const handleDownloadInvoice = () => {
+    if (orderData.success) {
+      if (invoiceUrlData.success) {
+        window.open(invoiceUrlData.data, "_blank");
+      }
+    }
+  };
+
   return (
     <section className="py-16 md:py-24 px-5">
       <div className="max-w-4xl mx-auto">
@@ -24,23 +35,29 @@ export default function OrderSummaryPage() {
         <OrderItems />
         <ShippingAddress />
         <Card className="shadow-none">
-        <CardContent className="space-y-3 p-4">
-          <Button className="w-full" variant="default">
-            <Package className="mr-2 size-4" />
-            Track Order
-          </Button>
-          <Button className="w-full" variant="outline">
-            <Download className="mr-2 size-4" />
-            Download Invoice
-          </Button>
-          <Button className="w-full" variant="ghost">
-            <Printer className="mr-2 size-4" />
-            Print Order
-          </Button>
-        </CardContent>
-      </Card>
+          <CardContent className="space-y-3 p-4">
+            <Button
+              onClick={() => handleDownloadInvoice()}
+              className="w-full cursor-pointer"
+            >
+              <Download className="mr-2 size-4" />
+              Download Invoice
+            </Button>
+            <Button
+              onClick={() => handleDownloadInvoice()}
+              className="w-full cursor-pointer"
+              variant="outline"
+            >
+              <Printer className="mr-2 size-4" />
+              Print Invoice
+            </Button>
+            <Button className="w-full" variant="ghost">
+              <Package className="mr-2 size-4" />
+              Track Order
+            </Button>
+          </CardContent>
+        </Card>
       </div>
-      
     </section>
   );
 }
