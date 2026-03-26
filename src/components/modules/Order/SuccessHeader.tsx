@@ -3,7 +3,7 @@ import { CheckCircle } from "lucide-react";
 
 export default function SuccessHeader() {
   const {data: meData} = useGetMeQuery(undefined);
-  console.log(meData)
+
   return (
     <div className="mb-10 text-center">
       <div className="mx-auto mb-4 flex size-20 items-center justify-center rounded-full bg-emerald-500/10">
