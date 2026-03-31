@@ -8,7 +8,7 @@ export const ProductCardsContainer = ({
   className,
   productsData,
 }: IProductCardsContainerProps) => {
-  console.log(className, productsData);
+  // console.log(className, productsData);
 
   const productCardsData: TProductCards = productsData?.map(
     (item: IProduct) => ({
