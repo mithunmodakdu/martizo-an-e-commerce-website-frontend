@@ -8,7 +8,7 @@ export const ProductCardsContainer = ({
   className,
   productsData,
 }: IProductCardsContainerProps) => {
-  console.log(className, productsData);
+  // console.log(className, productsData);
 
   const productCardsData: TProductCards = productsData?.map(
     (item: IProduct) => ({
@@ -53,7 +53,7 @@ export const ProductCardsContainer = ({
   );
 
   return (
-    <section className={cn("py-14 px-10 xl:px-0", className)}>
+    <section className={cn("py-8 px-10 xl:px-0", className)}>
       <div className="container">
         <div className="grid place-items-center gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {productCardsData?.map((item, index) => (
