@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -24,11 +25,20 @@ export default function ProductsFilter() {
     setSearchParams(params);
   }
 
+  const handleClearFilter = () => {
+    const params = new URLSearchParams(searchParams);
+    params.delete("category");
+    setSearchParams(params);
+  }
+
   const { data: categoryData } = useGetProductCategoriesQuery(undefined);
   
   return (
     <div>
-      <h3 className="font-bold mb-2">Filter Products by Category</h3>
+      <div className="flex justify-between items-center w-xl">
+        <h3 className="font-bold mb-2">Filter Products</h3>
+        <Button onClick={handleClearFilter} variant="outline" className="cursor-pointer">Clear Filter</Button>
+      </div>
       <Select
         onValueChange={(value) => handleCategoryChange(value)}
         value={selectedCategory? selectedCategory : ""}
