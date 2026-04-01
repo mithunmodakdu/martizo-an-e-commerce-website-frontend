@@ -18,12 +18,14 @@ export default function ProductsPage() {
   const [searchParams] = useSearchParams();
 
   const selectedCategory = searchParams.get("category") || undefined;
-  console.log()
+  const selectedBrand = searchParams.get("brand") || undefined;
+  console.log(selectedBrand)
 
   const { data: productsData, isLoading } = useGetAllProductsQuery({
     page: currentPage,
     limit: 10,
-    category: selectedCategory
+    category: selectedCategory,
+    brand: selectedBrand
   });
 
   const totalPage = productsData?.meta?.totalPage || 1;
