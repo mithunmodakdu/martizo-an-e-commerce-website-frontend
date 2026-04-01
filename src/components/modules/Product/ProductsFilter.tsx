@@ -1,4 +1,6 @@
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -15,10 +17,11 @@ import { useSearchParams } from "react-router";
 export default function ProductsFilter() {
   const [searchParams, setSearchParams] = useSearchParams();
   const { data: categoryData } = useGetProductCategoriesQuery(undefined);
-  const {data: brandsData} = useGetAllBrandsQuery(undefined);
+  const { data: brandsData } = useGetAllBrandsQuery(undefined);
 
   const selectedCategory = searchParams.get("category") || undefined;
   const selectedBrand = searchParams.get("brand") || undefined;
+  const isCheckedNewArrival = Boolean(searchParams.get("isNewArrival"));
 
   const handleCategoryChange = (value: string) => {
     const params = new URLSearchParams(searchParams);
@@ -30,15 +33,27 @@ export default function ProductsFilter() {
     const params = new URLSearchParams(searchParams);
     params.set("brand", value);
     setSearchParams(params);
-  }
+  };
+
+  const handleNewArrival = (value: boolean) => {
+    const params = new URLSearchParams(searchParams);
+
+    if (value) {
+      params.set("isNewArrival", String(value));
+      setSearchParams(params);
+    } else {
+      params.delete("isNewArrival");
+      setSearchParams(params);
+    }
+  };
 
   const handleClearFilter = () => {
     const params = new URLSearchParams(searchParams);
     params.delete("category");
     params.delete("brand");
+    params.delete("isNewArrival");
     setSearchParams(params);
   };
-
 
   return (
     <div>
@@ -54,6 +69,7 @@ export default function ProductsFilter() {
         </Button>
       </div>
       <div className="flex justify-evenly items-center">
+        {/*Filter Product by Categories*/}
         <Select
           onValueChange={(value) => handleCategoryChange(value)}
           value={selectedCategory ? selectedCategory : ""}
@@ -74,9 +90,11 @@ export default function ProductsFilter() {
             </SelectGroup>
           </SelectContent>
         </Select>
+
+        {/*Filter Product by Brands */}
         <Select
           onValueChange={(value) => handleBrandChange(value)}
-          value={selectedBrand? selectedBrand : ""}
+          value={selectedBrand ? selectedBrand : ""}
         >
           <SelectTrigger className="w-full max-w-52">
             <SelectValue placeholder="Select a brand" />
@@ -84,16 +102,27 @@ export default function ProductsFilter() {
           <SelectContent>
             <SelectGroup>
               <SelectLabel>Product Brands:</SelectLabel>
-              {
-                brandsData?.data?.map((item: {_id: string, name: string}, index: number) => (
+              {brandsData?.data?.map(
+                (item: { _id: string; name: string }, index: number) => (
                   <SelectItem key={index} value={item._id}>
                     {item.name}
                   </SelectItem>
-                ))
-              }
+                ),
+              )}
             </SelectGroup>
           </SelectContent>
         </Select>
+
+        {/*Filter New Arrival Products by Checkbox */}
+        <Label className="flex items-start gap-2 rounded-lg border p-3 hover:bg-accent/50 has-data-checked:border-primary/48 has-data-checked:bg-accent/50">
+          <Checkbox
+            checked= {isCheckedNewArrival}
+            onCheckedChange={(value: boolean) => handleNewArrival(value)}
+          />
+          <div className="flex flex-col gap-1">
+            <p>New Arrival</p>
+          </div>
+        </Label>
       </div>
     </div>
   );

@@ -19,14 +19,17 @@ export default function ProductsPage() {
 
   const selectedCategory = searchParams.get("category") || undefined;
   const selectedBrand = searchParams.get("brand") || undefined;
-  console.log(selectedBrand)
+  const isCheckedNewArrival = searchParams.get("isNewArrival");
 
   const { data: productsData, isLoading } = useGetAllProductsQuery({
     page: currentPage,
     limit: 10,
     category: selectedCategory,
-    brand: selectedBrand
+    brand: selectedBrand,
+    isNewArrival: isCheckedNewArrival
   });
+
+  console.log(productsData)
 
   const totalPage = productsData?.meta?.totalPage || 1;
 
