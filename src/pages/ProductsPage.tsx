@@ -22,15 +22,21 @@ export default function ProductsPage() {
   const isCheckedNewArrival = searchParams.get("isNewArrival");
   const isCheckedBestSeller = searchParams.get("isBestSeller");
   const isCheckedTrending = searchParams.get("isTrending");
+  const isCheckedFlashSale = searchParams.get("isFlashSale");
+  const isCheckedMartizoExclusive = searchParams.get("isMartizoExclusive");
+
+  const limit = 10;
 
   const { data: productsData, isLoading } = useGetAllProductsQuery({
     page: currentPage,
-    limit: 10,
+    limit,
     category: selectedCategory,
     brand: selectedBrand,
     isNewArrival: isCheckedNewArrival,
     isBestSeller: isCheckedBestSeller,
     isTrending: isCheckedTrending,
+    isFlashSale: isCheckedFlashSale,
+    isMartizoExclusive: isCheckedMartizoExclusive,
   });
 
   console.log(productsData);
