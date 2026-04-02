@@ -21,6 +21,7 @@ export default function ProductsPage() {
   const selectedBrand = searchParams.get("brand") || undefined;
   const isCheckedNewArrival = searchParams.get("isNewArrival");
   const isCheckedBestSeller = searchParams.get("isBestSeller");
+  const isCheckedTrending = searchParams.get("isTrending");
 
   const { data: productsData, isLoading } = useGetAllProductsQuery({
     page: currentPage,
@@ -28,17 +29,18 @@ export default function ProductsPage() {
     category: selectedCategory,
     brand: selectedBrand,
     isNewArrival: isCheckedNewArrival,
-    isBestSeller: isCheckedBestSeller
+    isBestSeller: isCheckedBestSeller,
+    isTrending: isCheckedTrending,
   });
 
-  console.log(productsData)
+  console.log(productsData);
 
   const totalPage = productsData?.meta?.totalPage || 1;
 
   return (
     <div>
       <div className="w-full flex justify-center items-center mt-10">
-        <ProductsFilter/>
+        <ProductsFilter />
       </div>
 
       {isLoading ? (

@@ -23,6 +23,7 @@ export default function ProductsFilter() {
   const selectedBrand = searchParams.get("brand") || undefined;
   const isCheckedNewArrival = Boolean(searchParams.get("isNewArrival"));
   const isCheckedBestSeller = Boolean(searchParams.get("isBestSeller"));
+  const isCheckedTrending = Boolean(searchParams.get("isTrending"));
 
   const handleCategoryChange = (value: string) => {
     const params = new URLSearchParams(searchParams);
@@ -60,12 +61,25 @@ export default function ProductsFilter() {
     }
   }
 
+  const handleTrending = (value: boolean) => {
+    const params = new URLSearchParams(searchParams);
+
+    if(value){
+      params.set("isTrending", String(value));
+      setSearchParams(params);
+    }else{
+      params.delete("isTrending");
+      setSearchParams(params);
+    }
+  }
+
   const handleClearFilter = () => {
     const params = new URLSearchParams(searchParams);
     params.delete("category");
     params.delete("brand");
     params.delete("isNewArrival");
-    params.delete("isBestSeller")
+    params.delete("isBestSeller");
+    params.delete("isTrending");
     setSearchParams(params);
   };
 
@@ -146,6 +160,17 @@ export default function ProductsFilter() {
           />
           <div className="flex flex-col gap-1">
             <p>Best Seller</p>
+          </div>
+        </Label>
+
+        {/*Filter Trending Products by Checkbox */}
+        <Label className="flex items-start gap-2 rounded-lg border p-3 hover:bg-accent/50 has-data-checked:border-primary/48 has-data-checked:bg-accent/50">
+          <Checkbox
+            checked= {isCheckedTrending}
+            onCheckedChange={(value: boolean) => handleTrending(value)}
+          />
+          <div className="flex flex-col gap-1">
+            <p>Trending</p>
           </div>
         </Label>
 
