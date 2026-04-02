@@ -22,6 +22,10 @@ export default function ProductsFilter() {
   const selectedCategory = searchParams.get("category") || undefined;
   const selectedBrand = searchParams.get("brand") || undefined;
   const isCheckedNewArrival = Boolean(searchParams.get("isNewArrival"));
+  const isCheckedBestSeller = Boolean(searchParams.get("isBestSeller"));
+  const isCheckedTrending = Boolean(searchParams.get("isTrending"));
+  const isCheckedFlashSale = Boolean(searchParams.get("isFlashSale"));
+  const isCheckedMartizoExclusive = Boolean(searchParams.get("isMartizoExclusive"));
 
   const handleCategoryChange = (value: string) => {
     const params = new URLSearchParams(searchParams);
@@ -47,17 +51,69 @@ export default function ProductsFilter() {
     }
   };
 
+  const handleBestSeller = (value: boolean) => {
+    const params = new URLSearchParams(searchParams);
+
+    if(value){
+      params.set("isBestSeller", String(value));
+      setSearchParams(params);
+    }else{
+      params.delete("isBestSeller");
+      setSearchParams(params);
+    }
+  }
+
+  const handleTrending = (value: boolean) => {
+    const params = new URLSearchParams(searchParams);
+
+    if(value){
+      params.set("isTrending", String(value));
+      setSearchParams(params);
+    }else{
+      params.delete("isTrending");
+      setSearchParams(params);
+    }
+  }
+
+  const handleFlashSale = (value: boolean) => {
+    const params = new URLSearchParams(searchParams);
+
+    if(value){
+      params.set("isFlashSale", String(value));
+      setSearchParams(params);
+    }else{
+      params.delete("isFlashSale");
+      setSearchParams(params);
+    }
+  }
+
+  const handleMartizoExclusive = (value: boolean) => {
+    const params = new URLSearchParams(searchParams);
+
+    if(value){
+      params.set("isMartizoExclusive", String(value));
+      setSearchParams(params);
+    }else{
+      params.delete("isMartizoExclusive");
+      setSearchParams(params);
+    }
+  }
+
   const handleClearFilter = () => {
     const params = new URLSearchParams(searchParams);
     params.delete("category");
     params.delete("brand");
     params.delete("isNewArrival");
+    params.delete("isBestSeller");
+    params.delete("isTrending");
+    params.delete("isFlashSale");
+    params.delete("isMartizoExclusive");
     setSearchParams(params);
   };
 
   return (
-    <div>
-      <div className="flex justify-between items-center w-xl mb-2">
+    <div className="border-2 p-2 w-full">
+      <div className="flex justify-evenly items-center w-xl mb-2">
         <h3 className="font-bold">Filter Products</h3>
         <Button
           onClick={handleClearFilter}
@@ -123,6 +179,51 @@ export default function ProductsFilter() {
             <p>New Arrival</p>
           </div>
         </Label>
+
+        {/*Filter Best Seller Products by Checkbox */}
+        <Label className="flex items-start gap-2 rounded-lg border p-3 hover:bg-accent/50 has-data-checked:border-primary/48 has-data-checked:bg-accent/50">
+          <Checkbox
+            checked= {isCheckedBestSeller}
+            onCheckedChange={(value: boolean) => handleBestSeller(value)}
+          />
+          <div className="flex flex-col gap-1">
+            <p>Best Seller</p>
+          </div>
+        </Label>
+
+        {/*Filter Trending Products by Checkbox */}
+        <Label className="flex items-start gap-2 rounded-lg border p-3 hover:bg-accent/50 has-data-checked:border-primary/48 has-data-checked:bg-accent/50">
+          <Checkbox
+            checked= {isCheckedTrending}
+            onCheckedChange={(value: boolean) => handleTrending(value)}
+          />
+          <div className="flex flex-col gap-1">
+            <p>Trending</p>
+          </div>
+        </Label>
+
+        {/*Filter Flash Sale Products by Checkbox */}
+        <Label className="flex items-start gap-2 rounded-lg border p-3 hover:bg-accent/50 has-data-checked:border-primary/48 has-data-checked:bg-accent/50">
+          <Checkbox
+            checked= {isCheckedFlashSale}
+            onCheckedChange={(value: boolean) => handleFlashSale(value)}
+          />
+          <div className="flex flex-col gap-1">
+            <p>Flash Sale</p>
+          </div>
+        </Label>
+
+        {/*Filter Martizo Exclusive Products by Checkbox */}
+        <Label className="flex items-start gap-2 rounded-lg border p-3 hover:bg-accent/50 has-data-checked:border-primary/48 has-data-checked:bg-accent/50">
+          <Checkbox
+            checked= {isCheckedMartizoExclusive}
+            onCheckedChange={(value: boolean) => handleMartizoExclusive(value)}
+          />
+          <div className="flex flex-col gap-1">
+            <p>Martizo Exclusive</p>
+          </div>
+        </Label>
+
       </div>
     </div>
   );
