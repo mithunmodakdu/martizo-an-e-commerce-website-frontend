@@ -20,13 +20,15 @@ export default function ProductsPage() {
   const selectedCategory = searchParams.get("category") || undefined;
   const selectedBrand = searchParams.get("brand") || undefined;
   const isCheckedNewArrival = searchParams.get("isNewArrival");
+  const isCheckedBestSeller = searchParams.get("isBestSeller");
 
   const { data: productsData, isLoading } = useGetAllProductsQuery({
     page: currentPage,
     limit: 10,
     category: selectedCategory,
     brand: selectedBrand,
-    isNewArrival: isCheckedNewArrival
+    isNewArrival: isCheckedNewArrival,
+    isBestSeller: isCheckedBestSeller
   });
 
   console.log(productsData)

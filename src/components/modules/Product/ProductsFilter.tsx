@@ -22,6 +22,7 @@ export default function ProductsFilter() {
   const selectedCategory = searchParams.get("category") || undefined;
   const selectedBrand = searchParams.get("brand") || undefined;
   const isCheckedNewArrival = Boolean(searchParams.get("isNewArrival"));
+  const isCheckedBestSeller = Boolean(searchParams.get("isBestSeller"));
 
   const handleCategoryChange = (value: string) => {
     const params = new URLSearchParams(searchParams);
@@ -47,17 +48,30 @@ export default function ProductsFilter() {
     }
   };
 
+  const handleBestSeller = (value: boolean) => {
+    const params = new URLSearchParams(searchParams);
+
+    if(value){
+      params.set("isBestSeller", String(value));
+      setSearchParams(params);
+    }else{
+      params.delete("isBestSeller");
+      setSearchParams(params);
+    }
+  }
+
   const handleClearFilter = () => {
     const params = new URLSearchParams(searchParams);
     params.delete("category");
     params.delete("brand");
     params.delete("isNewArrival");
+    params.delete("isBestSeller")
     setSearchParams(params);
   };
 
   return (
-    <div>
-      <div className="flex justify-between items-center w-xl mb-2">
+    <div className="border-2 p-2 w-full">
+      <div className="flex justify-evenly items-center w-xl mb-2">
         <h3 className="font-bold">Filter Products</h3>
         <Button
           onClick={handleClearFilter}
@@ -123,6 +137,18 @@ export default function ProductsFilter() {
             <p>New Arrival</p>
           </div>
         </Label>
+
+        {/*Filter Best Seller Products by Checkbox */}
+        <Label className="flex items-start gap-2 rounded-lg border p-3 hover:bg-accent/50 has-data-checked:border-primary/48 has-data-checked:bg-accent/50">
+          <Checkbox
+            checked= {isCheckedBestSeller}
+            onCheckedChange={(value: boolean) => handleBestSeller(value)}
+          />
+          <div className="flex flex-col gap-1">
+            <p>Best Seller</p>
+          </div>
+        </Label>
+
       </div>
     </div>
   );
