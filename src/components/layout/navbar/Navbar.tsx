@@ -1,4 +1,4 @@
-import { useId } from "react";
+import React, { useEffect, useId, useState } from "react";
 import { CircleIcon, Heart, SearchIcon, ShoppingCart } from "lucide-react";
 import logoImage from "@/assets/images/martizo-logo.png";
 import UserMenu from "@/components/layout/navbar/user-menu";
@@ -13,7 +13,7 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { ListItem } from "./ListItem";
 import { ModeToggler } from "../MoodToggler";
 import {
@@ -24,8 +24,39 @@ import {
 import { useGetCartQuery } from "@/redux/features/cart/cart.api";
 
 export default function Navbar() {
-  const {data: cartData, isLoading: cartLoading} = useGetCartQuery(undefined);
-  
+  const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
+  const navigate = useNavigate();
+  const { data: cartData, isLoading: cartLoading } = useGetCartQuery(undefined);
+
+ 
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  useEffect(() => {
+    handleSearch(debouncedSearchQuery);
+  }, [debouncedSearchQuery]);
+
+  const handleSearch = (value: string) => {
+    if (value) {
+      navigate(`/products?searchTerm=${value}`);
+    } else {
+        navigate("/");
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      setDebouncedSearchQuery(searchQuery);
+    }
+  };
+
   const id = useId();
   const wishlistLength = 5;
 
@@ -244,6 +275,9 @@ export default function Navbar() {
               className="peer h-12 ps-8 pe-10"
               placeholder="Search..."
               type="search"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={handleKeyDown}
             />
             <div className="pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-2 text-muted-foreground/80 peer-disabled:opacity-50">
               <SearchIcon size={16} />
@@ -344,17 +378,16 @@ export default function Navbar() {
           </Button>
 
           {/* cart */}
-         <Link className="asChild" to={"/cart"}>
-           <Button className="cursor-pointer" variant="outline">
-            <span>
-              <ShoppingCart />
-            </span>
-            {
-              !cartLoading && cartData?.data?.totalItems > 0 && <sup>{cartData?.data?.totalItems}</sup>
-            }
-            
-          </Button>
-         </Link>
+          <Link className="asChild" to={"/cart"}>
+            <Button className="cursor-pointer" variant="outline">
+              <span>
+                <ShoppingCart />
+              </span>
+              {!cartLoading && cartData?.data?.totalItems > 0 && (
+                <sup>{cartData?.data?.totalItems}</sup>
+              )}
+            </Button>
+          </Link>
 
           {/* User menu */}
           <UserMenu />
