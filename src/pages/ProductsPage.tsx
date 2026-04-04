@@ -24,12 +24,12 @@ export default function ProductsPage() {
   const isCheckedTrending = searchParams.get("isTrending");
   const isCheckedFlashSale = searchParams.get("isFlashSale");
   const isCheckedMartizoExclusive = searchParams.get("isMartizoExclusive");
+  const existedSearchTerm = searchParams.get("searchTerm");
 
-  const limit = 10;
 
   const { data: productsData, isLoading } = useGetAllProductsQuery({
     page: currentPage,
-    limit,
+    limit: 10,
     category: selectedCategory,
     brand: selectedBrand,
     isNewArrival: isCheckedNewArrival,
@@ -37,6 +37,7 @@ export default function ProductsPage() {
     isTrending: isCheckedTrending,
     isFlashSale: isCheckedFlashSale,
     isMartizoExclusive: isCheckedMartizoExclusive,
+    searchTerm: existedSearchTerm
   });
 
   console.log(productsData);
@@ -55,7 +56,7 @@ export default function ProductsPage() {
         <ProductCardsContainer productsData={productsData?.data} />
       )}
 
-      {totalPage > 1 && (
+      {(totalPage > 1) && (
         <div>
           <Pagination>
             <PaginationContent>

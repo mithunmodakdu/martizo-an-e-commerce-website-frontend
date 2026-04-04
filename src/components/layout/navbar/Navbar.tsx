@@ -1,4 +1,4 @@
-import { useId } from "react";
+import React, { useEffect, useId, useState } from "react";
 import { CircleIcon, Heart, SearchIcon, ShoppingCart } from "lucide-react";
 import logoImage from "@/assets/images/martizo-logo.png";
 import UserMenu from "@/components/layout/navbar/user-menu";
@@ -13,7 +13,7 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { ListItem } from "./ListItem";
 import { ModeToggler } from "../MoodToggler";
 import {
@@ -22,10 +22,47 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useGetCartQuery } from "@/redux/features/cart/cart.api";
+import { useGetProductCategoriesQuery } from "@/redux/features/productCategories/productCategories.api";
+import { useGetAllBrandsQuery } from "@/redux/features/brands/brands.api";
 
 export default function Navbar() {
-  const {data: cartData, isLoading: cartLoading} = useGetCartQuery(undefined);
-  
+  const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
+  const navigate = useNavigate();
+  const {pathname, search} = useLocation();
+  console.log(pathname, search.split("=")[0])
+  const {data: categoriesData} = useGetProductCategoriesQuery(undefined);
+  const {data: brandsData} = useGetAllBrandsQuery(undefined);
+  const { data: cartData, isLoading: cartLoading } = useGetCartQuery(undefined);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  useEffect(() => {
+    handleSearch(debouncedSearchQuery);
+  }, [debouncedSearchQuery]);
+
+  const handleSearch = (value: string) => {
+    if (value) {
+      navigate(`/products?searchTerm=${value}`, {
+        state: { from: location.pathname },
+      });
+    } else {
+      navigate("/products");
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      setDebouncedSearchQuery(searchQuery);
+    }
+  };
+
   const id = useId();
   const wishlistLength = 5;
 
@@ -37,7 +74,7 @@ export default function Navbar() {
       type: "link",
     },
     {
-      label: "Shop",
+      label: "Products",
       type: "menu", // means it has dropdown content
       links: [
         {
@@ -48,132 +85,58 @@ export default function Navbar() {
         },
         {
           title: "New Arrivals",
-          href: "/products/new-arrivals",
+          href: "/products?isNewArrival=true",
           description:
             "Lorem ipsum dolor sit amet consectetur adipisicing elit. Non, distinctio",
         },
         {
           title: "Best Sellers",
-          href: "/products/best-sellers",
-          description:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Non, distinctio",
-        },
-        {
-          title: "Hot Deals",
-          href: "/products/hot-deals",
-          description:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Non, distinctio",
-        },
-        {
-          title: "Martizo Exclusive",
-          href: "/products/exclusive",
+          href: "/products?isBestSeller=true",
           description:
             "Lorem ipsum dolor sit amet consectetur adipisicing elit. Non, distinctio",
         },
         {
           title: "Trending Now",
-          href: "/products/trending-now",
+          href: "/products?isTrending=true",
           description:
             "Lorem ipsum dolor sit amet consectetur adipisicing elit. Non, distinctio",
         },
+        {
+          title: "Flash Sale",
+          href: "/products?isFlashSale=true",
+          description:
+            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Non, distinctio",
+        },
+        {
+          title: "Martizo Exclusive",
+          href: "/products?isMartizoExclusive=true",
+          description:
+            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Non, distinctio",
+        },
+
       ],
     },
     {
       label: "Categories",
       type: "menu",
-      links: [
+      links: categoriesData?.map(item => (
         {
-          title: "Electronics",
-          icon: "https://res.cloudinary.com/<cloud_name>/image/upload/category-icons/electronics.png",
-          href: "/products/electronics",
-          description:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Non, distinctio",
-        },
-        {
-          title: "Fashion (Men / Women / Kids)",
-          href: "/products/fashion",
-          description:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Non, distinctio",
-        },
-        {
-          title: "Home & Living",
-          href: "/products/home-living",
-          description:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Non, distinctio",
-        },
-        {
-          title: " Grocery / Superstore",
-          href: "/products/grocery",
-          description:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Non, distinctio",
-        },
-        {
-          title: "Beauty & Personal Care",
-          href: "/products/beauty",
-          description:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Non, distinctio",
-        },
-        {
-          title: "Sports & Outdoors",
-          href: "/products/sports-outdoors",
-          description:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Non, distinctio",
-        },
-        {
-          title: "Baby & Toys",
-          href: "/products/baby-toys",
-          description:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Non, distinctio",
-        },
-        {
-          title: "Automobiles & Motorbike",
-          href: "/products/automobiles-motorbike",
-          description:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Non, distinctio",
-        },
-        {
-          title: "Accessories",
-          href: "/products/accessories",
-          description:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Non, distinctio",
-        },
-        {
-          title: "Stationery & Office",
-          href: "/products/stationery-office",
-          description:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Non, distinctio",
-        },
-        {
-          title: "Medicine & Health Care",
-          href: "/products/medicine-health-care",
-          description:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Non, distinctio",
-        },
-      ],
+          title: item.name,
+          icon: item.icon,
+          href: `/products?category=${item._id}`,
+        }
+      ))
     },
     {
       label: "Brands",
       type: "menu",
-      links: [
-        {
-          title: "All Brands",
-          href: "/products/all-brands",
-          description:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Non, distinctio",
-        },
-        {
-          title: "Top Brands",
-          href: "/products/top-brands",
-          description:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Non, distinctio",
-        },
-        {
-          title: "Martizo Choice Brands",
-          href: "/products/martizo-choice-brands",
-          description:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Non, distinctio",
-        },
-      ],
+      links: brandsData?.data?.map(item => (
+         {
+          title: item.name,
+          icon: item.icon,
+          href: `/products?brand=${item._id}`,
+        }
+      )),
     },
     {
       label: "Offers",
@@ -244,6 +207,9 @@ export default function Navbar() {
               className="peer h-12 ps-8 pe-10"
               placeholder="Search..."
               type="search"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={handleKeyDown}
             />
             <div className="pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-2 text-muted-foreground/80 peer-disabled:opacity-50">
               <SearchIcon size={16} />
@@ -344,17 +310,16 @@ export default function Navbar() {
           </Button>
 
           {/* cart */}
-         <Link className="asChild" to={"/cart"}>
-           <Button className="cursor-pointer" variant="outline">
-            <span>
-              <ShoppingCart />
-            </span>
-            {
-              !cartLoading && cartData?.data?.totalItems > 0 && <sup>{cartData?.data?.totalItems}</sup>
-            }
-            
-          </Button>
-         </Link>
+          <Link className="asChild" to={"/cart"}>
+            <Button className="cursor-pointer" variant="outline">
+              <span>
+                <ShoppingCart />
+              </span>
+              {!cartLoading && cartData?.data?.totalItems > 0 && (
+                <sup>{cartData?.data?.totalItems}</sup>
+              )}
+            </Button>
+          </Link>
 
           {/* User menu */}
           <UserMenu />
@@ -394,7 +359,7 @@ export default function Navbar() {
                               to={link.href}
                               className="flex-row items-center gap-2"
                             >
-                              <CircleIcon />
+                              {link.icon? <img className="w-5 rounded-full" src={link.icon} alt="" /> : <CircleIcon />}
                               {link.title}
                             </Link>
                           </NavigationMenuLink>
