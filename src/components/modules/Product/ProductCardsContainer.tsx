@@ -53,9 +53,9 @@ export const ProductCardsContainer = ({
   );
 
   return (
-    <section className={cn("py-8 px-10 xl:px-0", className)}>
+    <section className={cn("px-10 xl:px-0", className)}>
       <div className="container">
-        <div className="grid place-items-center gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="grid place-items-center gap-5 md:grid-cols-2 lg:grid-cols-3">
           {productCardsData?.map((item, index) => (
             <ProductCard key={`product-card-${index}`} {...item} />
           ))}

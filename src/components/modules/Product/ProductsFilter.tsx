@@ -112,8 +112,8 @@ export default function ProductsFilter() {
   };
 
   return (
-    <div className="border-2 p-2 w-full">
-      <div className="flex justify-evenly items-center w-xl mb-2">
+    <div className="border-2 p-2 w-[250px] md:h-dvh">
+      <div className="flex justify-evenly items-center mb-2">
         <h3 className="font-bold">Filter Products</h3>
         <Button
           onClick={handleClearFilter}
@@ -124,13 +124,13 @@ export default function ProductsFilter() {
           Clear Filter
         </Button>
       </div>
-      <div className="flex justify-evenly items-center">
+      <div className="flex flex-col gap-3">
         {/*Filter Product by Categories*/}
         <Select
           onValueChange={(value) => handleCategoryChange(value)}
           value={selectedCategory ? selectedCategory : ""}
         >
-          <SelectTrigger className="w-full max-w-52">
+          <SelectTrigger className="w-full">
             <SelectValue placeholder="Select a category" />
           </SelectTrigger>
           <SelectContent>
@@ -152,7 +152,7 @@ export default function ProductsFilter() {
           onValueChange={(value) => handleBrandChange(value)}
           value={selectedBrand ? selectedBrand : ""}
         >
-          <SelectTrigger className="w-full max-w-52">
+          <SelectTrigger className="w-full">
             <SelectValue placeholder="Select a brand" />
           </SelectTrigger>
           <SelectContent>
@@ -170,7 +170,7 @@ export default function ProductsFilter() {
         </Select>
 
         {/*Filter New Arrival Products by Checkbox */}
-        <Label className="flex items-start gap-2 rounded-lg border p-3 hover:bg-accent/50 has-data-checked:border-primary/48 has-data-checked:bg-accent/50">
+        <Label className="flex items-start gap-2 rounded-lg border p-2 hover:bg-accent/50 has-data-checked:border-primary/48 has-data-checked:bg-accent/50">
           <Checkbox
             checked= {isCheckedNewArrival}
             onCheckedChange={(value: boolean) => handleNewArrival(value)}
@@ -181,7 +181,7 @@ export default function ProductsFilter() {
         </Label>
 
         {/*Filter Best Seller Products by Checkbox */}
-        <Label className="flex items-start gap-2 rounded-lg border p-3 hover:bg-accent/50 has-data-checked:border-primary/48 has-data-checked:bg-accent/50">
+        <Label className="flex items-start gap-2 rounded-lg border p-2 hover:bg-accent/50 has-data-checked:border-primary/48 has-data-checked:bg-accent/50">
           <Checkbox
             checked= {isCheckedBestSeller}
             onCheckedChange={(value: boolean) => handleBestSeller(value)}
@@ -192,7 +192,7 @@ export default function ProductsFilter() {
         </Label>
 
         {/*Filter Trending Products by Checkbox */}
-        <Label className="flex items-start gap-2 rounded-lg border p-3 hover:bg-accent/50 has-data-checked:border-primary/48 has-data-checked:bg-accent/50">
+        <Label className="flex items-start gap-2 rounded-lg border p-2 hover:bg-accent/50 has-data-checked:border-primary/48 has-data-checked:bg-accent/50">
           <Checkbox
             checked= {isCheckedTrending}
             onCheckedChange={(value: boolean) => handleTrending(value)}
@@ -203,7 +203,7 @@ export default function ProductsFilter() {
         </Label>
 
         {/*Filter Flash Sale Products by Checkbox */}
-        <Label className="flex items-start gap-2 rounded-lg border p-3 hover:bg-accent/50 has-data-checked:border-primary/48 has-data-checked:bg-accent/50">
+        <Label className="flex items-start gap-2 rounded-lg border p-2 hover:bg-accent/50 has-data-checked:border-primary/48 has-data-checked:bg-accent/50">
           <Checkbox
             checked= {isCheckedFlashSale}
             onCheckedChange={(value: boolean) => handleFlashSale(value)}
@@ -214,7 +214,7 @@ export default function ProductsFilter() {
         </Label>
 
         {/*Filter Martizo Exclusive Products by Checkbox */}
-        <Label className="flex items-start gap-2 rounded-lg border p-3 hover:bg-accent/50 has-data-checked:border-primary/48 has-data-checked:bg-accent/50">
+        <Label className="flex items-start gap-2 rounded-lg border p-2 hover:bg-accent/50 has-data-checked:border-primary/48 has-data-checked:bg-accent/50">
           <Checkbox
             checked= {isCheckedMartizoExclusive}
             onCheckedChange={(value: boolean) => handleMartizoExclusive(value)}

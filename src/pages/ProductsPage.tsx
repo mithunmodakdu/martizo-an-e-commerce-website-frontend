@@ -26,10 +26,9 @@ export default function ProductsPage() {
   const isCheckedMartizoExclusive = searchParams.get("isMartizoExclusive");
   const existedSearchTerm = searchParams.get("searchTerm");
 
-
   const { data: productsData, isLoading } = useGetAllProductsQuery({
     page: currentPage,
-    limit: 10,
+    limit: 6,
     category: selectedCategory,
     brand: selectedBrand,
     isNewArrival: isCheckedNewArrival,
@@ -37,26 +36,25 @@ export default function ProductsPage() {
     isTrending: isCheckedTrending,
     isFlashSale: isCheckedFlashSale,
     isMartizoExclusive: isCheckedMartizoExclusive,
-    searchTerm: existedSearchTerm
+    searchTerm: existedSearchTerm,
   });
-
-  console.log(productsData);
 
   const totalPage = productsData?.meta?.totalPage || 1;
 
   return (
     <div>
-      <div className="w-full flex justify-center items-center mt-10">
+      <div className="w-full flex flex-col lg:flex-row gap-5 mt-10">
         <ProductsFilter />
+        <div>
+          {isLoading ? (
+            <Loading />
+          ) : (
+            <ProductCardsContainer productsData={productsData?.data} />
+          )}
+        </div>
       </div>
 
-      {isLoading ? (
-        <Loading />
-      ) : (
-        <ProductCardsContainer productsData={productsData?.data} />
-      )}
-
-      {(totalPage > 1) && (
+      {totalPage > 1 && (
         <div>
           <Pagination>
             <PaginationContent>

@@ -29,8 +29,7 @@ export default function Navbar() {
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
   const navigate = useNavigate();
-  const {pathname, search} = useLocation();
-  console.log(pathname, search.split("=")[0])
+  const {pathname} = useLocation()
   const {data: categoriesData} = useGetProductCategoriesQuery(undefined);
   const {data: brandsData} = useGetAllBrandsQuery(undefined);
   const { data: cartData, isLoading: cartLoading } = useGetCartQuery(undefined);
@@ -49,11 +48,9 @@ export default function Navbar() {
 
   const handleSearch = (value: string) => {
     if (value) {
-      navigate(`/products?searchTerm=${value}`, {
-        state: { from: location.pathname },
-      });
+      navigate(`/products?searchTerm=${value}`);
     } else {
-      navigate("/products");
+      navigate("/");
     }
   };
 
@@ -70,8 +67,8 @@ export default function Navbar() {
     {
       label: "Home",
       href: "/",
-      active: true,
       type: "link",
+      active: pathname === "/"
     },
     {
       label: "Products",
@@ -119,7 +116,7 @@ export default function Navbar() {
     {
       label: "Categories",
       type: "menu",
-      links: categoriesData?.map(item => (
+      links: categoriesData?.map((item: {_id: string, name:string, icon: string, href: string}) => (
         {
           title: item.name,
           icon: item.icon,
@@ -130,7 +127,7 @@ export default function Navbar() {
     {
       label: "Brands",
       type: "menu",
-      links: brandsData?.data?.map(item => (
+      links: brandsData?.data?.map((item: {_id: string, name:string, icon: string, href: string}) => (
          {
           title: item.name,
           icon: item.icon,
@@ -191,7 +188,7 @@ export default function Navbar() {
         {/* Left side */}
         <div className="flex flex-1 items-center gap-2">
           {/* Logo */}
-          <div className="flex items-center pt-5 w-32">
+          <div className="flex items-center pt-3 w-32">
             <a href="/">
               <img src={logoImage} alt="Logo of Martizo" />
             </a>
@@ -263,23 +260,24 @@ export default function Navbar() {
                         {item.type === "link" ? (
                           <NavigationMenuLink
                             asChild
-                            className={navigationMenuTriggerStyle()}
-                            active={item.active}
+                            className={navigationMenuTriggerStyle()}                              
                           >
                             <Link to={`${item.href}`}>{item.label}</Link>
                           </NavigationMenuLink>
                         ) : (
                           <>
-                            <NavigationMenuTrigger>
+                            <NavigationMenuTrigger                            
+                            >
                               {item.label}
                             </NavigationMenuTrigger>
                             <NavigationMenuContent>
                               <ul className="grid gap-2 sm:w-[300px] md:w-[400px] md:grid-cols-2 lg:w-[500px]">
-                                {item?.links?.map((link) => (
+                                {item?.links?.map((link: {title: string, href: string, description: string}) => (
                                   <ListItem
                                     key={link.title}
                                     title={link.title}
                                     href={link.href}
+                                    
                                   >
                                     {link.description}
                                   </ListItem>
@@ -290,6 +288,7 @@ export default function Navbar() {
                         )}
                       </NavigationMenuItem>
                     ))}
+                    
                   </NavigationMenuList>
                 </NavigationMenu>
               </PopoverContent>
@@ -327,7 +326,7 @@ export default function Navbar() {
       </div>
 
       {/* main navigation */}
-      <div className="py-2 px-4 md:px-6 hidden md:block bg-primary w-full">
+      <div className="mt-2 py-2 px-4 md:px-6 hidden md:block bg-primary w-full">
         {/* Navigation menu */}
         <NavigationMenu>
           <NavigationMenuList className="flex-wrap ">
@@ -346,14 +345,7 @@ export default function Navbar() {
                     <NavigationMenuTrigger>{item.label}</NavigationMenuTrigger>
                     <NavigationMenuContent>
                       <ul className="grid gap-2 sm:w-[300px] md:w-[400px] md:grid-cols-2 lg:w-[500px]">
-                        {item?.links?.map((link) => (
-                          // <ListItem
-                          //   key={link.title}
-                          //   title={link.title}
-                          //   href={link.href}
-                          // >
-                          //   {link.description}
-                          // </ListItem>
+                        {item?.links?.map((link: {title: string, href: string, icon: string}) => (
                           <NavigationMenuLink asChild>
                             <Link
                               to={link.href}
