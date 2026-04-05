@@ -112,8 +112,8 @@ export default function ProductsFilter() {
   };
 
   return (
-    <div className="border-2 p-2 w-[250px] md:h-dvh">
-      <div className="flex justify-evenly items-center mb-2">
+    <div className="border-2 p-5 mx-auto w-3/4 md:w-1/3 lg:w-1/4 ">
+      <div className="flex justify-between items-center mb-2">
         <h3 className="font-bold">Filter Products</h3>
         <Button
           onClick={handleClearFilter}

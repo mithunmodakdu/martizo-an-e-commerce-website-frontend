@@ -43,9 +43,9 @@ export default function ProductsPage() {
 
   return (
     <div>
-      <div className="w-full flex flex-col lg:flex-row gap-5 mt-10">
+      <div className="w-full px-5 flex flex-col md:flex-row gap-4 mt-10">
         <ProductsFilter />
-        <div>
+        <div className="w-full md:w-3/4">
           {isLoading ? (
             <Loading />
           ) : (
@@ -55,7 +55,7 @@ export default function ProductsPage() {
       </div>
 
       {totalPage > 1 && (
-        <div>
+        <div className="mt-10">
           <Pagination>
             <PaginationContent>
               <PaginationItem>

@@ -62,13 +62,13 @@ export const ProductCard = ({
 
   return (
     <div className="relative group">
-      <Card className="overflow-hidden w-[300px] h-[350px] p-0 rounded-tl-none rounded-tr-3xl rounded-bl-3xl rounded-br-3xl">
+      <Card className="overflow-hidden  p-0 rounded-tl-none rounded-tr-3xl rounded-bl-3xl rounded-br-3xl">
         <CardHeader className="relative block p-0">
           <AspectRatio ratio={1.5} className="overflow-hidden">
             <img
               src={image.src}
               alt={image.alt}
-              className="h-56 w-full rounded-tr-3xl rounded-bl-3xl object-cover sm:h-64 lg:h-72"
+              className="w-full rounded-tr-3xl rounded-bl-3xl object-cover"
             />
           </AspectRatio>
           <div className="absolute start-4 top-4">
@@ -92,24 +92,26 @@ export const ProductCard = ({
           </div>
         </CardHeader>
         <CardContent className="flex h-full flex-col gap-4 pb-6">
-          <CardTitle className="text-xl font-semibold">{name}</CardTitle>
+          <CardTitle className="text-lg font-semibold">{name}</CardTitle>
           <CardDescription className="font-medium text-muted-foreground">
             {description}
           </CardDescription>
           <div className="mt-auto">
-            <Price onSale={sale != null} className="text-lg font-semibold">
-              <PriceValue price={sale} currency={currency} variant="sale" />
-              <PriceValue
+            <Price onSale={sale != null} className="text-sm font-semibold">
+               <PriceValue
                 price={regular}
                 currency={currency}
                 variant="regular"
               />
+              <PriceValue price={sale} currency={currency} variant="sale" />            
             </Price>
           </div>
         </CardContent>
       </Card>
+
+      {/* overlay */}
       <div
-        className="absolute w-[300px] h-[350px] p-0 rounded-tl-none rounded-tr-3xl rounded-bl-3xl rounded-br-3xl inset-0 bg-muted-foreground flex items-center justify-center gap-3
+        className="absolute  p-0 rounded-tl-none rounded-tr-3xl rounded-bl-3xl rounded-br-3xl inset-0 bg-muted-foreground flex items-center justify-center gap-3
         opacity-0 group-hover:opacity-80 transition-all duration-300 ease-in-out"
       >
         

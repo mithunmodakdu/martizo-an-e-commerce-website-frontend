@@ -1,8 +1,10 @@
 import { cn } from "@/lib/utils";
-import type { IProduct, IProductCardsContainerProps, TProductCards } from "./product.types";
+import type {
+  IProduct,
+  IProductCardsContainerProps,
+  TProductCards,
+} from "./product.types";
 import { ProductCard } from "./ProductCard";
-
-
 
 export const ProductCardsContainer = ({
   className,
@@ -48,21 +50,16 @@ export const ProductCardsContainer = ({
           color: item?.isNewArrival && "oklch(0.448 0.119 151.328)",
         },
       ],
-
     }),
   );
 
   return (
-    <section className={cn("px-10 xl:px-0", className)}>
-      <div className="container">
-        <div className="grid place-items-center gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {productCardsData?.map((item, index) => (
-            <ProductCard key={`product-card-${index}`} {...item} />
-          ))}
-        </div>
+    <div className="container">
+      <div className="grid place-items-center gap-5 md:grid-cols-2 lg:grid-cols-3">
+        {productCardsData?.map((item, index) => (
+          <ProductCard key={`product-card-${index}`} {...item} />
+        ))}
       </div>
-    </section>
+    </div>
   );
 };
-
-
