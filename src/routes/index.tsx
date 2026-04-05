@@ -16,12 +16,17 @@ import CartPage from "@/pages/CartPage";
 import CheckoutPage from "@/pages/CheckoutPage";
 import PaymentMessagePage from "@/pages/PaymentMessagePage";
 import OrderSummaryPage from "@/pages/OrderSummaryPage";
+import HomePage from "@/pages/HomePage";
 
 export const router = createBrowserRouter([
   {
     Component: App,
     path: "/",
     children: [
+      {
+        Component: HomePage,
+        path: "/"
+      },
       {
         Component: ProductsPage,
         path: "products",
