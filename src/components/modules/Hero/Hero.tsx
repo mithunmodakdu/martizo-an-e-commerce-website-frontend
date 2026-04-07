@@ -43,7 +43,6 @@ export default function Hero() {
     thumbnail: string;
     price: number;
   }) => {
-
     const cartData = {
       productId: item._id,
       name: item.title,
@@ -83,7 +82,7 @@ export default function Hero() {
         }}
       />
 
-      {/* Left side */}
+      {/* Left part */}
       <div className="relative z-10 flex flex-col justify-center px-10 py-14">
         {/* Eyebrow */}
         <div className="mb-5 flex items-center gap-2">
@@ -131,10 +130,14 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Right — product card */}
-      <div className="relative flex items-center justify-center p-8">
-        {/* Product card */}
-        <Carousel className="w-full max-w-[12rem] sm:max-w-xs">
+      {/* Right — part */}
+      <div className="relative flex items-center justify-center mb-8 md:mb-0 p-8">
+        {/* Products carousel */}
+        <Carousel opts={
+          {
+            loop: true
+          }
+        } className="w-full max-w-[18rem]  ">
           <CarouselContent>
             {productsData?.data?.map(
               (
@@ -153,7 +156,9 @@ export default function Hero() {
                     <div className="relative w-full rounded-xl border border-border bg-background p-5 shadow-sm">
                       {/* Image area */}
                       <div className="relative mb-4 flex h-40 items-center justify-center overflow-hidden rounded-lg bg-muted">
-                        <Badge className="absolute right-2 top-2 rounded-full bg-primary text-primary-foreground text-[10px] px-2 py-0.5">
+                        <Badge
+                          className="absolute right-2 top-2 rounded-full bg-red-500  text-primary-foreground text-[10px] px-2 py-0.5"
+                        >
                           New
                         </Badge>
                         <img
@@ -198,12 +203,12 @@ export default function Hero() {
               ),
             )}
           </CarouselContent>
-          <CarouselPrevious />
-          <CarouselNext />
+          <CarouselPrevious className="md:size-5 md:-left-6 lg:size-8 lg:-left-12" />
+          <CarouselNext className="md:size-5 md:-right-6 lg:size-8 lg:-right-12"/>
         </Carousel>
 
         {/* Rating chip */}
-        <div className="absolute right-7 top-10 rounded-lg border border-border bg-card px-3 py-2 shadow-sm">
+        <div className="absolute  right-7 -top-7 md:top-7 rounded-lg border border-border bg-card px-3 py-2 shadow-sm">
           <div className="flex gap-0.5">
             {[...Array(5)].map((_, i) => (
               <svg
@@ -226,7 +231,7 @@ export default function Hero() {
         </div>
 
         {/* Social proof chip */}
-        <div className="absolute bottom-12 left-5 flex items-center gap-2.5 rounded-lg border border-border bg-card px-3 py-2 shadow-sm">
+        <div className="absolute -bottom-5  md:bottom-8 left-5 flex items-center gap-2.5 rounded-lg border border-border bg-card px-3 py-2 shadow-sm">
           <div className="flex">
             {avatars.map((a, i) => (
               <div
