@@ -10,10 +10,11 @@ import {
 } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
 import { useGetAllProductsQuery } from "@/redux/features/products/products.api";
-import type { ICartItem } from "../Cart/cart.types";
+import type { ICartItem, IProductPrice } from "../Cart/cart.types";
 import { useAddToCartMutation } from "@/redux/features/cart/cart.api";
 import { toast } from "sonner";
 import type { IProduct } from "../Product/product.types";
+import { Price, PriceValue } from "../Product/Price";
 
 const stats = [
   { value: "12k+", label: "Happy customers" },
@@ -42,6 +43,7 @@ export default function Hero() {
     description: string;
     thumbnail: string;
     price: number;
+    salePrice: number;
   }) => {
     const cartData = {
       productId: item._id,
@@ -49,6 +51,7 @@ export default function Hero() {
       category: item.category,
       price: {
         regular: item.price,
+        sale: item.salePrice,
         currency: "BDT",
       },
       quantity: 1,
@@ -70,6 +73,7 @@ export default function Hero() {
       }
     }
   };
+
   return (
     <section className="relative mt-5 overflow-hidden rounded-lg border border-border bg-card grid grid-cols-1 md:grid-cols-2 min-h-[480px]">
       {/* Subtle dot grid */}
@@ -133,11 +137,12 @@ export default function Hero() {
       {/* Right — part */}
       <div className="relative flex items-center justify-center mb-8 md:mb-0 p-8">
         {/* Products carousel */}
-        <Carousel opts={
-          {
-            loop: true
-          }
-        } className="w-full max-w-[18rem]  ">
+        <Carousel
+          opts={{
+            loop: true,
+          }}
+          className="w-full max-w-[18rem]  "
+        >
           <CarouselContent>
             {productsData?.data?.map(
               (
@@ -148,6 +153,7 @@ export default function Hero() {
                   description: string;
                   thumbnail: string;
                   price: number;
+                  salePrice: number;
                 },
                 index: number,
               ) => (
@@ -156,9 +162,7 @@ export default function Hero() {
                     <div className="relative w-full rounded-xl border border-border bg-background p-5 shadow-sm">
                       {/* Image area */}
                       <div className="relative mb-4 flex h-40 items-center justify-center overflow-hidden rounded-lg bg-muted">
-                        <Badge
-                          className="absolute right-2 top-2 rounded-full bg-red-500  text-primary-foreground text-[10px] px-2 py-0.5"
-                        >
+                        <Badge className="absolute right-2 top-2 rounded-full bg-red-500  text-primary-foreground text-[10px] px-2 py-0.5">
                           New
                         </Badge>
                         <img
@@ -175,9 +179,21 @@ export default function Hero() {
                       </p>
 
                       <div className="flex items-center justify-between">
-                        <span className="text-lg font-medium text-foreground">
-                          BDT {item.price}
-                        </span>
+                        <Price
+                          onSale={item.salePrice != null}
+                          className="text-sm font-semibold"
+                        >
+                          <PriceValue
+                            price={item.price}
+                            currency={"BDT"}
+                            variant="regular"
+                          />
+                          <PriceValue
+                            price={item.salePrice}
+                            currency={"BDT"}
+                            variant="sale"
+                          />
+                        </Price>
                         <button
                           onClick={() => handleAddToCart(item)}
                           className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground transition-transform hover:scale-105 active:scale-95 cursor-pointer"
@@ -204,7 +220,7 @@ export default function Hero() {
             )}
           </CarouselContent>
           <CarouselPrevious className="md:size-5 md:-left-6 lg:size-8 lg:-left-12" />
-          <CarouselNext className="md:size-5 md:-right-6 lg:size-8 lg:-right-12"/>
+          <CarouselNext className="md:size-5 md:-right-6 lg:size-8 lg:-right-12" />
         </Carousel>
 
         {/* Rating chip */}
