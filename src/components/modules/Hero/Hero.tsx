@@ -8,13 +8,11 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { Card, CardContent } from "@/components/ui/card";
 import { useGetAllProductsQuery } from "@/redux/features/products/products.api";
-import type { ICartItem, IProductPrice } from "../Cart/cart.types";
 import { useAddToCartMutation } from "@/redux/features/cart/cart.api";
 import { toast } from "sonner";
-import type { IProduct } from "../Product/product.types";
 import { Price, PriceValue } from "../Product/Price";
+import Autoplay from "embla-carousel-autoplay"
 
 const stats = [
   { value: "12k+", label: "Happy customers" },
@@ -138,9 +136,14 @@ export default function Hero() {
       <div className="relative flex items-center justify-center mb-8 md:mb-0 p-8">
         {/* Products carousel */}
         <Carousel
-          opts={{
-            loop: true,
-          }}
+         
+          plugins={[
+            Autoplay({
+              delay: 3000,
+              stopOnMouseEnter: true,
+              
+            })
+          ]}
           className="w-full max-w-[18rem]  "
         >
           <CarouselContent>
