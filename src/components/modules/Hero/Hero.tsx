@@ -27,7 +27,7 @@ const avatars = [
 ];
 
 export default function Hero() {
-  const { data: productsData } = useGetAllProductsQuery({
+  const { data: productsData, isLoading: productsLoading } = useGetAllProductsQuery({
     isNewArrival: true,
     limit: 5,
   });
@@ -135,7 +135,8 @@ export default function Hero() {
       {/* Right — part */}
       <div className="relative flex items-center justify-center mb-8 md:mb-0 p-8">
         {/* Products carousel */}
-        <Carousel
+        {
+          !productsLoading && <Carousel
          
           plugins={[
             Autoplay({
@@ -143,7 +144,12 @@ export default function Hero() {
               stopOnMouseEnter: true,
               
             })
+            
           ]}
+
+          opts={{
+            loop: true
+          }}
           className="w-full max-w-[18rem]  "
         >
           <CarouselContent>
@@ -225,6 +231,7 @@ export default function Hero() {
           <CarouselPrevious className="md:size-5 md:-left-6 lg:size-8 lg:-left-12" />
           <CarouselNext className="md:size-5 md:-right-6 lg:size-8 lg:-right-12" />
         </Carousel>
+        }
 
         {/* Rating chip */}
         <div className="absolute  right-7 -top-7 md:top-7 rounded-lg border border-border bg-card px-3 py-2 shadow-sm">
