@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -35,6 +36,7 @@ import { Edit2 } from "lucide-react";
 import { useId, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import type { ICategory } from "./category.interface";
 
 export function UpdateProductCategoryModal({ category }) {
   const [image, setImage] = useState<File | null>(null);
@@ -48,13 +50,13 @@ export function UpdateProductCategoryModal({ category }) {
   const form = useForm({
     defaultValues: {
       name: category.name,
-      parent: "",
+      parent: null,
     },
   });
 
   const [updateProductCategory] = useUpdateProductCategoryMutation();
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: ICategory) => {
     const formData = new FormData();
 
     formData.append("data", JSON.stringify(data));
@@ -67,7 +69,7 @@ export function UpdateProductCategoryModal({ category }) {
       formData: formData,
     };
 
-    // console.log(dataToUpdate)
+    console.log(dataToUpdate)
 
     const toastId = toast.loading("Updating product category...");
 
@@ -79,8 +81,11 @@ export function UpdateProductCategoryModal({ category }) {
         toast.success(res.message, { id: toastId });
         setOpen(false);
       }
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      if(!error?.data?.success){
+        toast.error(error?.data?.message, {id: toastId})
+      }
+      
     }
   };
 
@@ -163,7 +168,7 @@ export function UpdateProductCategoryModal({ category }) {
             <DialogClose asChild>
               <Button variant="outline">Cancel</Button>
             </DialogClose>
-            <Button form="add-product-category" type="submit">
+            <Button form="add-product-category" type="submit" className="cursor-pointer">
               Submit
             </Button>
           </DialogFooter>
