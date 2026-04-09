@@ -26,7 +26,6 @@ import {
   InputGroupText,
   InputGroupTextarea,
 } from "@/components/ui/input-group";
-import { ProductUpdateZodSchema } from "@/types";
 import { useGetProductCategoriesQuery } from "@/redux/features/productCategories/productCategories.api";
 import {
   Select,
@@ -48,9 +47,9 @@ import {
   useGetProductBySlugQuery,
   useUpdateProductMutation,
 } from "@/redux/features/products/products.api";
-import Loading from "@/utils/Loading";
 import { toast } from "sonner";
 import { PlusCircleIcon } from "lucide-react";
+import { ProductUpdateZodSchema } from "./product.types";
 
 export function UpdateProductForm() {
   const [thumbnail, setThumbnail] = useState<File | null>(null);
