@@ -6,12 +6,15 @@ export default function CategorySection() {
     useGetProductCategoriesQuery(undefined);
   
   return (
-    <div className="py-10 grid grid-cols-4">
+   <div className="mt-10">
+      <h2 className="text-foreground font-bold text-2xl mb-2">Shop by Categories</h2>
+     <div className="grid grid-cols-4 gap-5">
       {
         !categoryLoading && categoryData?.map((category: {_id: string, name: string, icon: string}) => (
           <CategoryCard  category={category}/>
         ))
       }
     </div>
+   </div>
   );
 }

@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 
 
 const CategoryCard = ( {category}: {category: {_id: string, name: string, icon: string}}) => {
@@ -6,8 +7,8 @@ const CategoryCard = ( {category}: {category: {_id: string, name: string, icon: 
 
   return (
     <div>
-        <a
-          href="#"
+        <Link
+          to={`/products?category=${category?._id}`}
           className="group relative block bg-black h-[300px] w-[300px]"
         >
           <img
@@ -17,25 +18,19 @@ const CategoryCard = ( {category}: {category: {_id: string, name: string, icon: 
           />
 
           <div className="relative p-4 sm:p-6 lg:p-8">
-            <p className="text-sm font-medium tracking-widest text-primary uppercase">
-              Category
-            </p>
-
             <p className="text-xl font-bold text-white sm:text-2xl">
               {category?.name}
             </p>
 
-            <div className="mt-12 sm:mt-18 lg:mt-24">
-              <div className="translate-y-8 transform opacity-0 transition-all group-hover:translate-y-0 group-hover:opacity-100">
-                <p className="text-sm text-white">
-                  Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                  Omnis perferendis hic asperiores quibusdam quidem voluptates
-                  doloremque reiciendis nostrum harum. Repudiandae?
+            <div className="mt-12 sm:mt-14 lg:mt-18">
+              <div className="translate-y-4 transform opacity-0 transition-all group-hover:translate-y-0 group-hover:opacity-100">
+                <p className="text-lg text-white">
+                  {`Click here to Explore and Shop ${category?.name} products.`}
                 </p>
               </div>
             </div>
           </div>
-        </a>
+        </Link>
       </div>
   );
 };
