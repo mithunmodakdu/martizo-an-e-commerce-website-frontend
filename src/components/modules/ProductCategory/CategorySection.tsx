@@ -6,7 +6,7 @@ export default function CategorySection() {
     useGetProductCategoriesQuery(undefined);
   
   return (
-   <div className="px-5 py-10">
+   <div className="w-4/5 mx-auto p-5">
       <h2 className="text-foreground font-bold text-2xl mb-2">Shop by Categories</h2>
      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
       {
