@@ -76,7 +76,6 @@ const trustPoints: TTrustPoint[] = [
   },
 ];
 
-
 export const WhyChooseUsSection = () => {
   return (
     <section aria-labelledby="why-choose-us-heading" className="space-y-5">
@@ -117,7 +116,7 @@ export const WhyChooseUsSection = () => {
         ))}
       </div>
 
-        {/* Trust points */}
+      {/* Trust points */}
       <div
         className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4"
         aria-label="Our commitments"
@@ -126,7 +125,6 @@ export const WhyChooseUsSection = () => {
           <TrustCard key={point.title} point={point} />
         ))}
       </div>
-
     </section>
   );
 };
