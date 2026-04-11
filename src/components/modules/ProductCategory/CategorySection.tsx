@@ -2,19 +2,22 @@ import { useGetProductCategoriesQuery } from "@/redux/features/productCategories
 import CategoryCard from "./CategoryCard";
 
 export default function CategorySection() {
-   const { data: categoryData, isLoading: categoryLoading } =
+  const { data: categoryData, isLoading: categoryLoading } =
     useGetProductCategoriesQuery(undefined);
-  
+
   return (
-   <div className="w-4/5 mx-auto p-5">
-      <h2 className="text-foreground font-bold text-2xl mb-2">Shop by Categories</h2>
-     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-      {
-        !categoryLoading && categoryData?.map((category: {_id: string, name: string, icon: string}) => (
-          <CategoryCard  category={category}/>
-        ))
-      }
-    </div>
-   </div>
+    <section>
+      <h2 className="text-foreground font-bold text-2xl mb-2">
+        Shop by Categories
+      </h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+        {!categoryLoading &&
+          categoryData?.map(
+            (category: { _id: string; name: string; icon: string }) => (
+              <CategoryCard category={category} />
+            ),
+          )}
+      </div>
+    </section>
   );
 }

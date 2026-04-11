@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 export const FeatureCard = ({ feature }: { feature: TFeature }) => {
   return (
     <Card className="group border hover:border-primary transition-colors duration-200 h-full">
-      <CardContent className="p-5 flex flex-col gap-3 h-full">
+      <CardContent className="flex flex-col gap-3 h-full">
         <div
           className={cn(
             "w-15 h-15 rounded-xl flex items-center justify-center shrink-0",
