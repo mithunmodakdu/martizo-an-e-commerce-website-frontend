@@ -10,7 +10,7 @@ export default function CommonLayout({children} : IProps) {
   return (
     <div>
       <Navbar/>
-      <div className="max-w-7xl mx-auto">
+      <div className="w-9/10 mx-auto max-w-7xl">
         {children}
       </div>
       <Footer/>

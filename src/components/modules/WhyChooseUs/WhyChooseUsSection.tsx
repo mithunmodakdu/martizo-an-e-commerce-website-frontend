@@ -8,6 +8,8 @@ import {
 } from "lucide-react";
 import { FeatureCard } from "./FeatureCard";
 import type { TFeature } from "./WhyChooseUs.types";
+import type { TStat } from "./WhyChooseUs.types";
+import { StatItem } from "./StatItem";
 
 const features: TFeature[] = [
   {
@@ -48,10 +50,16 @@ const features: TFeature[] = [
   },
 ];
 
-export default function WhyChooseUs() {
-  return (
-    <section aria-labelledby="why-choose-us-heading" className="space-y-5 w-4/5 mx-auto p-5">
+const stats: TStat[] = [
+  { value: "50,000+", label: "Happy customers" },
+  { value: "2,000+", label: "Products available" },
+  { value: "4.8 / 5", label: "Average rating" },
+  { value: "64", label: "Districts covered" },
+];
 
+export const WhyChooseUsSection = () => {
+  return (
+    <section aria-labelledby="why-choose-us-heading" className="space-y-5">
       {/* WhyChooseUs Heading */}
       <div className="space-y-2 max-w-xl">
         <p className="text-sm font-medium tracking-widest uppercase text-primary">
@@ -64,8 +72,8 @@ export default function WhyChooseUs() {
           Why choose Martizo?
         </h2>
         <p className="text-base text-muted-foreground leading-relaxed">
-          We're more than just a store — we're committed to quality, convenience,
-          and an online shopping experience you can trust.
+          We're more than just a store — we're committed to quality,
+          convenience, and an online shopping experience you can trust.
         </p>
       </div>
 
@@ -79,7 +87,15 @@ export default function WhyChooseUs() {
         ))}
       </div>
 
+      {/* Stats */}
+      <div
+        className="grid grid-cols-2 sm:grid-cols-4 rounded-xl border border-border overflow-hidden bg-background"
+        aria-label="Martizo by the numbers"
+      >
+        {stats.map((s, i) => (
+          <StatItem key={s.label} stat={s} isLast={i === stats.length - 1} />
+        ))}
+      </div>
     </section>
   );
-}
-
+};

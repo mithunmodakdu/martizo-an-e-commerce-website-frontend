@@ -154,7 +154,7 @@ export default function FlashSaleSection() {
   }, [api]);
 
   return (
-    <section className="w-full py-10 px-4 md:px-8 bg-background">
+    <section className="w-full bg-background">
       {/* Section Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         {/* Left: Title + badge */}
