@@ -2,8 +2,6 @@ import { Link } from "react-router";
 
 
 const CategoryCard = ( {category}: {category: {_id: string, name: string, icon: string}}) => {
-  console.log("from card", category)
- 
 
   return (
     <div>

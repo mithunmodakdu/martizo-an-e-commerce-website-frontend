@@ -23,9 +23,9 @@ export function FlashProductCard({ product }: { product: Product }) {
   };
 
   return (
-    <Card className="overflow-hidden border border-border bg-card shadow-md hover:shadow-xl transition-shadow duration-300 rounded-xl h-full flex flex-col">
+    <Card className="overflow-hidden border border-border rounded-none bg-card py-0 shadow-md hover:shadow-xl transition-shadow duration-300  h-full flex flex-col">
       {/* Image */}
-      <div className="relative h-48 overflow-hidden bg-muted flex-shrink-0">
+      <div className="relative h-48 overflow-hidden bg-muted shrink-0">
         <img
           src={product.image}
           alt={product.name}
@@ -105,19 +105,17 @@ export function FlashProductCard({ product }: { product: Product }) {
         </div>
       </CardContent>
 
-      <CardFooter className="px-3 pt-3 pb-3">
+      <CardFooter className="px-3 pt-3 pb-3 flex justify-evenly">
         <Button
-          size="sm"
-          onClick={handleAddToCart}
-          className={cn(
-            "w-full text-xs font-semibold h-9 rounded-lg transition-all duration-200",
-            addedToCart
-              ? "bg-[var(--chart-3)] hover:bg-[var(--chart-3)] text-primary-foreground"
-              : "bg-primary hover:bg-[var(--chart-4)] text-primary-foreground hover:scale-[1.02]"
-          )}
         >
           <ShoppingCart className="w-3.5 h-3.5 mr-1.5" />
-          {addedToCart ? "Added ✓" : "Add to Cart"}
+          Add to Cart
+        </Button>
+        <Button
+          
+          variant="outline"
+        >
+          View Details
         </Button>
       </CardFooter>
     </Card>

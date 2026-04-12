@@ -1,18 +1,15 @@
-import { cn } from "@/lib/utils";
 import type {
   IProduct,
   IProductCardsContainerProps,
-  TProductCards,
 } from "./product.types";
 import { ProductCard } from "./ProductCard";
 
 export const ProductCardsContainer = ({
-  className,
   productsData,
 }: IProductCardsContainerProps) => {
   // console.log(className, productsData);
 
-  const productCardsData: TProductCards = productsData?.map(
+  const productCardsData = productsData?.map(
     (item: IProduct) => ({
       _id: item._id,
       name: item.title,

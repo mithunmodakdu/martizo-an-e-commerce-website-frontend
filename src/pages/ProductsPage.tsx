@@ -54,6 +54,7 @@ export default function ProductsPage() {
         </div>
       </div>
 
+      {/* pagination */}
       {totalPage > 1 && (
         <div className="mt-10">
           <Pagination>
