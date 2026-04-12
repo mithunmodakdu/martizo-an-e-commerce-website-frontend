@@ -154,8 +154,8 @@ export default function FlashSaleSection() {
   }, [api]);
 
   return (
-    <section className="w-full bg-background">
-      {/* Section Header */}
+    <section className="w-full bg-background border-2 border-red-500">
+      {/* Section Heading */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         {/* Left: Title + badge */}
         <div className="flex items-center gap-3">
@@ -213,8 +213,8 @@ export default function FlashSaleSection() {
         </CarouselContent>
 
         {/* Navigation Arrows */}
-        <CarouselPrevious className="hidden sm:flex -left-4 border-border bg-background hover:bg-primary hover:text-primary-foreground hover:border-primary transition-colors" />
-        <CarouselNext className="hidden sm:flex -right-4 border-border bg-background hover:bg-primary hover:text-primary-foreground hover:border-primary transition-colors" />
+        <CarouselPrevious className="hidden sm:flex -left-8 border-border bg-background hover:bg-primary hover:text-primary-foreground hover:border-primary transition-colors" />
+        <CarouselNext className="hidden sm:flex -right-8 border-border bg-background hover:bg-primary hover:text-primary-foreground hover:border-primary transition-colors" />
       </Carousel>
 
       {/* Dot Indicators */}

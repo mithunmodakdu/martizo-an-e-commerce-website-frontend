@@ -3,6 +3,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -15,6 +16,10 @@ import { Button } from "@/components/ui/button";
 import type { ICartItem } from "../Cart/cart.types";
 import { useAddToCartMutation } from "@/redux/features/cart/cart.api";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
+import { useState } from "react";
+import { Heart, ShoppingCart, Star } from "lucide-react";
+import { Progress } from "@/components/ui/progress";
 
 export const ProductCard = ({
   _id,
@@ -25,9 +30,17 @@ export const ProductCard = ({
   image,
   price,
   badges,
+  stock = 50,
+  rating = 4,
+  ratingCount = 500,
 }: TProductCardProps) => {
-  const [addToCart] = useAddToCartMutation()
+  const [wishlisted, setWishlisted] = useState(false);
+  const stockSold = 10;
   const { regular, sale, currency } = price;
+  const stockPercent = Math.round((stockSold / stock) * 100);
+  const discount = sale && Math.round(((regular - sale) / regular) * 100);
+  const stockLeft = stock - stockSold;
+  const [addToCart] = useAddToCartMutation();
 
   const cartData: ICartItem = {
     productId: _id,
@@ -37,97 +50,178 @@ export const ProductCard = ({
     quantity: 1,
     image,
   };
-  
 
   const handleAddToCart = async (data: ICartItem) => {
     // console.log(data)
-    const toastId = toast.loading("Adding product to cart...")
+    const toastId = toast.loading("Adding product to cart...");
 
     try {
       const res = await addToCart(data).unwrap();
       // console.log(res)
-      if(res.success){
-        toast.success(res.message, {id: toastId})
+      if (res.success) {
+        toast.success(res.message, { id: toastId });
       }
-
-      
     } catch (error: any) {
       // console.log("from error catch", error)
-      if(!error.data.success){
-        toast.error(error.data.message, {id: toastId})
+      if (!error.data.success) {
+        toast.error(error.data.message, { id: toastId });
       }
     }
-    
   };
 
   return (
     <div className="relative group">
-      <Card className="overflow-hidden  p-0 rounded-tl-none rounded-tr-3xl rounded-bl-3xl rounded-br-3xl">
+      <Card className="overflow-hidden border border-border rounded-none bg-card py-0 shadow-md hover:shadow-xl transition-shadow duration-300  h-full flex flex-col">
         <CardHeader className="relative block p-0">
-          <AspectRatio ratio={1.5} className="overflow-hidden">
+          {/* Image */}
+          <div className="relative h-48 overflow-hidden bg-muted shrink-0">
             <img
               src={image.src}
               alt={image.alt}
-              className="w-full rounded-tr-3xl rounded-bl-3xl object-cover"
+              className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
             />
-          </AspectRatio>
-          <div className="absolute start-4 top-4">
-            <div className="flex gap-3">
-              {badges?.map((badge) => (
-                <div>
-                  {badge.text ? (
-                    <Badge
-                      style={{
-                        backgroundColor: badge.color,
-                      }}
-                    >
-                      {badge.text}
-                    </Badge>
-                  ) : (
-                    ""
-                  )}
-                </div>
-              ))}
+
+            {/* Badges */}
+            <div className="absolute start-4 top-4">
+              <div className="flex gap-3">
+                {badges?.map((badge) => (
+                  <div>
+                    {badge.text ? (
+                      <Badge
+                        style={{
+                          backgroundColor: badge.color,
+                        }}
+                      >
+                        {badge.text}
+                      </Badge>
+                    ) : (
+                      ""
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
+
+            {/* wishlist button */}
+            <Button
+              onClick={() => setWishlisted(!wishlisted)}
+              className={cn(
+                "absolute top-2.5 right-2.5 p-1.5 rounded-full bg-background/80 backdrop-blur-sm shadow transition-all duration-200 hover:scale-110",
+                wishlisted ? "text-destructive" : "text-muted-foreground",
+              )}
+            >
+              <Heart
+                className={cn("w-3.5 h-3.5", wishlisted && "fill-destructive")}
+              />
+            </Button>
           </div>
         </CardHeader>
-        <CardContent className="flex h-full flex-col gap-4 pb-6">
+        {/* <CardContent className="flex h-full flex-col gap-4 pb-6">
           <CardTitle className="text-lg font-semibold">{name}</CardTitle>
           <CardDescription className="font-medium text-muted-foreground">
             {description}
           </CardDescription>
           <div className="mt-auto">
             <Price onSale={sale != null} className="text-sm font-semibold">
-               <PriceValue
+              <PriceValue
                 price={regular}
                 currency={currency}
                 variant="regular"
               />
-              <PriceValue price={sale} currency={currency} variant="sale" />            
+              <PriceValue price={sale} currency={currency} variant="sale" />
             </Price>
           </div>
-        </CardContent>
-      </Card>
+        </CardContent> */}
 
-      {/* overlay */}
-      <div
-        className="absolute  p-0 rounded-tl-none rounded-tr-3xl rounded-bl-3xl rounded-br-3xl inset-0 bg-muted-foreground flex items-center justify-center gap-3
-        opacity-0 group-hover:opacity-80 transition-all duration-300 ease-in-out"
-      >
-        
-          <Button onClick={() => handleAddToCart(cartData)} className="transform translate-y-24 group-hover:translate-y-0 transition-transform duration-500 ease-in-out hover:cursor-pointer">
+        <CardContent className="pt-3 px-3 pb-0 space-y-2 flex-1">
+          <h3 className="font-semibold text-card-foreground text-sm leading-snug line-clamp-2">
+            {name}
+          </h3>
+
+          {/* Ratings */}
+          <div className="flex items-center gap-1">
+            <div className="flex items-center gap-0.5">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <Star
+                  key={i}
+                  className={cn(
+                    "w-3 h-3",
+                    i < Math.floor(rating)
+                      ? "text-[var(--chart-2)] fill-[var(--chart-2)]"
+                      : "text-border fill-border",
+                  )}
+                />
+              ))}
+            </div>
+            <span className="text-[11px] text-muted-foreground">
+              ({ratingCount?.toLocaleString()})
+            </span>
+          </div>
+
+          {/* Price */}
+          <div className="flex items-baseline gap-1.5">
+            <Price onSale={sale != null} className="text-sm font-semibold">
+              <PriceValue
+                price={regular}
+                currency={currency}
+                variant="regular"
+              />
+              <PriceValue price={sale} currency={currency} variant="sale" />
+            </Price>
+            {sale && (
+              <span className="text-xs font-semibold text-primary ml-auto">
+                Save ${regular - sale}
+              </span>
+            )}
+          </div>
+
+          {/* Stock */}
+          <div className="space-y-1">
+            <div className="flex justify-between text-[11px]">
+              <span className="text-muted-foreground">
+                Sold{" "}
+                <span className="text-card-foreground font-semibold">
+                  {stockSold}
+                </span>
+              </span>
+              <span
+                className={cn(
+                  "font-semibold",
+                  stockLeft <= 10
+                    ? "text-destructive"
+                    : "text-muted-foreground",
+                )}
+              >
+                {stockLeft <= 10 ? `🔥 ${stockLeft} left` : `${stockLeft} left`}
+              </span>
+            </div>
+            <Progress
+              value={stockPercent}
+              className="h-1.5 bg-muted [&>div]:bg-primary"
+            />
+          </div>
+        </CardContent>
+
+        <CardFooter className="px-3 pt-3 pb-3 flex gap-5">
+          <Button
+            onClick={() => handleAddToCart(cartData)}
+            className="hover:cursor-pointer"
+            
+          >
+            <ShoppingCart className="w-2 h-2 mr-1" />
             Add to Cart
           </Button>
-       
-        <Link to={`/product-details/${slug}`} className="asChild">
-          <Button
-            variant={"secondary"}
-            className="transform -translate-y-24 group-hover:translate-y-0 transition-transform duration-500 ease-in-out hover:cursor-pointer"
-          >
-            View Details
-          </Button>
-        </Link>
-      </div>
+
+          <Link to={`/product-details/${slug}`} className="asChild">
+            <Button
+              variant="outline"
+              className="hover:cursor-pointer"             
+            >
+              View Details
+            </Button>
+          </Link>
+        </CardFooter>
+      </Card>
     </div>
   );
 };
