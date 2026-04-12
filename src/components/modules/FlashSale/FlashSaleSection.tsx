@@ -154,7 +154,7 @@ export default function FlashSaleSection() {
   }, [api]);
 
   return (
-    <section className="w-full bg-background border-2 border-red-500">
+    <section className="w-full bg-background border-2 p-5">
       {/* Section Heading */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         {/* Left: Title + badge */}
