@@ -179,7 +179,7 @@ export const ProductCard = ({
         </div>
       </CardContent>
 
-      <CardFooter className="px-3 pb-3 flex gap-5">
+      <CardFooter className="px-3 pb-3 flex gap-5  justify-center">
         {/* CTA Buttons */}
         <Button
           onClick={() => handleAddToCart(cartData)}
