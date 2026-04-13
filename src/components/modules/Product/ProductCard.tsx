@@ -183,17 +183,17 @@ export const ProductCard = ({
         {/* CTA Buttons */}
         <Button
           onClick={() => handleAddToCart(cartData)}
-          className="rounded-none hover:cursor-pointer"
+          className="rounded-none hover:cursor-pointer flex-1"
         >
           <ShoppingCart className="w-2 h-2 mr-1" />
           Add to Cart
         </Button>
 
-        <Link to={`/product-details/${slug}`} className="asChild">
-          <Button variant="outline" className="rounded-none hover:cursor-pointer">
-            View Details
+        
+          <Button variant="outline" className="rounded-none hover:cursor-pointer flex-1">
+            <Link to={`/product-details/${slug}`} className="asChild">View Details</Link>
           </Button>
-        </Link>
+        
       </CardFooter>
     </Card>
   );

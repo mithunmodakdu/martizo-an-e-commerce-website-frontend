@@ -78,7 +78,7 @@ const trustPoints: TTrustPoint[] = [
 
 export const WhyChooseUsSection = () => {
   return (
-    <section aria-labelledby="why-choose-us-heading" className="space-y-5">
+    <section aria-labelledby="why-choose-us-heading" className="space-y-5 border-2 border-border p-5">
       {/* WhyChooseUs Heading */}
       <div className="space-y-2 max-w-xl">
         <p className="text-sm font-medium tracking-widest uppercase text-primary">
