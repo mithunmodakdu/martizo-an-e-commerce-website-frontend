@@ -101,7 +101,7 @@ export default function SpecialOffersSection() {
   );
 
   return (
-    <section aria-labelledby="special-offers-heading">
+    <section aria-labelledby="special-offers-heading" className="border-2 border-border p-5">
       {/* Heading */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between mb-6 sm:mb-8">
         <div>
