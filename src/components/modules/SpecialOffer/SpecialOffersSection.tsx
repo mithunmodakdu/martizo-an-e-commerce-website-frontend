@@ -18,8 +18,7 @@ export default function SpecialOffersSection() {
     limit: 4
     
   });
-  // console.log(topDiscountProducts);
-  // console.log(smallDiscountProducts);
+
   const topDiscountProductCardsData = topDiscountProducts?.data?.map(
     (item: IProduct) => ({
       _id: item._id,
