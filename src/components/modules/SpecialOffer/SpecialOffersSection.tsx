@@ -3,6 +3,7 @@ import { useGetAllProductsQuery } from "@/redux/features/products/products.api";
 import { Link } from "react-router";
 import { ProductCard } from "../Product/ProductCard";
 import type { IProduct } from "../Product/product.types";
+import { CouponCountdownStrip } from "./CouponCountdownStrip";
 
 export default function SpecialOffersSection() {
   const { data: topDiscountProducts } = useGetAllProductsQuery({
@@ -140,6 +141,9 @@ export default function SpecialOffersSection() {
           ))
         }
       </div>
+
+      {/* CouponCountdownStrip */}
+      <CouponCountdownStrip/>
 
 
 
