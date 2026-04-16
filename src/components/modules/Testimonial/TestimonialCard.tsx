@@ -2,7 +2,7 @@ import StarRating from "../Shared/StarRating";
 
 export function TestimonialCard({ name, meta, initials, avatarClass, rating, quote }) {
   return (
-    <div className="bg-card border border-border rounded-xl p-5 flex flex-col gap-3">
+    <div className={`bg-card border border-border rounded-xl p-5 flex flex-col gap-3 w-[320px] h-[250px]`}>
       <StarRating rating={rating} />
       <p className="text-sm text-muted-foreground leading-relaxed flex-1">
         "{quote}"

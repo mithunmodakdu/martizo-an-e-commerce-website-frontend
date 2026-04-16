@@ -1,12 +1,13 @@
 import { TestimonialCard } from "./TestimonialCard";
+import Marquee from "react-fast-marquee";
 
-const testimonials = [
+const testimonialsToRight = [
   {
-    name: "Sarah Rahman",
+    name: "Probash Khan",
     meta: "Verified buyer · Home & Living",
-    initials: "SR",
+    initials: "PK",
     avatarClass: "bg-primary/10 text-primary",
-    rating: 5,
+    rating: 4.5,
     quote:
       "Martizo has completely changed how I shop online. The quality of every product I've ordered has been exceptional — exactly as described, and delivered super fast.",
   },
@@ -28,13 +29,60 @@ const testimonials = [
     quote:
       "Great variety of products and really competitive prices. Shipping could be a tiny bit faster, but overall I'm very happy and will definitely be ordering again soon.",
   },
+  {
+    name: "Motaleb Hossain",
+    meta: "Verified buyer · Home & Living",
+    initials: "MH",
+    avatarClass: "bg-primary/10 text-primary",
+    rating: 4.5,
+    quote:
+      "Martizo has completely changed how I shop online. The quality of every product I've ordered has been exceptional — exactly as described, and delivered super fast.",
+  },
 ];
 
-const TestimonialsSection = () =>{
+const testimonialsToLeft = [
+  {
+    name: "Tanzim Ahmed",
+    meta: "Verified buyer · Electronics",
+    initials: "TA",
+    avatarClass: "bg-blue-100 text-blue-700",
+    rating: 5,
+    quote:
+      "I was a bit skeptical at first, but the customer support team was incredibly responsive. My package arrived in perfect condition, and the return process was seamless.",
+  },
+  {
+    name: "Prakash Das",
+    meta: "Verified buyer · Fashion",
+    initials: "PD",
+    avatarClass: "bg-amber-100 text-amber-700",
+    rating: 4,
+    quote:
+      "Great variety of products and really competitive prices. Shipping could be a tiny bit faster, but overall I'm very happy and will definitely be ordering again soon.",
+  },
+  {
+    name: "Mritayanjoy Mondal",
+    meta: "Verified buyer · Fashion",
+    initials: "MM",
+    avatarClass: "bg-amber-100 text-amber-700",
+    rating: 4,
+    quote:
+      "Great variety of products and really competitive prices. Shipping could be a tiny bit faster, but overall I'm very happy and will definitely be ordering again soon.",
+  },
+  {
+    name: "Moni Saker",
+    meta: "Verified buyer · Home & Living",
+    initials: "MS",
+    avatarClass: "bg-primary/10 text-primary",
+    rating: 4.5,
+    quote:
+      "Martizo has completely changed how I shop online. The quality of every product I've ordered has been exceptional — exactly as described, and delivered super fast.",
+  },
+];
+
+const TestimonialsSection = () => {
   return (
     <section className="p-5 bg-secondary/40">
-      <div className="max-w-5xl mx-auto">
-
+      <div className="mx-auto">
         {/* Heading */}
         <div className="text-center mb-10">
           <p className="text-sm font-medium tracking-widest text-primary uppercase mb-2">
@@ -48,21 +96,39 @@ const TestimonialsSection = () =>{
           </p>
         </div>
 
-          {/* Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {testimonials.map((item) => (
-            <TestimonialCard key={item.name} {...item} />
-          ))}
-        </div>
+        {/* Cards */}
 
-
-       
-
-       
-
+        <Marquee
+          pauseOnHover
+          speed={20}
+          className="py-4"
+          direction="left"
+        >
+          <div className="flex gap-5">
+            {testimonialsToLeft.map((item) => (
+              <div key={item.name} className="mx-2.5">
+                <TestimonialCard {...item} />
+              </div>
+            ))}
+          </div>
+        </Marquee>
+        <Marquee
+          pauseOnHover
+          speed={20}
+          className="py-4"
+          direction="right"
+        >
+          <div className="flex gap-5">
+            {testimonialsToRight.map((item) => (
+              <div key={item.name} className="mx-3">
+                <TestimonialCard {...item} />
+              </div>
+            ))}
+          </div>
+        </Marquee>
       </div>
     </section>
   );
-}
+};
 
 export default TestimonialsSection;
