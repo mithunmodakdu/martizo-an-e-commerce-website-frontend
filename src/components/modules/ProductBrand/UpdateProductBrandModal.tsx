@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -94,8 +95,8 @@ export function UpdateProductBrandModal({ brand }) {
         toast.success(res.message, { id: toastId });
         setOpen(false);
       }
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      toast.error(error?.data?.message, {id: toastId})
     }
   };
 
@@ -175,8 +176,9 @@ export function UpdateProductBrandModal({ brand }) {
                     <FormControl>
                       <Input
                         placeholder="Write here total Products number"
-                        type="number"
-                        {...field}
+                        type="text"
+                        {...field}                        
+                      onChange={(e) => field.onChange(Number(e.target.value))}
                       />
                     </FormControl>
                     <FormDescription className="sr-only">

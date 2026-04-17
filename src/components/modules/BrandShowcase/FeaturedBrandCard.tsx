@@ -29,7 +29,7 @@ export default function FeaturedBrandCard({ brand }: {brand: IBrand}) {
         {/* badges row */}
         <div className="flex items-center justify-between mb-5">
           <Badge
-            className="gap-1 text-[10px] font-semibold tracking-widest uppercase"
+            className="gap-1 text-base font-semibold tracking-widest uppercase"
             style={{
               color: "var(--primary)",
               background: "oklch(0.5941 0.1635 150.03 / 0.08)",
@@ -40,11 +40,11 @@ export default function FeaturedBrandCard({ brand }: {brand: IBrand}) {
             Featured
           </Badge>
           <span
-            className="flex items-center gap-1 text-[11px] font-medium"
+            className="flex items-center gap-1 text-base font-medium"
             style={{ color: "var(--muted-foreground)" }}
           >
             <TrendingUp size={15} style={{ color: "var(--primary)" }} />
-            {brand.products}+ items
+            {brand.totalProducts}+ items
           </span>
         </div>
 
@@ -52,13 +52,13 @@ export default function FeaturedBrandCard({ brand }: {brand: IBrand}) {
         <div className="flex justify-center mb-2">
           <img
             className="w-[60px] h-[60px] rounded-full"
-            src="https://res.cloudinary.com/dbcykhgzd/image/upload/v1776269557/71ziaxkilct-1776269554162-sony-logo.png.png"
+            src={brand.brandLogo}
             alt=""
           />
         </div>
 
         <p
-          className="text-sm text-center mb-4"
+          className="text-base text-center mb-4"
           style={{ color: "var(--muted-foreground)" }}
         >
           {brand.tagline}
@@ -69,16 +69,16 @@ export default function FeaturedBrandCard({ brand }: {brand: IBrand}) {
           style={{ borderTop: "1px solid var(--border)" }}
         >
           <span
-            className="text-[11px]"
+            className="text-sm"
             style={{ color: "var(--muted-foreground)" }}
           >
             Official partner
           </span>
           <button
-            className="flex items-center gap-1 text-xs font-semibold transition-opacity hover:opacity-75"
+            className="flex items-center gap-1 text-base font-semibold transition-opacity hover:opacity-75"
             style={{ color: "var(--primary)" }}
           >
-            Shop Now <ArrowRight size={12} />
+            Shop Now <ArrowRight size={16} />
           </button>
         </div>
       </div>

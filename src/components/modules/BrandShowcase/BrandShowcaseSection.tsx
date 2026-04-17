@@ -5,23 +5,6 @@ import RegularBrandCard from "./RegularBrandCard";
 import { useGetAllBrandsQuery } from "@/redux/features/brands/brands.api";
 import type { IBrand } from "@/types";
 
-const brands = [
-  { id: 1, name: "Lumen",  tagline: "Premium Lighting",  featured: true,  products: 214 },
-  { id: 2, name: "Solène", tagline: "Luxury Skincare",   featured: true,  products: 178 },
-  { id: 3, name: "Vortex", tagline: "Sports & Active",   featured: false, products: 302 },
-  { id: 4, name: "Arcana", tagline: "Home Décor",        featured: false, products: 145 },
-  { id: 5, name: "Ferro",  tagline: "Tools & Hardware",  featured: false, products: 88  },
-  { id: 6, name: "Aura",   tagline: "Wellness & Spa",    featured: false, products: 193 },
-  { id: 7, name: "Noxis",  tagline: "Tech Gadgets",      featured: false, products: 261 },
-  { id: 8, name: "Bloom",  tagline: "Organic Foods",     featured: false, products: 134 },
-  { id: 4, name: "Arcana", tagline: "Home Décor",        featured: false, products: 145 },
-  { id: 5, name: "Ferro",  tagline: "Tools & Hardware",  featured: false, products: 88  },
-  { id: 6, name: "Aura",   tagline: "Wellness & Spa",    featured: false, products: 193 },
-  { id: 7, name: "Noxis",  tagline: "Tech Gadgets",      featured: false, products: 261 },
-  { id: 8, name: "Bloom",  tagline: "Organic Foods",     featured: false, products: 134 },
-];
-
-
 export default function BrandShowcaseSection() {
   const {data: brandData} = useGetAllBrandsQuery(undefined);
   const featuredBrands = brandData?.data?.filter((brand: IBrand) => brand.isFeatured);
@@ -79,14 +62,14 @@ export default function BrandShowcaseSection() {
 
           {/* Featured column */}
           <div className="flex flex-col gap-5 lg:col-span-1">
-            {featuredBrands.map((brand: IBrand) => (
+            {featuredBrands?.map((brand: IBrand) => (
               <FeaturedBrandCard key={brand._id} brand={brand} />
             ))}
           </div>
 
              {/* Brand grid */}
           <div className="lg:col-span-2 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5 content-start">
-            {regularBrands.map((brand: IBrand) => (
+            {regularBrands?.map((brand: IBrand) => (
               <RegularBrandCard key={brand._id} brand={brand} />
             ))}
 
@@ -99,14 +82,14 @@ export default function BrandShowcaseSection() {
                 minHeight: "100px",
               }}
             >
-              <p className="text-xs text-center mb-2.5" style={{ color: "var(--muted-foreground)" }}>
+              <p className="text-base text-center mb-2.5" style={{ color: "var(--muted-foreground)" }}>
                 50+ brands available on Martizo
               </p>
               <button
-                className="flex items-center gap-1 text-xs font-semibold"
+                className="flex items-center gap-1 text-base font-semibold"
                 style={{ color: "var(--primary)" }}
               >
-                Explore All <ArrowRight size={11} />
+                Explore All <ArrowRight size={16} />
               </button>
             </div>
           </div>

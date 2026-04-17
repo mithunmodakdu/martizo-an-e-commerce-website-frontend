@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -86,8 +87,8 @@ export function AddProductBrandModal() {
         form.reset();
         setOpen(false);
       }
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      toast.error(error?.data?.message, {id: toastId})
     }
   };
 
@@ -165,8 +166,9 @@ export function AddProductBrandModal() {
                     <FormControl>
                       <Input
                         placeholder="Write here total Products number"
-                        type="number"
+                        type="text"
                         {...field}
+                        onChange={(e) => field.onChange(Number(e.target.value))}
                       />
                     </FormControl>
                     <FormDescription className="sr-only">

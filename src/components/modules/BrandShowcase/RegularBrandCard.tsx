@@ -25,12 +25,12 @@ export default function RegularBrandCard({ brand }) {
       <div className="flex justify-center mb-2">
         <img
           className="w-[60px] h-[60px] rounded-full"
-          src="https://res.cloudinary.com/dbcykhgzd/image/upload/v1776269557/71ziaxkilct-1776269554162-sony-logo.png.png"
+          src={brand.brandLogo}
           alt=""
         />
       </div>
       <p
-        className="text-[11px] mt-1.5 transition-colors duration-200"
+        className="text-base mt-1.5 transition-colors duration-200"
         style={{
           color: hovered ? "var(--primary)" : "var(--muted-foreground)",
         }}
@@ -38,10 +38,10 @@ export default function RegularBrandCard({ brand }) {
         {brand.tagline}
       </p>
       <span
-        className="text-[10px] mt-0.5 opacity-60"
+        className="text-base mt-0.5 opacity-60"
         style={{ color: "var(--muted-foreground)" }}
       >
-        {brand.products}+ products
+        {brand.totalProducts}+ products
       </span>
     </div>
   );

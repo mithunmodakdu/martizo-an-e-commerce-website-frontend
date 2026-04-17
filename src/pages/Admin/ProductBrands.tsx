@@ -62,6 +62,7 @@ export default function ProductBrands() {
               <TableHead className="w-1/5 text-left">Brand</TableHead>
               <TableHead className="w-1/5 text-left">Slug</TableHead>
               <TableHead className="w-1/5 text-left">Tagline</TableHead>
+              <TableHead className="text-center">Total Products</TableHead>
               <TableHead className="text-center">Is Top Brand</TableHead>
               <TableHead className="text-center">Is Martizo Choice</TableHead>
               <TableHead className="text-center">Is Featured Brand</TableHead>
@@ -90,6 +91,7 @@ export default function ProductBrands() {
 
                 <TableCell className="text-left w-1/5">{item?.slug}</TableCell>
                 <TableCell className="text-left w-1/5">{item?.tagline}</TableCell>
+                <TableCell className="text-center">{item?.totalProducts}</TableCell>
                 <TableCell className="text-center">
                   {item.isTopBrand ? "Yes" : "No"}
                 </TableCell>
