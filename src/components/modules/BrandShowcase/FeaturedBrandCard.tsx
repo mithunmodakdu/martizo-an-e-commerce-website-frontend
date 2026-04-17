@@ -9,12 +9,14 @@ export default function FeaturedBrandCard({ brand }) {
     <div
       className={cn(
         "relative rounded-xl overflow-hidden cursor-pointer transition-all duration-300",
-        hovered && "-translate-y-1"
+        hovered && "-translate-y-1",
       )}
       style={{
         background: "var(--card)",
         border: `1px solid ${hovered ? "oklch(0.5941 0.1635 150.03 / 0.4)" : "var(--border)"}`,
-        boxShadow: hovered ? "0 10px 36px oklch(0.5941 0.1635 150.03 / 0.14)" : undefined,
+        boxShadow: hovered
+          ? "0 10px 36px oklch(0.5941 0.1635 150.03 / 0.14)"
+          : undefined,
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
@@ -46,11 +48,18 @@ export default function FeaturedBrandCard({ brand }) {
         </div>
 
         {/* logo area */}
-        <div className="flex justify-center mb-2" >
-            <img className="w-[60px] h-[60px] rounded-full" src="https://res.cloudinary.com/dbcykhgzd/image/upload/v1776269557/71ziaxkilct-1776269554162-sony-logo.png.png" alt="" />
-          </div>
+        <div className="flex justify-center mb-2">
+          <img
+            className="w-[60px] h-[60px] rounded-full"
+            src="https://res.cloudinary.com/dbcykhgzd/image/upload/v1776269557/71ziaxkilct-1776269554162-sony-logo.png.png"
+            alt=""
+          />
+        </div>
 
-        <p className="text-sm text-center mb-4" style={{ color: "var(--muted-foreground)" }}>
+        <p
+          className="text-sm text-center mb-4"
+          style={{ color: "var(--muted-foreground)" }}
+        >
           {brand.tagline}
         </p>
 
@@ -58,7 +67,10 @@ export default function FeaturedBrandCard({ brand }) {
           className="flex items-center justify-between pt-4"
           style={{ borderTop: "1px solid var(--border)" }}
         >
-          <span className="text-[11px]" style={{ color: "var(--muted-foreground)" }}>
+          <span
+            className="text-[11px]"
+            style={{ color: "var(--muted-foreground)" }}
+          >
             Official partner
           </span>
           <button

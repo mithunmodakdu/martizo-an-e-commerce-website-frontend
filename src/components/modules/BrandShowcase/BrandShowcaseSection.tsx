@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import FeaturedBrandCard from "./FeaturedBrandCard";
+import RegularBrandCard from "./RegularBrandCard";
 
 const brands = [
   { id: 1, name: "Lumen",  tagline: "Premium Lighting",  featured: true,  products: 214 },
@@ -16,6 +17,7 @@ const brands = [
 
 export default function BrandShowcaseSection() {
   const featuredBrands = brands.filter((brand) => brand.featured);
+  const regularBrands = brands.filter((brand) => !brand.featured);
   
   return (
     <section className="py-20 px-4" style={{ background: "var(--background)" }}>
@@ -73,6 +75,34 @@ export default function BrandShowcaseSection() {
               <FeaturedBrandCard key={brand.id} brand={brand} />
             ))}
           </div>
+
+             {/* Brand grid */}
+          <div className="lg:col-span-2 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 content-start">
+            {regularBrands.map((brand) => (
+              <RegularBrandCard key={brand.id} brand={brand} />
+            ))}
+
+            {/* CTA tile */}
+            <div
+              className="col-span-2 sm:col-span-1 flex flex-col items-center justify-center rounded-xl p-4 cursor-pointer transition-colors duration-200"
+              style={{
+                border: "1.5px dashed var(--border)",
+                background: "var(--muted)",
+                minHeight: "100px",
+              }}
+            >
+              <p className="text-xs text-center mb-2.5" style={{ color: "var(--muted-foreground)" }}>
+                50+ brands available on Martizo
+              </p>
+              <button
+                className="flex items-center gap-1 text-xs font-semibold"
+                style={{ color: "var(--primary)" }}
+              >
+                Explore All <ArrowRight size={11} />
+              </button>
+            </div>
+          </div>
+
 
          
         </div>
