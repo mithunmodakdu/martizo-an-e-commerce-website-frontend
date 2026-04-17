@@ -23,23 +23,21 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import SingleImageUploader from "@/components/ui/singleImageUploader";
 import { useUpdateProductBrandMutation } from "@/redux/features/productBrands/productBrands.api";
-import {
-  UpdateBrandZodSchema,
-  type IBrand,
-} from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Edit2 } from "lucide-react";
 import { useEffect, useId, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
+import { UpdateBrandZodSchema, type IBrand } from "./brand.types";
 
-export function UpdateProductBrandModal({brand}) {
+export function UpdateProductBrandModal({ brand }) {
   const [image, setImage] = useState<File | null>(null);
   const [open, setOpen] = useState(false);
   const [updateProductBrand] = useUpdateProductBrandMutation();
   const topBrandRadioId = useId();
   const martizoChoiceRadioId = useId();
+  const featuredRadioId = useId();
 
   const topBrandItems = [
     { label: "Yes", value: true },
@@ -51,21 +49,28 @@ export function UpdateProductBrandModal({brand}) {
     { label: "No", value: false },
   ];
 
+  const featuredItems = [
+    { label: "Yes", value: true },
+    { label: "No", value: false },
+  ];
+
   const form = useForm<z.infer<typeof UpdateBrandZodSchema>>({
     resolver: zodResolver(UpdateBrandZodSchema),
     defaultValues: {
       name: "",
+      tagline: "",
       brandLogo: "",
       isTopBrand: false,
       isMartizoChoice: false,
+      isFeatured: false,
     },
   });
 
   useEffect(() => {
-    if(brand){
+    if (brand) {
       form.reset(brand);
     }
-  }, [brand, form])
+  }, [brand, form]);
 
   const onSubmit = async (data: Partial<IBrand>) => {
     const formData = new FormData();
@@ -73,10 +78,10 @@ export function UpdateProductBrandModal({brand}) {
     formData.append("data", JSON.stringify(data));
     formData.append("file", image as File);
 
-    const dataToUpdate = { 
-      brandId: brand._id, 
-      formData: formData
-     }
+    const dataToUpdate = {
+      brandId: brand._id,
+      formData: formData,
+    };
 
     const toastId = toast.loading("Updating product Brand...");
 
@@ -88,7 +93,6 @@ export function UpdateProductBrandModal({brand}) {
         toast.success(res.message, { id: toastId });
         setOpen(false);
       }
-
     } catch (error) {
       console.log(error);
     }
@@ -99,7 +103,7 @@ export function UpdateProductBrandModal({brand}) {
       <div>
         <DialogTrigger asChild>
           <Button className="hoover: cursor-pointer">
-            <Edit2/>
+            <Edit2 />
           </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
@@ -116,6 +120,7 @@ export function UpdateProductBrandModal({brand}) {
               onSubmit={form.handleSubmit(onSubmit)}
               className="space-y-5"
             >
+              {/* Brand name */}
               <FormField
                 control={form.control}
                 name="name"
@@ -137,7 +142,30 @@ export function UpdateProductBrandModal({brand}) {
                 )}
               />
 
+              {/* brand tagline */}
+              <FormField
+                control={form.control}
+                name="tagline"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Brand Tagline</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Write here brand tagline"
+                        type="text"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription className="sr-only">
+                      This is for brand tagline.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
               <div className="flex justify-between items-center">
+                {/* isTopBrand */}
                 <FormField
                   control={form.control}
                   name="isTopBrand"
@@ -149,7 +177,9 @@ export function UpdateProductBrandModal({brand}) {
                           <RadioGroup
                             className="flex flex-wrap gap-2"
                             value={String(field.value)}
-                            onValueChange={(value) => field.onChange(value === "true")}
+                            onValueChange={(value) =>
+                              field.onChange(value === "true")
+                            }
                           >
                             {topBrandItems.map((item) => (
                               <div
@@ -181,6 +211,8 @@ export function UpdateProductBrandModal({brand}) {
                     </FormItem>
                   )}
                 />
+
+                {/* isMartizoChoice */}
                 <FormField
                   control={form.control}
                   name="isMartizoChoice"
@@ -192,7 +224,9 @@ export function UpdateProductBrandModal({brand}) {
                           <RadioGroup
                             className="flex flex-wrap gap-2"
                             value={String(field.value)}
-                            onValueChange={(value) => field.onChange(value === "true")}
+                            onValueChange={(value) =>
+                              field.onChange(value === "true")
+                            }
                           >
                             {martizoChoiceItems.map((item) => (
                               <div
@@ -224,6 +258,53 @@ export function UpdateProductBrandModal({brand}) {
                     </FormItem>
                   )}
                 />
+
+                {/* isFeatured Brand */}
+                <FormField
+                  control={form.control}
+                  name="isFeatured"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Is Featured Brand</FormLabel>
+                      <FormControl>
+                        <fieldset className="space-y-4">
+                          <RadioGroup
+                            className="flex flex-wrap gap-2"
+                            value={String(field.value)}
+                            onValueChange={(value) =>
+                              field.onChange(value === "true")
+                            }
+                          >
+                            {featuredItems.map((item) => (
+                              <div
+                                className="relative flex flex-col items-start gap-4 rounded-md border border-input p-3 shadow-xs outline-none has-data-[state=checked]:border-primary/50"
+                                key={`${featuredRadioId}-${item.value}`}
+                              >
+                                <div className="flex items-center gap-2">
+                                  <RadioGroupItem
+                                    className="after:absolute after:inset-0"
+                                    id={`${featuredRadioId}-${item.value}`}
+                                    value={String(item.value)}
+                                  />
+                                  <Label
+                                    htmlFor={`${featuredRadioId}-${item.value}`}
+                                  >
+                                    {item.label}
+                                  </Label>
+                                </div>
+                              </div>
+                            ))}
+                          </RadioGroup>
+                        </fieldset>
+                      </FormControl>
+
+                      <FormDescription className="sr-only">
+                        Is Featured? Yes or No
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
             </form>
             <SingleImageUploader onChange={setImage} />
@@ -232,7 +313,11 @@ export function UpdateProductBrandModal({brand}) {
             <DialogClose asChild>
               <Button variant="outline">Cancel</Button>
             </DialogClose>
-            <Button className="hoover: cursor-pointer" form="add-product-category" type="submit">
+            <Button
+              className="hoover: cursor-pointer"
+              form="add-product-category"
+              type="submit"
+            >
               Submit
             </Button>
           </DialogFooter>

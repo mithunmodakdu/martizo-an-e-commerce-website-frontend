@@ -22,15 +22,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import SingleImageUploader from "@/components/ui/singleImageUploader";
-import {
-  useCreateProductBrandMutation,
-} from "@/redux/features/productBrands/productBrands.api";
-import { CreateBrandZodSchema, type IBrand } from "@/types";
+import { useCreateProductBrandMutation } from "@/redux/features/productBrands/productBrands.api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useId, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
+import { CreateBrandZodSchema, type IBrand } from "./brand.types";
 
 export function AddProductBrandModal() {
   const [image, setImage] = useState<File | null>(null);
@@ -38,6 +36,7 @@ export function AddProductBrandModal() {
   const [createProductBrand] = useCreateProductBrandMutation();
   const topBrandRadioId = useId();
   const martizoChoiceRadioId = useId();
+  const featuredRadioId = useId();
 
   const topBrandItems = [
     { label: "Yes", value: true },
@@ -49,13 +48,20 @@ export function AddProductBrandModal() {
     { label: "No", value: false },
   ];
 
+  const featuredItems = [
+    { label: "Yes", value: true },
+    { label: "No", value: false },
+  ];
+
   const form = useForm<z.infer<typeof CreateBrandZodSchema>>({
     resolver: zodResolver(CreateBrandZodSchema),
     defaultValues: {
       name: "",
+      tagline: "",
       brandLogo: "",
       isTopBrand: false,
       isMartizoChoice: false,
+      isFeatured: false,
     },
   });
 
@@ -103,6 +109,7 @@ export function AddProductBrandModal() {
               onSubmit={form.handleSubmit(onSubmit)}
               className="space-y-5"
             >
+              {/* Brand name */}
               <FormField
                 control={form.control}
                 name="name"
@@ -123,91 +130,172 @@ export function AddProductBrandModal() {
                   </FormItem>
                 )}
               />
-             
-             <div className="flex justify-between items-center">
-               <FormField
+
+              {/* brand tagline */}
+              <FormField
                 control={form.control}
-                name="isTopBrand"
+                name="tagline"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Is Top Brand</FormLabel>
+                    <FormLabel>Brand Tagline</FormLabel>
                     <FormControl>
-                      <fieldset className="space-y-4">
-                        <RadioGroup
-                          className="flex flex-wrap gap-2"
-                          value={String(field.value)}
-                          onValueChange={(value) => field.onChange(value === "true")}
-                        >
-                          {topBrandItems.map((item) => (
-                            <div
-                              className="relative flex flex-col items-start gap-4 rounded-md border border-input p-3 shadow-xs outline-none has-data-[state=checked]:border-primary/50"
-                              key={`${topBrandRadioId}-${item.value}`}
-                            >
-                              <div className="flex items-center gap-2">
-                                <RadioGroupItem
-                                  className="after:absolute after:inset-0"
-                                  id={`${topBrandRadioId}-${item.value}`}
-                                  value={String(item.value)}
-                                />
-                                <Label htmlFor={`${topBrandRadioId}-${item.value}`}>
-                                  {item.label}
-                                </Label>
-                              </div>
-                            </div>
-                          ))}
-                         
-                        </RadioGroup>
-                      </fieldset>
+                      <Input
+                        placeholder="Write here brand tagline"
+                        type="text"
+                        {...field}
+                      />
                     </FormControl>
-
                     <FormDescription className="sr-only">
-                      Is Top Brand? Yes or No
+                      This is for brand tagline.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-               <FormField
-                control={form.control}
-                name="isMartizoChoice"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Is Martizo Choice</FormLabel>
-                    <FormControl>
-                      <fieldset className="space-y-4">                      
-                        <RadioGroup
-                          className="flex flex-wrap gap-2"
-                          onValueChange={field.onChange}
-                        >
-                          {martizoChoiceItems.map((item) => (
-                            <div
-                              className="relative flex flex-col items-start gap-4 rounded-md border border-input p-3 shadow-xs outline-none has-data-[state=checked]:border-primary/50"
-                              key={`${martizoChoiceRadioId}-${item.value}`}
-                            >
-                              <div className="flex items-center gap-2">
-                                <RadioGroupItem
-                                  className="after:absolute after:inset-0"
-                                  id={`${martizoChoiceRadioId}-${item.value}`}
-                                  value={item.value}
-                                />
-                                <Label htmlFor={`${martizoChoiceRadioId}-${item.value}`}>
-                                  {item.label}
-                                </Label>
-                              </div>
-                            </div>
-                          ))}
-                        </RadioGroup>
-                      </fieldset>
-                    </FormControl>
 
-                    <FormDescription className="sr-only">
-                      Is Martizo Choice? Yes or No
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-             </div>
+              <div className="flex items-center">
+
+                {/* isTopBrand */}
+                <FormField
+                  control={form.control}
+                  name="isTopBrand"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Is Top Brand</FormLabel>
+                      <FormControl>
+                        <fieldset className="space-y-4">
+                          <RadioGroup
+                            className="flex flex-wrap gap-2"
+                            value={String(field.value)}
+                            onValueChange={(value) =>
+                              field.onChange(value === "true")
+                            }
+                          >
+                            {topBrandItems.map((item) => (
+                              <div
+                                className="relative flex flex-col items-start gap-4 rounded-md border border-input p-3 shadow-xs outline-none has-data-[state=checked]:border-primary/50"
+                                key={`${topBrandRadioId}-${item.value}`}
+                              >
+                                <div className="flex items-center gap-2">
+                                  <RadioGroupItem
+                                    className="after:absolute after:inset-0"
+                                    id={`${topBrandRadioId}-${item.value}`}
+                                    value={String(item.value)}
+                                  />
+                                  <Label
+                                    htmlFor={`${topBrandRadioId}-${item.value}`}
+                                  >
+                                    {item.label}
+                                  </Label>
+                                </div>
+                              </div>
+                            ))}
+                          </RadioGroup>
+                        </fieldset>
+                      </FormControl>
+                      <FormDescription className="sr-only">
+                        Is Top Brand? Yes or No
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* isMartizoChoice */}
+                <FormField
+                  control={form.control}
+                  name="isMartizoChoice"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Is Martizo Choice</FormLabel>
+                      <FormControl>
+                        <fieldset className="space-y-4">
+                          <RadioGroup
+                            className="flex flex-wrap gap-2"
+                            value={String(field.value)}
+                            onValueChange={(value) =>
+                              field.onChange(value === "true")
+                            }
+                          >
+                            {martizoChoiceItems.map((item) => (
+                              <div
+                                className="relative flex flex-col items-start gap-4 rounded-md border border-input p-3 shadow-xs outline-none has-data-[state=checked]:border-primary/50"
+                                key={`${martizoChoiceRadioId}-${item.value}`}
+                              >
+                                <div className="flex items-center gap-2">
+                                  <RadioGroupItem
+                                    className="after:absolute after:inset-0"
+                                    id={`${martizoChoiceRadioId}-${item.value}`}
+                                    value={String(item.value)}
+                                  />
+                                  <Label
+                                    htmlFor={`${martizoChoiceRadioId}-${item.value}`}
+                                  >
+                                    {item.label}
+                                  </Label>
+                                </div>
+                              </div>
+                            ))}
+                          </RadioGroup>
+                        </fieldset>
+                      </FormControl>
+
+                      <FormDescription className="sr-only">
+                        Is Martizo Choice? Yes or No
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* isFeatured Brand */}
+                <FormField
+                  control={form.control}
+                  name="isFeatured"
+                  
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Is Featured Brand</FormLabel>
+                      <FormControl>
+                        <fieldset className="space-y-4">
+                          <RadioGroup
+                            className="flex flex-wrap gap-2"
+                            value={String(field.value)}
+                            onValueChange={(value) => field.onChange(value === "true")
+                            }
+                          >
+                            {featuredItems.map((item) => (
+                              <div
+                                className="relative flex flex-col items-start gap-4 rounded-md border border-input p-3 shadow-xs outline-none has-data-[state=checked]:border-primary/50"
+                                key={`${featuredRadioId}-${item.value}`}
+                              >
+                                <div className="flex items-center gap-2">
+                                  <RadioGroupItem
+                                    className="after:absolute after:inset-0"
+                                    id={`${featuredRadioId}-${item.value}`}
+                                    value={String(item.value)}
+                                  />
+                                  <Label
+                                    htmlFor={`${featuredRadioId}-${item.value}`}
+                                  >
+                                    {item.label}
+                                  </Label>
+                                </div>
+                              </div>
+                            ))}
+                          </RadioGroup>
+                        </fieldset>
+                      </FormControl>
+
+                      <FormDescription className="sr-only">
+                        Is Featured? Yes or No
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+              </div>
             </form>
             <SingleImageUploader onChange={setImage} />
           </Form>

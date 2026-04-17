@@ -12,6 +12,11 @@ const brands = [
   { id: 6, name: "Aura",   tagline: "Wellness & Spa",    featured: false, products: 193 },
   { id: 7, name: "Noxis",  tagline: "Tech Gadgets",      featured: false, products: 261 },
   { id: 8, name: "Bloom",  tagline: "Organic Foods",     featured: false, products: 134 },
+  { id: 4, name: "Arcana", tagline: "Home Décor",        featured: false, products: 145 },
+  { id: 5, name: "Ferro",  tagline: "Tools & Hardware",  featured: false, products: 88  },
+  { id: 6, name: "Aura",   tagline: "Wellness & Spa",    featured: false, products: 193 },
+  { id: 7, name: "Noxis",  tagline: "Tech Gadgets",      featured: false, products: 261 },
+  { id: 8, name: "Bloom",  tagline: "Organic Foods",     featured: false, products: 134 },
 ];
 
 
@@ -20,7 +25,7 @@ export default function BrandShowcaseSection() {
   const regularBrands = brands.filter((brand) => !brand.featured);
   
   return (
-    <section className="py-20 px-4" style={{ background: "var(--background)" }}>
+    <section className="px-4" style={{ background: "var(--background)" }}>
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-5 mb-10">
@@ -77,7 +82,7 @@ export default function BrandShowcaseSection() {
           </div>
 
              {/* Brand grid */}
-          <div className="lg:col-span-2 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 content-start">
+          <div className="lg:col-span-2 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5 content-start">
             {regularBrands.map((brand) => (
               <RegularBrandCard key={brand.id} brand={brand} />
             ))}
