@@ -49,7 +49,7 @@ export default function ProductBrands() {
   };
 
   return (
-    <div className="max-w-4xl w-full mx-auto space-y-5 ">
+    <div className="max-w-6xl w-full mx-auto space-y-5 ">
       <div className="flex justify-between">
         <h1 className="text-2xl font-bold">Product Brands</h1>
         <AddProductBrandModal />
@@ -61,8 +61,10 @@ export default function ProductBrands() {
               <TableHead className="w-[50px] text-center">Sl No.</TableHead>
               <TableHead className="w-1/5 text-left">Brand</TableHead>
               <TableHead className="w-1/5 text-left">Slug</TableHead>
+              <TableHead className="w-1/5 text-left">Tagline</TableHead>
               <TableHead className="text-center">Is Top Brand</TableHead>
               <TableHead className="text-center">Is Martizo Choice</TableHead>
+              <TableHead className="text-center">Is Featured Brand</TableHead>
               <TableHead className="text-center">Delete</TableHead>
               <TableHead className="text-center">Update</TableHead>
             </TableRow>
@@ -86,12 +88,16 @@ export default function ProductBrands() {
                   </div>
                 </TableCell>
 
-                <TableCell className="text-left w-1/5">{item.slug}</TableCell>
+                <TableCell className="text-left w-1/5">{item?.slug}</TableCell>
+                <TableCell className="text-left w-1/5">{item?.tagline}</TableCell>
                 <TableCell className="text-center">
                   {item.isTopBrand ? "Yes" : "No"}
                 </TableCell>
                 <TableCell className="text-center">
                   {item.isMartizoChoice ? "Yes" : "No"}
+                </TableCell>
+                <TableCell className="text-center">
+                  {item.isFeatured ? "Yes" : "No"}
                 </TableCell>
 
                 <TableCell className="text-center">

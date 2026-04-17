@@ -2,8 +2,9 @@ import { cn } from "@/lib/utils";
 import { ArrowRight, Sparkles, TrendingUp } from "lucide-react";
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
+import type { IBrand } from "@/types";
 
-export default function FeaturedBrandCard({ brand }) {
+export default function FeaturedBrandCard({ brand }: {brand: IBrand}) {
   const [hovered, setHovered] = useState(false);
   return (
     <div

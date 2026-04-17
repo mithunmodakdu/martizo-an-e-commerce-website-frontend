@@ -59,10 +59,11 @@ export function UpdateProductBrandModal({ brand }) {
     defaultValues: {
       name: "",
       tagline: "",
-      brandLogo: "",
+      totalProducts: 0,
       isTopBrand: false,
       isMartizoChoice: false,
       isFeatured: false,
+      brandLogo: "",
     },
   });
 
@@ -158,6 +159,28 @@ export function UpdateProductBrandModal({ brand }) {
                     </FormControl>
                     <FormDescription className="sr-only">
                       This is for brand tagline.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Total products */}
+              <FormField
+                control={form.control}
+                name="totalProducts"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Total Products</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Write here total Products number"
+                        type="number"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription className="sr-only">
+                      This is for total Products number.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -311,7 +334,9 @@ export function UpdateProductBrandModal({ brand }) {
           </Form>
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="outline" className="cursor-pointer">
+                Cancel
+              </Button>
             </DialogClose>
             <Button
               className="hoover: cursor-pointer"

@@ -58,10 +58,11 @@ export function AddProductBrandModal() {
     defaultValues: {
       name: "",
       tagline: "",
-      brandLogo: "",
+      totalProducts: 0,
       isTopBrand: false,
       isMartizoChoice: false,
       isFeatured: false,
+      brandLogo: "",
     },
   });
 
@@ -82,6 +83,7 @@ export function AddProductBrandModal() {
 
       if (res.success) {
         toast.success(res.message, { id: toastId });
+        form.reset();
         setOpen(false);
       }
     } catch (error) {
@@ -147,6 +149,28 @@ export function AddProductBrandModal() {
                     </FormControl>
                     <FormDescription className="sr-only">
                       This is for brand tagline.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Total products */}
+              <FormField
+                control={form.control}
+                name="totalProducts"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Total Products</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Write here total Products number"
+                        type="number"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription className="sr-only">
+                      This is for total Products number.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -301,9 +325,9 @@ export function AddProductBrandModal() {
           </Form>
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="outline" className="cursor-pointer">Cancel</Button>
             </DialogClose>
-            <Button form="add-product-category" type="submit">
+            <Button form="add-product-category" type="submit" className="cursor-pointer">
               Submit
             </Button>
           </DialogFooter>

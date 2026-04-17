@@ -2,6 +2,8 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import FeaturedBrandCard from "./FeaturedBrandCard";
 import RegularBrandCard from "./RegularBrandCard";
+import { useGetAllBrandsQuery } from "@/redux/features/brands/brands.api";
+import type { IBrand } from "@/types";
 
 const brands = [
   { id: 1, name: "Lumen",  tagline: "Premium Lighting",  featured: true,  products: 214 },
@@ -21,8 +23,9 @@ const brands = [
 
 
 export default function BrandShowcaseSection() {
-  const featuredBrands = brands.filter((brand) => brand.featured);
-  const regularBrands = brands.filter((brand) => !brand.featured);
+  const {data: brandData} = useGetAllBrandsQuery(undefined);
+  const featuredBrands = brandData?.data?.filter((brand: IBrand) => brand.isFeatured);
+  const regularBrands = brandData?.data?.filter((brand: IBrand) => !brand.isFeatured);
   
   return (
     <section className="px-4" style={{ background: "var(--background)" }}>
@@ -76,15 +79,15 @@ export default function BrandShowcaseSection() {
 
           {/* Featured column */}
           <div className="flex flex-col gap-5 lg:col-span-1">
-            {featuredBrands.map((brand) => (
-              <FeaturedBrandCard key={brand.id} brand={brand} />
+            {featuredBrands.map((brand: IBrand) => (
+              <FeaturedBrandCard key={brand._id} brand={brand} />
             ))}
           </div>
 
              {/* Brand grid */}
           <div className="lg:col-span-2 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5 content-start">
-            {regularBrands.map((brand) => (
-              <RegularBrandCard key={brand.id} brand={brand} />
+            {regularBrands.map((brand: IBrand) => (
+              <RegularBrandCard key={brand._id} brand={brand} />
             ))}
 
             {/* CTA tile */}
