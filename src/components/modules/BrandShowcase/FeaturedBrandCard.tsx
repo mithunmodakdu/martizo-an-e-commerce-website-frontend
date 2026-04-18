@@ -49,11 +49,11 @@ export default function FeaturedBrandCard({ brand }: {brand: IBrand}) {
         </div>
 
         {/* logo area */}
-        <div className="flex justify-center mb-2">
+        <div className="w-18 h-18 rounded-full flex justify-center items-center mx-auto mb-2">
           <img
-            className="w-[60px] h-[60px] rounded-full"
+            className="w-14 h-14"
             src={brand.brandLogo}
-            alt=""
+            alt={`Logo of ${brand.name}`}
           />
         </div>
 

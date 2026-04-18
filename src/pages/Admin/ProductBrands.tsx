@@ -1,4 +1,3 @@
-import { AddProductBrandModal } from "@/components/modules/ProductBrand/AddProductBrandModal";
 import { UpdateProductBrandModal } from "@/components/modules/ProductBrand/UpdateProductBrandModal";
 import {
   AlertDialog,
@@ -26,7 +25,8 @@ import {
   useGetProductBrandsQuery,
 } from "@/redux/features/productBrands/productBrands.api";
 import type { IBrand } from "@/types";
-import { Trash2 } from "lucide-react";
+import { Edit2, Trash2 } from "lucide-react";
+import { Link } from "react-router";
 import { toast } from "sonner";
 
 export default function ProductBrands() {
@@ -50,10 +50,7 @@ export default function ProductBrands() {
 
   return (
     <div className="max-w-6xl w-full mx-auto space-y-5 ">
-      <div className="flex justify-between">
-        <h1 className="text-2xl font-bold">Product Brands</h1>
-        <AddProductBrandModal />
-      </div>
+      <h1 className="text-2xl font-bold">Product Brands</h1>
       <div className="border-2 border-muted-foreground rounded-md p-5 ">
         <Table>
           <TableHeader>
@@ -90,8 +87,12 @@ export default function ProductBrands() {
                 </TableCell>
 
                 <TableCell className="text-left w-1/5">{item?.slug}</TableCell>
-                <TableCell className="text-left w-1/5">{item?.tagline}</TableCell>
-                <TableCell className="text-center">{item?.totalProducts}</TableCell>
+                <TableCell className="text-left w-1/5">
+                  {item?.tagline}
+                </TableCell>
+                <TableCell className="text-center">
+                  {item?.totalProducts}
+                </TableCell>
                 <TableCell className="text-center">
                   {item.isTopBrand ? "Yes" : "No"}
                 </TableCell>
@@ -141,7 +142,11 @@ export default function ProductBrands() {
                   </AlertDialog>
                 </TableCell>
                 <TableCell className="text-center">
-                  <UpdateProductBrandModal brand={item} />
+                  <Link to={`/admin/update-product-brand/${item._id}`}>
+                    <Button className="hoover: cursor-pointer">
+                      <Edit2 />
+                    </Button>
+                  </Link>
                 </TableCell>
               </TableRow>
             ))}
