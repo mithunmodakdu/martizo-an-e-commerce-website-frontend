@@ -22,11 +22,11 @@ export default function RegularBrandCard({ brand }) {
       onMouseLeave={() => setHovered(false)}
     >
       {/* logo area */}
-      <div className="flex justify-center mb-2">
+      <div className="mb-2 w-18 h-18 rounded-full overflow-hidden flex justify-center items-center">
         <img
-          className="w-[60px] h-[60px] rounded-full"
+          className="w-14 h-14"
           src={brand.brandLogo}
-          alt=""
+          alt={`Logo of${brand.name}`}
         />
       </div>
       <p

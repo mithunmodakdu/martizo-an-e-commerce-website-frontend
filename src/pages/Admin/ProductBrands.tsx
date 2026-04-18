@@ -1,4 +1,3 @@
-import { AddProductBrandModal } from "@/components/modules/ProductBrand/AddProductBrandModal";
 import { UpdateProductBrandModal } from "@/components/modules/ProductBrand/UpdateProductBrandModal";
 import {
   AlertDialog,
@@ -50,10 +49,7 @@ export default function ProductBrands() {
 
   return (
     <div className="max-w-6xl w-full mx-auto space-y-5 ">
-      <div className="flex justify-between">
-        <h1 className="text-2xl font-bold">Product Brands</h1>
-        <AddProductBrandModal />
-      </div>
+      <h1 className="text-2xl font-bold">Product Brands</h1>
       <div className="border-2 border-muted-foreground rounded-md p-5 ">
         <Table>
           <TableHeader>
