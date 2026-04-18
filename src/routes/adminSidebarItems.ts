@@ -1,4 +1,5 @@
 import { AddProductBrand } from "@/components/modules/ProductBrand/AddProductBrand";
+import { UpdateProductBrand } from "@/components/modules/ProductBrand/UpdateProductBrand";
 import ProductsTablePage from "@/pages/Admin/ProductsTablePage";
 import type { ISidebarItem } from "@/types";
 import { lazy } from "react";
@@ -42,6 +43,10 @@ export const adminSidebarItems: ISidebarItem[] = [
           title: "Add Product Brand",
           url: "/admin/add-product-brand",
           component: AddProductBrand
+        },
+        {
+          url: "/admin/update-product-brand/:brandId",
+          component: UpdateProductBrand
         },
         {
           title: "Add Product",

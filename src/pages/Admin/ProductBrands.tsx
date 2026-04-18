@@ -25,7 +25,8 @@ import {
   useGetProductBrandsQuery,
 } from "@/redux/features/productBrands/productBrands.api";
 import type { IBrand } from "@/types";
-import { Trash2 } from "lucide-react";
+import { Edit2, Trash2 } from "lucide-react";
+import { Link } from "react-router";
 import { toast } from "sonner";
 
 export default function ProductBrands() {
@@ -86,8 +87,12 @@ export default function ProductBrands() {
                 </TableCell>
 
                 <TableCell className="text-left w-1/5">{item?.slug}</TableCell>
-                <TableCell className="text-left w-1/5">{item?.tagline}</TableCell>
-                <TableCell className="text-center">{item?.totalProducts}</TableCell>
+                <TableCell className="text-left w-1/5">
+                  {item?.tagline}
+                </TableCell>
+                <TableCell className="text-center">
+                  {item?.totalProducts}
+                </TableCell>
                 <TableCell className="text-center">
                   {item.isTopBrand ? "Yes" : "No"}
                 </TableCell>
@@ -137,7 +142,11 @@ export default function ProductBrands() {
                   </AlertDialog>
                 </TableCell>
                 <TableCell className="text-center">
-                  <UpdateProductBrandModal brand={item} />
+                  <Link to={`/admin/update-product-brand/${item._id}`}>
+                    <Button className="hoover: cursor-pointer">
+                      <Edit2 />
+                    </Button>
+                  </Link>
                 </TableCell>
               </TableRow>
             ))}

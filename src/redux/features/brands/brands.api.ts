@@ -7,10 +7,18 @@ const brandsApi = baseApi.injectEndpoints({
         url: "/brands",
         method: "GET"
       })
+    }),
+
+    getBrandById: builder.query({
+      query: (brandId) => ({
+        url: `/brands/${brandId}`,
+        method: "GET"
+      })
     })
   })
 })
 
 export const {
-  useGetAllBrandsQuery
+  useGetAllBrandsQuery,
+  useGetBrandByIdQuery
 } = brandsApi;
