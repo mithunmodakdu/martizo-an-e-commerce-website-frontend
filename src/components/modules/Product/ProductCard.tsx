@@ -16,7 +16,7 @@ import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { Heart, ShoppingCart, Star } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
-import { useAddToWishlistMutation } from "@/redux/features/wishlist/wishlist.api";
+import { useAddToWishlistMutation, useRemoveFromWishlistMutation } from "@/redux/features/wishlist/wishlist.api";
 import { pad } from "../Shared/pad";
 import type { IWishListItem } from "./product.types";
 
@@ -35,6 +35,7 @@ export const ProductCard = ({
 }) => {
   const [wishlisted, setWishlisted] = useState(false);
   const [addToWishlist] = useAddToWishlistMutation();
+  const [removeFromWishlist] = useRemoveFromWishlistMutation();
   const stockSold = 48;
   const { regular, sale, currency } = price;
   const stockPercent = Math.round((stockSold / stock) * 100);
@@ -104,7 +105,22 @@ export const ProductCard = ({
       }
 
     } else {
-      setWishlisted(false);
+      const removeToastId = toast.loading("Removing product from wishlist...")
+      try {
+        const res = await removeFromWishlist(_id).unwrap();
+        
+        if(res.success){
+          toast.success(res.message, {id: removeToastId});
+          setWishlisted(false);
+        }
+      } catch (error: any) {
+        
+        if(!error.data.success){
+          toast.error(error.data.message, {id: removeToastId});
+          setWishlisted(true)
+        }
+      }
+      
     }
   };
 
