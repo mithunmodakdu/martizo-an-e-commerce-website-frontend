@@ -300,3 +300,8 @@ export interface IProductCardsContainerProps {
   className?: string;
   productsData?: IProduct[];
 }
+
+export interface IWishListItem {
+  productId: string;
+  addedAt: string; 
+}

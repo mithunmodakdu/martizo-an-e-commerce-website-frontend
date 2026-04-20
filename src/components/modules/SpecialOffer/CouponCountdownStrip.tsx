@@ -2,14 +2,13 @@ import { useState } from "react";
 import { useCountdown } from "./useCountDown";
 import { Check, Copy, Tag } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { pad } from "../Shared/pad";
 
 const COUPON_CODE = "MARTIZO10";
 // Update this to your real offer deadline
 const OFFER_END = new Date(Date.now() + 11 * 3_600_000 + 47 * 60_000);
 
-function pad(n: number) {
-  return String(n).padStart(2, "0");
-}
+
 
 
 export const CouponCountdownStrip = () => {
