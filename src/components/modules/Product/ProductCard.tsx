@@ -16,6 +16,9 @@ import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { Heart, ShoppingCart, Star } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
+import { useAddToWishlistMutation, useRemoveFromWishlistMutation } from "@/redux/features/wishlist/wishlist.api";
+import { pad } from "../Shared/pad";
+import type { IWishListItem } from "./product.types";
 
 export const ProductCard = ({
   _id,
@@ -31,10 +34,13 @@ export const ProductCard = ({
   ratingCount = 500,
 }) => {
   const [wishlisted, setWishlisted] = useState(false);
+  const [addToWishlist] = useAddToWishlistMutation();
+  const [removeFromWishlist] = useRemoveFromWishlistMutation();
   const stockSold = 48;
   const { regular, sale, currency } = price;
   const stockPercent = Math.round((stockSold / stock) * 100);
-  const discountPercent = sale && Math.round(((regular - sale) / regular) * 100);
+  const discountPercent =
+    sale && Math.round(((regular - sale) / regular) * 100);
   const stockLeft = stock - stockSold;
   const [addToCart] = useAddToCartMutation();
 
@@ -65,6 +71,59 @@ export const ProductCard = ({
     }
   };
 
+  const handleWishlist = async () => {
+    if (!wishlisted) {
+      const today = new Date();
+      const yyyy = today.getFullYear();
+      const mm = pad(today.getMonth() + 1); 
+      const dd = pad(today.getDate());
+
+      const formattedToday = dd + "/" + mm + "/" + yyyy;
+
+      const wishlistItem: IWishListItem = {
+        productId: _id,
+        addedAt: formattedToday
+      };
+
+      const toastId = toast.loading("Adding product to wishlist...")
+
+      try {
+        const res = await addToWishlist(wishlistItem).unwrap();
+        
+        if(res.success){
+          toast.success(res.message, {id: toastId});
+          setWishlisted(true);
+        }
+        
+      } catch (error: any) {
+        console.log("error:", error)
+        if(!error.data.success){         
+          toast.error(error?.data?.message, {id: toastId});
+          setWishlisted(false);
+          
+        }
+      }
+
+    } else {
+      const removeToastId = toast.loading("Removing product from wishlist...")
+      try {
+        const res = await removeFromWishlist(_id).unwrap();
+        
+        if(res.success){
+          toast.success(res.message, {id: removeToastId});
+          setWishlisted(false);
+        }
+      } catch (error: any) {
+        
+        if(!error.data.success){
+          toast.error(error.data.message, {id: removeToastId});
+          setWishlisted(true)
+        }
+      }
+      
+    }
+  };
+
   return (
     <Card className="overflow-hidden border border-border rounded-none bg-card py-0 shadow-md hover:shadow-xl transition-shadow duration-300  h-full flex flex-col">
       <CardHeader className="relative block p-0">
@@ -79,9 +138,9 @@ export const ProductCard = ({
           {/* Badges */}
           <div className="absolute start-4 top-4">
             <div className="flex justify-items-start gap-1">
-               {
-                discountPercent && <Badge className="bg-destructive text-white">{`OFF ${discountPercent}%`}</Badge>
-              }
+              {discountPercent && (
+                <Badge className="bg-destructive text-white">{`OFF ${discountPercent}%`}</Badge>
+              )}
               {badges?.map((badge) => (
                 <div>
                   {badge.text ? (
@@ -97,13 +156,12 @@ export const ProductCard = ({
                   )}
                 </div>
               ))}
-             
             </div>
           </div>
 
           {/* wishlist button */}
           <Button
-            onClick={() => setWishlisted(!wishlisted)}
+            onClick={handleWishlist}
             className={cn(
               "absolute top-2.5 right-2.5 p-1.5 rounded-full bg-background/80 backdrop-blur-sm shadow transition-all duration-200 hover:scale-110 hover:cursor-pointer",
               wishlisted ? "text-destructive" : "text-foreground",
@@ -145,7 +203,7 @@ export const ProductCard = ({
         <div className="flex items-baseline gap-1.5">
           <Price onSale={sale != null} className="text-xs font-medium">
             <PriceValue price={regular} currency={currency} variant="regular" />
-            <PriceValue price={sale} currency={currency} variant="sale" />           
+            <PriceValue price={sale} currency={currency} variant="sale" />
           </Price>
           {sale && (
             <span className="text-xs font-medium text-primary ml-auto">
@@ -189,11 +247,14 @@ export const ProductCard = ({
           Add to Cart
         </Button>
 
-        
-          <Button variant="outline" className="rounded-none hover:cursor-pointer flex-1">
-            <Link to={`/product-details/${slug}`} className="asChild">View Details</Link>
-          </Button>
-        
+        <Button
+          variant="outline"
+          className="rounded-none hover:cursor-pointer flex-1"
+        >
+          <Link to={`/product-details/${slug}`} className="asChild">
+            View Details
+          </Link>
+        </Button>
       </CardFooter>
     </Card>
   );
