@@ -24,15 +24,18 @@ import {
 import { useGetCartQuery } from "@/redux/features/cart/cart.api";
 import { useGetProductCategoriesQuery } from "@/redux/features/productCategories/productCategories.api";
 import { useGetAllBrandsQuery } from "@/redux/features/brands/brands.api";
+import { useGetWishlistQuery } from "@/redux/features/wishlist/wishlist.api";
 
 export default function Navbar() {
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
   const navigate = useNavigate();
-  const {pathname} = useLocation()
-  const {data: categoriesData} = useGetProductCategoriesQuery(undefined);
-  const {data: brandsData} = useGetAllBrandsQuery(undefined);
+  const { pathname } = useLocation();
+  const { data: categoriesData } = useGetProductCategoriesQuery(undefined);
+  const { data: brandsData } = useGetAllBrandsQuery(undefined);
   const { data: cartData, isLoading: cartLoading } = useGetCartQuery(undefined);
+  const { data: wishlistData, isLoading: wishlistLoading } =
+    useGetWishlistQuery(undefined);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -61,14 +64,14 @@ export default function Navbar() {
   };
 
   const id = useId();
-  const wishlistLength = 5;
+  const wishlistLength = wishlistData?.data?.items?.length;
 
   const navItems = [
     {
       label: "Home",
       href: "/",
       type: "link",
-      active: pathname === "/"
+      active: pathname === "/",
     },
     {
       label: "Products",
@@ -110,30 +113,29 @@ export default function Navbar() {
           description:
             "Lorem ipsum dolor sit amet consectetur adipisicing elit. Non, distinctio",
         },
-
       ],
     },
     {
       label: "Categories",
       type: "menu",
-      links: categoriesData?.map((item: {_id: string, name:string, icon: string, href: string}) => (
-        {
+      links: categoriesData?.map(
+        (item: { _id: string; name: string; icon: string; href: string }) => ({
           title: item.name,
           icon: item.icon,
           href: `/products?category=${item._id}`,
-        }
-      ))
+        }),
+      ),
     },
     {
       label: "Brands",
       type: "menu",
-      links: brandsData?.data?.map((item: {_id: string, name:string, icon: string, href: string}) => (
-         {
+      links: brandsData?.data?.map(
+        (item: { _id: string; name: string; icon: string; href: string }) => ({
           title: item.name,
           icon: item.icon,
           href: `/products?brand=${item._id}`,
-        }
-      )),
+        }),
+      ),
     },
     {
       label: "Offers",
@@ -260,35 +262,38 @@ export default function Navbar() {
                         {item.type === "link" ? (
                           <NavigationMenuLink
                             asChild
-                            className={navigationMenuTriggerStyle()}                              
+                            className={navigationMenuTriggerStyle()}
                           >
                             <Link to={`${item.href}`}>{item.label}</Link>
                           </NavigationMenuLink>
                         ) : (
                           <>
-                            <NavigationMenuTrigger                            
-                            >
+                            <NavigationMenuTrigger>
                               {item.label}
                             </NavigationMenuTrigger>
                             <NavigationMenuContent>
                               <ul className="grid gap-2 sm:w-[300px] md:w-[400px] md:grid-cols-2 lg:w-[500px]">
-                                {item?.links?.map((link: {title: string, href: string, description: string}) => (
-                                  <ListItem
-                                    key={link.title}
-                                    title={link.title}
-                                    href={link.href}
-                                    
-                                  >
-                                    {link.description}
-                                  </ListItem>
-                                ))}
+                                {item?.links?.map(
+                                  (link: {
+                                    title: string;
+                                    href: string;
+                                    description: string;
+                                  }) => (
+                                    <ListItem
+                                      key={link.title}
+                                      title={link.title}
+                                      href={link.href}
+                                    >
+                                      {link.description}
+                                    </ListItem>
+                                  ),
+                                )}
                               </ul>
                             </NavigationMenuContent>
                           </>
                         )}
                       </NavigationMenuItem>
                     ))}
-                    
                   </NavigationMenuList>
                 </NavigationMenu>
               </PopoverContent>
@@ -299,14 +304,16 @@ export default function Navbar() {
           <ModeToggler />
 
           {/* wishlist */}
-          <Button variant="outline" asChild>
-            <Link to="/wishlist">
-              <span>
-                <Heart />
-              </span>
-              <sup>{wishlistLength}</sup>
-            </Link>
-          </Button>
+          {!wishlistLoading && (
+            <Button variant="outline" asChild>
+              <Link to="/wishlist">
+                <span>
+                  <Heart />
+                </span>
+                <sup>{wishlistLength}</sup>
+              </Link>
+            </Button>)
+          }
 
           {/* cart */}
           <Link className="asChild" to={"/cart"}>
@@ -345,17 +352,31 @@ export default function Navbar() {
                     <NavigationMenuTrigger>{item.label}</NavigationMenuTrigger>
                     <NavigationMenuContent>
                       <ul className="grid gap-2 sm:w-[300px] md:w-[400px] md:grid-cols-2 lg:w-[500px]">
-                        {item?.links?.map((link: {title: string, href: string, icon: string}) => (
-                          <NavigationMenuLink asChild>
-                            <Link
-                              to={link.href}
-                              className="flex-row items-center gap-2"
-                            >
-                              {link.icon? <img className="w-5 rounded-full" src={link.icon} alt="" /> : <CircleIcon />}
-                              {link.title}
-                            </Link>
-                          </NavigationMenuLink>
-                        ))}
+                        {item?.links?.map(
+                          (link: {
+                            title: string;
+                            href: string;
+                            icon: string;
+                          }) => (
+                            <NavigationMenuLink asChild>
+                              <Link
+                                to={link.href}
+                                className="flex-row items-center gap-2"
+                              >
+                                {link.icon ? (
+                                  <img
+                                    className="w-5 rounded-full"
+                                    src={link.icon}
+                                    alt=""
+                                  />
+                                ) : (
+                                  <CircleIcon />
+                                )}
+                                {link.title}
+                              </Link>
+                            </NavigationMenuLink>
+                          ),
+                        )}
                       </ul>
                     </NavigationMenuContent>
                   </>
