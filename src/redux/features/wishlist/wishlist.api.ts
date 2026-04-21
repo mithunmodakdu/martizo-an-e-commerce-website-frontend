@@ -2,6 +2,15 @@ import { baseApi } from "@/redux/baseApi";
 
 const wishlistApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
+    
+    getWishlist: builder.query({
+      query: () => ({
+        url: "/wishlist",
+        method: "GET"
+      }),
+      providesTags: ["WISHLIST"]
+    }),
+
     removeFromWishlist: builder.mutation({
       query: (productId) => ({
         url: `/wishlist/${productId}`,
@@ -24,6 +33,7 @@ const wishlistApi = baseApi.injectEndpoints({
 })
 
 export const {
+  useGetWishlistQuery,
   useRemoveFromWishlistMutation,
   useAddToWishlistMutation
 } = wishlistApi;
