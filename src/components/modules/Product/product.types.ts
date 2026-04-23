@@ -134,14 +134,7 @@ export const ProductUpdateZodSchema = z.object({
   brand: z.string().optional(),
 
   // price section
-  price: z
-    .number({ error: "Price must be a number" })
-    .positive("Price must be a positive number")
-    .optional(),
-
-  salePrice: z
-    .union([z.number().min(0), z.undefined()])
-    .optional(),
+  price: ProductPriceZodSchema,
 
   // stock
   stock: z
@@ -168,8 +161,9 @@ export const ProductUpdateZodSchema = z.object({
   isNewArrival: z.boolean().optional(),
   isBestSeller: z.boolean().optional(),
   isFlashSale: z.boolean().optional(),
-  isMartizoExclusive: z.boolean().optional(),
   isTrending: z.boolean().optional(),
+  isMartizoExclusive: z.boolean().optional(),
+  isFeatured: z.boolean().optional(),
 
   // offers
   offers: z

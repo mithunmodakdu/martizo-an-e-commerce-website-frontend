@@ -49,7 +49,7 @@ import {
 } from "@/redux/features/products/products.api";
 import { toast } from "sonner";
 import { PlusCircleIcon } from "lucide-react";
-import { ProductUpdateZodSchema } from "./product.types";
+import { ProductPriceZodSchema, ProductUpdateZodSchema } from "./product.types";
 
 export function UpdateProductForm() {
   const [thumbnail, setThumbnail] = useState<File | null>(null);
@@ -109,11 +109,10 @@ export function UpdateProductForm() {
       brand: "",
 
       // pricing
-      price: 0,
-      salePrice: undefined,
+      price: { regular: undefined, sale: undefined, currency: "" },
 
       // stock + variants
-      stock: 0,
+      stock: undefined,
 
       // labels for Shop menu sections
       isNewArrival: false,
@@ -137,7 +136,7 @@ export function UpdateProductForm() {
 
       form.reset({
         ...productData,
-        features: productData.features
+        features: productData.features,
       });
     }
   }, [productData, form]);
@@ -161,7 +160,7 @@ export function UpdateProductForm() {
     formData.append("file", thumbnail as File);
     images.forEach((image) => formData.append("files", image as File));
 
-    console.log(formData.get("data"))
+    console.log(formData.get("data"));
 
     const dataToUpdate = {
       productSlug: productSlug,
@@ -197,6 +196,7 @@ export function UpdateProductForm() {
         <CardContent>
           <form id="update-product-form" onSubmit={form.handleSubmit(onSubmit)}>
             <FieldGroup>
+              {/* Title */}
               <Controller
                 name="title"
                 control={form.control}
@@ -218,6 +218,8 @@ export function UpdateProductForm() {
                   </Field>
                 )}
               />
+
+              {/* description */}
               <Controller
                 name="description"
                 control={form.control}
@@ -251,6 +253,7 @@ export function UpdateProductForm() {
                 )}
               />
 
+              {/* Features */}
               <div>
                 <div>
                   <Button
@@ -258,7 +261,7 @@ export function UpdateProductForm() {
                     variant="outline"
                     onClick={() => append({ name: "", value: "" })}
                   >
-                    <PlusCircleIcon/> Add Product Feature
+                    <PlusCircleIcon /> Add Product Feature
                   </Button>
                 </div>
                 <div className="mt-5 space-y-5">
@@ -323,6 +326,7 @@ export function UpdateProductForm() {
                 </div>
               </div>
 
+              {/* category & brand */}
               <div className="flex gap-5">
                 <Controller
                   name="category"
@@ -404,20 +408,22 @@ export function UpdateProductForm() {
                   }}
                 />
               </div>
+
+              {/* price & stock */}
               <div className="flex gap-5">
                 <Controller
-                  name="price"
+                  name="price.regular"
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor="update-product-form-price">
-                        Price
+                      <FieldLabel htmlFor="update-product-form-regular-price">
+                        Regular Price
                       </FieldLabel>
                       <Input
                         {...field}
-                        id="update-product-form-price"
+                        id="update-product-form-regular-price"
                         aria-invalid={fieldState.invalid}
-                        placeholder="Write here product price"
+                        placeholder="Write here product regular price"
                         autoComplete="off"
                         onChange={(event) => {
                           const value = event.target.value;
@@ -431,7 +437,7 @@ export function UpdateProductForm() {
                   )}
                 />
                 <Controller
-                  name="salePrice"
+                  name="price.sale"
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
@@ -446,10 +452,29 @@ export function UpdateProductForm() {
                         autoComplete="off"
                         onChange={(event) => {
                           const value = event.target.value;
-                          field.onChange(
-                            value === "" ? undefined : Number(value),
-                          );
+                          field.onChange(value === "" ? "" : Number(value));
                         }}
+                      />
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </Field>
+                  )}
+                />
+                <Controller
+                  name="price.currency"
+                  control={form.control}
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid}>
+                      <FieldLabel htmlFor="update-product-form-price-currency">
+                        Currency
+                      </FieldLabel>
+                      <Input
+                        {...field}
+                        id="update-product-form-price-currency"
+                        aria-invalid={fieldState.invalid}
+                        placeholder="Write here currency "
+                        autoComplete="off"
                       />
                       {fieldState.invalid && (
                         <FieldError errors={[fieldState.error]} />
@@ -483,7 +508,9 @@ export function UpdateProductForm() {
                   )}
                 />
               </div>
-              <div className="flex gap-5">
+
+              {/*isNewArrival, isBestSeller, isFlashSale, isTrending, isMartizoExclusive, isFeatured  */}
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-5">
                 <Controller
                   name="isNewArrival"
                   control={form.control}
@@ -660,9 +687,101 @@ export function UpdateProductForm() {
                     </Field>
                   )}
                 />
+                <Controller
+                  name="isMartizoExclusive"
+                  control={form.control}
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid}>
+                      <FieldLabel htmlFor="update-product-form-isMartizoExclusive">
+                        Is Martizo Exclusive
+                      </FieldLabel>
+                      <fieldset
+                        id="update-product-form-isMartizoExclusive"
+                        className="space-y-4"
+                      >
+                        <RadioGroup
+                          className="flex flex-wrap gap-2"
+                          value={String(field.value)}
+                          onValueChange={(value) =>
+                            field.onChange(value === "true")
+                          }
+                        >
+                          {radioItems.map((item) => (
+                            <div
+                              className="relative flex flex-col items-start gap-4 rounded-md border border-input p-3 shadow-xs outline-none has-data-[state=checked]:border-primary/50"
+                              key={`isMartizoExclusive-${item.value}`}
+                            >
+                              <div className="flex items-center gap-2">
+                                <RadioGroupItem
+                                  className="after:absolute after:inset-0"
+                                  id={`isMartizoExclusive-${item.value}`}
+                                  value={String(item.value)}
+                                />
+                                <Label
+                                  htmlFor={`isMartizoExclusive-${item.value}`}
+                                >
+                                  {item.label}
+                                </Label>
+                              </div>
+                            </div>
+                          ))}
+                        </RadioGroup>
+                      </fieldset>
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </Field>
+                  )}
+                />
+                <Controller
+                  name="isFeatured"
+                  control={form.control}
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid}>
+                      <FieldLabel htmlFor="update-product-form-isFeatured">
+                        isFeatured
+                      </FieldLabel>
+                      <fieldset
+                        id="update-product-form-isFeatured"
+                        className="space-y-4"
+                      >
+                        <RadioGroup
+                          className="flex flex-wrap gap-2"
+                          value={String(field.value)}
+                          onValueChange={(value) =>
+                            field.onChange(value === "true")
+                          }
+                        >
+                          {radioItems.map((item) => (
+                            <div
+                              className="relative flex flex-col items-start gap-4 rounded-md border border-input p-3 shadow-xs outline-none has-data-[state=checked]:border-primary/50"
+                              key={`isFeatured-${item.value}`}
+                            >
+                              <div className="flex items-center gap-2">
+                                <RadioGroupItem
+                                  className="after:absolute after:inset-0"
+                                  id={`isFeatured-${item.value}`}
+                                  value={String(item.value)}
+                                />
+                                <Label htmlFor={`isFeatured-${item.value}`}>
+                                  {item.label}
+                                </Label>
+                              </div>
+                            </div>
+                          ))}
+                        </RadioGroup>
+                      </fieldset>
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </Field>
+                  )}
+                />
               </div>
             </FieldGroup>
           </form>
+
+          {/* Thumbnail & Images */}
           <div className="space-y-5 my-5">
             {existedThumbnail ? (
               <Field>
