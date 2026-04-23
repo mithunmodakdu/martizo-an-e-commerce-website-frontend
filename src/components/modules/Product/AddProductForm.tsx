@@ -74,17 +74,19 @@ export function AddProductForm() {
       brand: "",
 
       // pricing
-      price: 0,
-      salePrice: 0,
+      price: {regular: undefined, sale: undefined, currency: ""},
+      
 
       // stock + variants
-      stock: 0,
+      stock: undefined,
 
       // labels for Shop menu sections
       isNewArrival: false,
       isBestSeller: false,
       isFlashSale: false,
       isTrending: false,
+      isMartizoExclusive: false,
+      isFeatured: false,
 
       status: "ACTIVE",
     },
@@ -96,11 +98,13 @@ export function AddProductForm() {
   });
 
   const onSubmit = async (data: z.infer<typeof ProductCreationZodSchema>) => {
+    // console.log(data)
     const toastId = toast.loading("Creating product...");
     const formData = new FormData();
     formData.append("data", JSON.stringify(data));
     formData.append("file", thumbnail as File);
     images.forEach((image) => formData.append("files", image as File));
+
     // console.log(formData.get("data"))
     // console.log(formData.get("file"))
     // console.log(formData.get("files"))
@@ -129,6 +133,8 @@ export function AddProductForm() {
       <CardContent>
         <form id="add-product-form" onSubmit={form.handleSubmit(onSubmit)}>
           <FieldGroup>
+
+            {/* Title */}
             <Controller
               name="title"
               control={form.control}
@@ -150,6 +156,8 @@ export function AddProductForm() {
                 </Field>
               )}
             />
+
+            {/* description */}
             <Controller
               name="description"
               control={form.control}
@@ -183,6 +191,7 @@ export function AddProductForm() {
               )}
             />
 
+            {/* Features */}
             <div>
               <div>
                 <Button
@@ -254,7 +263,8 @@ export function AddProductForm() {
                 ))}
               </div>
             </div>
-
+            
+            {/* category & brand */}
             <div className="flex gap-5">
               <Controller
                 name="category"
@@ -319,20 +329,22 @@ export function AddProductForm() {
                 )}
               />
             </div>
+
+            {/* price & stock */}
             <div className="flex gap-5">
               <Controller
-                name="price"
+                name="price.regular"
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor="add-product-form-price">
-                      Price
+                    <FieldLabel htmlFor="add-product-form-regular-price">
+                      Regular Price
                     </FieldLabel>
                     <Input
                       {...field}
-                      id="add-product-form-price"
+                      id="add-product-form-regular-price"
                       aria-invalid={fieldState.invalid}
-                      placeholder="Write here product price"
+                      placeholder="Write here product regular price"
                       autoComplete="off"
                       onChange={(event) => {
                         const value = event.target.value;
@@ -346,7 +358,7 @@ export function AddProductForm() {
                 )}
               />
               <Controller
-                name="salePrice"
+                name="price.sale"
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
@@ -363,6 +375,28 @@ export function AddProductForm() {
                         const value = event.target.value;
                         field.onChange(value === "" ? "" : Number(value));
                       }}
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+              <Controller
+                name="price.currency"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="add-product-form-price-currency">
+                      Currency
+                    </FieldLabel>
+                    <Input
+                      {...field}
+                      id="add-product-form-price-currency"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="Write here currency "
+                      autoComplete="off"
+                    
                     />
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
@@ -396,7 +430,9 @@ export function AddProductForm() {
                 )}
               />
             </div>
-            <div className="flex gap-5">
+
+            {/*isNewArrival, isBestSeller, isFlashSale, isTrending, isMartizoExclusive, isFeatured  */}
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-5">
               <Controller
                 name="isNewArrival"
                 control={form.control}
@@ -573,9 +609,99 @@ export function AddProductForm() {
                   </Field>
                 )}
               />
+              <Controller
+                name="isMartizoExclusive"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="add-product-form-isMartizoExclusive">
+                      Is Martizo Exclusive
+                    </FieldLabel>
+                    <fieldset
+                      id="add-product-form-isMartizoExclusive"
+                      className="space-y-4"
+                    >
+                      <RadioGroup
+                        className="flex flex-wrap gap-2"
+                        value={String(field.value)}
+                        onValueChange={(value) =>
+                          field.onChange(value === "true")
+                        }
+                      >
+                        {radioItems.map((item) => (
+                          <div
+                            className="relative flex flex-col items-start gap-4 rounded-md border border-input p-3 shadow-xs outline-none has-data-[state=checked]:border-primary/50"
+                            key={`isMartizoExclusive-${item.value}`}
+                          >
+                            <div className="flex items-center gap-2">
+                              <RadioGroupItem
+                                className="after:absolute after:inset-0"
+                                id={`isMartizoExclusive-${item.value}`}
+                                value={String(item.value)}
+                              />
+                              <Label htmlFor={`isMartizoExclusive-${item.value}`}>
+                                {item.label}
+                              </Label>
+                            </div>
+                          </div>
+                        ))}
+                      </RadioGroup>
+                    </fieldset>
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+              <Controller
+                name="isFeatured"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="add-product-form-isFeatured">
+                      isFeatured
+                    </FieldLabel>
+                    <fieldset
+                      id="add-product-form-isFeatured"
+                      className="space-y-4"
+                    >
+                      <RadioGroup
+                        className="flex flex-wrap gap-2"
+                        value={String(field.value)}
+                        onValueChange={(value) =>
+                          field.onChange(value === "true")
+                        }
+                      >
+                        {radioItems.map((item) => (
+                          <div
+                            className="relative flex flex-col items-start gap-4 rounded-md border border-input p-3 shadow-xs outline-none has-data-[state=checked]:border-primary/50"
+                            key={`isFeatured-${item.value}`}
+                          >
+                            <div className="flex items-center gap-2">
+                              <RadioGroupItem
+                                className="after:absolute after:inset-0"
+                                id={`isFeatured-${item.value}`}
+                                value={String(item.value)}
+                              />
+                              <Label htmlFor={`isFeatured-${item.value}`}>
+                                {item.label}
+                              </Label>
+                            </div>
+                          </div>
+                        ))}
+                      </RadioGroup>
+                    </fieldset>
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
             </div>
           </FieldGroup>
         </form>
+
+        {/* Thumbnail, Images */}
         <div className="space-y-5 my-5">
           <Field>
             <FieldLabel htmlFor="add-product-thumbnail">Thumbnail</FieldLabel>
@@ -587,6 +713,7 @@ export function AddProductForm() {
           </Field>
         </div>
       </CardContent>
+
       <CardFooter>
         <Field orientation="horizontal">
           <Button
