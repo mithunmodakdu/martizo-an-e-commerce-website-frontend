@@ -12,6 +12,16 @@ export const VariantCreationZodSchema = z.object({
   sku: z.string({ error: "sku must be string" }).optional(),
 });
 
+export const ProductPriceZodSchema = z.object({
+  regular:  z
+      .number({ error: "Regular Price must be a number" })
+      .positive("Price must be a positive number"),
+  sale: z
+      .union([z.number({ error: "Sale Price must be a number" }).min(0), z.undefined()])
+      .optional(),
+  currency: z.string({ error: "Currency must be a number" })
+})
+
 export const ProductCreationZodSchema = z.object({
   // main details
   title: z
@@ -37,20 +47,7 @@ export const ProductCreationZodSchema = z.object({
   brand: z.string().optional(),
 
   // price section
-  price: z
-    .number({ error: "Price must be a number" })
-    .positive("Price must be a positive number"),
-
-  salePrice: z
-    .number({ error: "Sale Price must be a number" })
-    .positive("Sale price must be a positive number")
-    .optional(),
-
-  discountPercentage: z
-    .number()
-    .min(0, "Discount percentage cannot be negative")
-    .max(100, "Discount percentage cannot exceed 100")
-    .optional(),
+  price: ProductPriceZodSchema,
 
   // stock
   stock: z
@@ -74,8 +71,10 @@ export const ProductCreationZodSchema = z.object({
   isNewArrival: z.boolean().optional(),
   isBestSeller: z.boolean().optional(),
   isFlashSale: z.boolean().optional(),
-  isMartizoExclusive: z.boolean().optional(),
   isTrending: z.boolean().optional(),
+  isMartizoExclusive: z.boolean().optional(),
+  isFeatured: z.boolean().optional(),
+  
 
   // offers
   offers: z
