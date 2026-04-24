@@ -1,4 +1,3 @@
-import { UpdateProductBrandModal } from "@/components/modules/ProductBrand/UpdateProductBrandModal";
 import {
   AlertDialog,
   AlertDialogAction,
