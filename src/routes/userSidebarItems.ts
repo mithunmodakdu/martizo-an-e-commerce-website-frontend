@@ -1,5 +1,3 @@
-import CartPage from "@/pages/CartPage";
-import CheckoutPage from "@/pages/CheckoutPage";
 import type { ISidebarItem } from "@/types";
 import { lazy } from "react";
 

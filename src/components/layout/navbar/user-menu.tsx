@@ -109,7 +109,9 @@ export default function UserMenu() {
         <DropdownMenuGroup>
           <DropdownMenuItem className="cursor-pointer">
             <UserPen size={16} className="opacity-60" aria-hidden="true" />
-            <span>My Profile</span>
+            
+            <span><Link to={"/user-profile"}>My Profile</Link></span>
+            
           </DropdownMenuItem>
           <DropdownMenuItem className="cursor-pointer">
             <Layers2Icon size={16} className="opacity-60" aria-hidden="true" />
