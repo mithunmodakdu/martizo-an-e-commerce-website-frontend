@@ -15,6 +15,7 @@ import {
 import { StatCard } from "@/components/modules/User/StatCard";
 import PersonalInfoCard from "@/components/modules/User/PersonalInfoCard";
 import LoyaltyCard from "@/components/modules/User/LoyaltyCard";
+import { OrderRow } from "@/components/modules/User/OrderRow";
  
 
 const user = {
@@ -43,6 +44,14 @@ const notificationPrefs = [
   { key: "arrivals",  label: "New Arrivals",       desc: "First look at new products",          enabled: false },
   { key: "security",  label: "Account Security",   desc: "Login and security alerts",           enabled: true  },
 ];
+
+const orders = [
+  { id: "#MRZ-00291", date: "Apr 20, 2026", status: "Delivered",   total: "৳ 5,400", items: 3, icon: CheckCircle2, variant: "success" },
+  { id: "#MRZ-00289", date: "Apr 14, 2026", status: "In Transit",  total: "৳ 2,850", items: 1, icon: Truck,         variant: "info"    },
+  { id: "#MRZ-00275", date: "Mar 31, 2026", status: "Processing",  total: "৳ 8,100", items: 5, icon: Clock,         variant: "warning" },
+  { id: "#MRZ-00260", date: "Mar 12, 2026", status: "Delivered",   total: "৳ 1,200", items: 1, icon: CheckCircle2, variant: "success" },
+];
+
 
 
 export default function UserProfilePage() {
@@ -88,8 +97,6 @@ export default function UserProfilePage() {
           </CardContent>
         </Card>
 
-
-        
         {/* ── Tabs ── */}
         <Tabs defaultValue="overview" className="space-y-5">
           <TabsList className="bg-muted border border-border rounded-lg p-1 h-auto gap-0.5 flex-wrap w-full justify-start">
@@ -113,14 +120,42 @@ export default function UserProfilePage() {
  
           {/* ── Overview ── */}
           <TabsContent value="overview" className="space-y-5 mt-0">
+            {/* Personal Info */}
             <PersonalInfoCard/>
  
             {/* Loyalty */}
             <LoyaltyCard/>
           </TabsContent>
+
+          {/* Orders */}
+           <TabsContent value="orders" className="mt-0">
+            <Card className="rounded-xl border-border shadow-sm">
+              <CardHeader className="px-6 pt-6 pb-1 flex flex-row items-center justify-between">
+                <CardTitle className="text-sm font-semibold text-foreground">Recent Orders</CardTitle>
+                <Button variant="ghost" size="sm" className="text-primary hover:text-primary hover:bg-primary/10 text-xs gap-1 rounded-lg h-8">
+                  View All <ChevronRight className="w-3.5 h-3.5" />
+                </Button>
+              </CardHeader>
+              <CardContent className="px-4 pb-4">
+                <div className="divide-y divide-border">
+                  {orders.map((order) => <OrderRow key={order.id} order={order} />)}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+
+         
+ 
+ 
+        
+ 
+        
  
           
         </Tabs>
+
+        
 
        
 
