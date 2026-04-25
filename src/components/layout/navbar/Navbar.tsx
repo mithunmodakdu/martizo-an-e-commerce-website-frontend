@@ -25,7 +25,7 @@ import { useGetCartQuery } from "@/redux/features/cart/cart.api";
 import { useGetProductCategoriesQuery } from "@/redux/features/productCategories/productCategories.api";
 import { useGetAllBrandsQuery } from "@/redux/features/brands/brands.api";
 import { useGetWishlistQuery } from "@/redux/features/wishlist/wishlist.api";
-import { AnnouncementBar } from "./Announcementbar";
+
 
 export default function Navbar() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -187,7 +187,7 @@ export default function Navbar() {
 
   return (
     <header>
-      <AnnouncementBar/>
+      
       <div className="flex flex-col px-4 md:px-6 md:flex-row items-center justify-between gap-4">
         {/* Left side */}
         <div className="flex flex-1 items-center gap-2">

@@ -2,7 +2,6 @@ import BrandShowcaseSection from "@/components/modules/BrandShowcase/BrandShowca
 import FlashSaleSection from "@/components/modules/FlashSale/FlashSaleSection";
 import Hero from "@/components/modules/Hero/Hero";
 import NewArrivalSection from "@/components/modules/NewArrival/NewArrivalSection";
-import { DiscountBadge } from "@/components/modules/Product/DiscountBadge";
 import CategorySection from "@/components/modules/ProductCategory/CategorySection";
 import SpecialOffersSection from "@/components/modules/SpecialOffer/SpecialOffersSection";
 import TestimonialsSection from "@/components/modules/Testimonial/TestimonialsSection";
@@ -20,7 +19,7 @@ const HomePage = () => {
       <BrandShowcaseSection/>
       <WhyChooseUsSection/>
       <TestimonialsSection/>
-      <DiscountBadge percent={50}/>
+      
       
       
     </div>
