@@ -16,6 +16,7 @@ import { StatCard } from "@/components/modules/User/StatCard";
 import PersonalInfoCard from "@/components/modules/User/PersonalInfoCard";
 import LoyaltyCard from "@/components/modules/User/LoyaltyCard";
 import { OrderRow } from "@/components/modules/User/OrderRow";
+import { AddressCard } from "@/components/modules/User/AddressCard";
  
 
 const user = {
@@ -51,6 +52,12 @@ const orders = [
   { id: "#MRZ-00275", date: "Mar 31, 2026", status: "Processing",  total: "৳ 8,100", items: 5, icon: Clock,         variant: "warning" },
   { id: "#MRZ-00260", date: "Mar 12, 2026", status: "Delivered",   total: "৳ 1,200", items: 1, icon: CheckCircle2, variant: "success" },
 ];
+
+const addresses = [
+  { id: 1, label: "Home",   name: "Rayan Chowdhury", line: "House 14, Road 3, Block C",          city: "Sylhet 3100", phone: "+880 1712 345 678", default: true  },
+  { id: 2, label: "Office", name: "Rayan Chowdhury", line: "Level 4, Zaman Tower, Zindabazar",   city: "Sylhet 3100", phone: "+880 1799 001 122", default: false },
+];
+
 
 
 
@@ -143,6 +150,20 @@ export default function UserProfilePage() {
               </CardContent>
             </Card>
           </TabsContent>
+
+            {/* ── Addresses ── */}
+          <TabsContent value="addresses" className="mt-0">
+            <div className="grid sm:grid-cols-2 gap-4">
+              {addresses.map((addr) => <AddressCard key={addr.id} address={addr} />)}
+              <button className="rounded-lg border-2 border-dashed border-border hover:border-primary/50 hover:bg-primary/5 flex flex-col items-center justify-center gap-2 py-12 text-muted-foreground hover:text-primary transition-all group">
+                <div className="w-9 h-9 rounded-full bg-muted group-hover:bg-primary/10 flex items-center justify-center transition-colors">
+                  <Plus className="w-4 h-4" />
+                </div>
+                <span className="text-sm font-medium">Add New Address</span>
+              </button>
+            </div>
+          </TabsContent>
+
 
 
          
