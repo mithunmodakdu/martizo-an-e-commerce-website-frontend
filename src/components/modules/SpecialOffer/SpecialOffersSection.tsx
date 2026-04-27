@@ -19,86 +19,86 @@ export default function SpecialOffersSection() {
     
   });
 
-  const topDiscountProductCardsData = topDiscountProducts?.data?.map(
-    (item: IProduct) => ({
-      _id: item._id,
-      name: item.title,
-      slug: item.slug,
-      category: item.category,
-      image: {
-        src: item.thumbnail,
-        alt: `Thumbnail of ${item.title}`,
-      },
-      description:
-        item.description.length > 25
-          ? item.description.slice(0, 25)
-          : item.description,
-      price: {
-        regular: item.price,
-        sale: item.salePrice,
-        currency: "BDT",
-      },
-      variants: item.variants,
-      badges: [
-        {
-          text: item?.isFlashSale && "Flash Sale",
-          color: item?.isFlashSale && "oklch(0.577 0.245 27.325)",
-        },
-        {
-          text: item?.isMartizoExclusive && "Exclusive",
-          color: item?.isMartizoExclusive && "oklch(0.5941 0.1635 150.03)",
-        },
-        {
-          text: item?.isTrending && "Trending",
-          color: item?.isTrending && "oklch(0.841 0.238 128.85)",
-        },
-        {
-          text: item?.isNewArrival && "New",
-          color: item?.isNewArrival && "oklch(0.448 0.119 151.328)",
-        },
-      ],
-    }),
-  );
-  const smallDiscountProductCardsData = smallDiscountProducts?.data?.map(
-    (item: IProduct) => ({
-      _id: item._id,
-      name: item.title,
-      slug: item.slug,
-      category: item.category,
-      image: {
-        src: item.thumbnail,
-        alt: `Thumbnail of ${item.title}`,
-      },
-      description:
-        item.description.length > 25
-          ? item.description.slice(0, 25)
-          : item.description,
-      price: {
-        regular: item.price,
-        sale: item.salePrice,
-        currency: "BDT",
-      },
-      variants: item.variants,
-      badges: [
-        {
-          text: item?.isFlashSale && "Flash Sale",
-          color: item?.isFlashSale && "oklch(0.577 0.245 27.325)",
-        },
-        {
-          text: item?.isMartizoExclusive && "Exclusive",
-          color: item?.isMartizoExclusive && "oklch(0.5941 0.1635 150.03)",
-        },
-        {
-          text: item?.isTrending && "Trending",
-          color: item?.isTrending && "oklch(0.841 0.238 128.85)",
-        },
-        {
-          text: item?.isNewArrival && "New",
-          color: item?.isNewArrival && "oklch(0.448 0.119 151.328)",
-        },
-      ],
-    }),
-  );
+  // const topDiscountProductCardsData = topDiscountProducts?.data?.map(
+  //   (item: IProduct) => ({
+  //     _id: item._id,
+  //     name: item.title,
+  //     slug: item.slug,
+  //     category: item.category,
+  //     image: {
+  //       src: item.thumbnail,
+  //       alt: `Thumbnail of ${item.title}`,
+  //     },
+  //     description:
+  //       item.description.length > 25
+  //         ? item.description.slice(0, 25)
+  //         : item.description,
+  //     price: {
+  //       regular: item.price,
+  //       sale: item.salePrice,
+  //       currency: "BDT",
+  //     },
+  //     variants: item.variants,
+  //     badges: [
+  //       {
+  //         text: item?.isFlashSale && "Flash Sale",
+  //         color: item?.isFlashSale && "oklch(0.577 0.245 27.325)",
+  //       },
+  //       {
+  //         text: item?.isMartizoExclusive && "Exclusive",
+  //         color: item?.isMartizoExclusive && "oklch(0.5941 0.1635 150.03)",
+  //       },
+  //       {
+  //         text: item?.isTrending && "Trending",
+  //         color: item?.isTrending && "oklch(0.841 0.238 128.85)",
+  //       },
+  //       {
+  //         text: item?.isNewArrival && "New",
+  //         color: item?.isNewArrival && "oklch(0.448 0.119 151.328)",
+  //       },
+  //     ],
+  //   }),
+  // );
+  // const smallDiscountProductCardsData = smallDiscountProducts?.data?.map(
+  //   (item: IProduct) => ({
+  //     _id: item._id,
+  //     name: item.title,
+  //     slug: item.slug,
+  //     category: item.category,
+  //     image: {
+  //       src: item.thumbnail,
+  //       alt: `Thumbnail of ${item.title}`,
+  //     },
+  //     description:
+  //       item.description.length > 25
+  //         ? item.description.slice(0, 25)
+  //         : item.description,
+  //     price: {
+  //       regular: item.price,
+  //       sale: item.salePrice,
+  //       currency: "BDT",
+  //     },
+  //     variants: item.variants,
+  //     badges: [
+  //       {
+  //         text: item?.isFlashSale && "Flash Sale",
+  //         color: item?.isFlashSale && "oklch(0.577 0.245 27.325)",
+  //       },
+  //       {
+  //         text: item?.isMartizoExclusive && "Exclusive",
+  //         color: item?.isMartizoExclusive && "oklch(0.5941 0.1635 150.03)",
+  //       },
+  //       {
+  //         text: item?.isTrending && "Trending",
+  //         color: item?.isTrending && "oklch(0.841 0.238 128.85)",
+  //       },
+  //       {
+  //         text: item?.isNewArrival && "New",
+  //         color: item?.isNewArrival && "oklch(0.448 0.119 151.328)",
+  //       },
+  //     ],
+  //   }),
+  // );
 
   return (
     <section aria-labelledby="special-offers-heading" className="border-2 border-border p-5">
@@ -127,16 +127,16 @@ export default function SpecialOffersSection() {
 
       {/* Top deals */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-        {topDiscountProductCardsData?.map((item) => (
-          <ProductCard key={item._id} {...item} />
+        {topDiscountProducts?.data?.map((item: IProduct) => (
+          <ProductCard key={item._id} item={item} />
         ))}
       </div>
       
       {/* Small deals */}
       <div className="grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
         {
-          smallDiscountProductCardsData?.map(item => (
-            <ProductCard key={item._id} {...item}/>
+          smallDiscountProducts?.data?.map((item: IProduct) => (
+            <ProductCard key={item._id} item={item}/>
           ))
         }
       </div>

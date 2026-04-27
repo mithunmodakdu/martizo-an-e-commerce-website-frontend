@@ -22,15 +22,17 @@ import {
 } from "@/redux/features/wishlist/wishlist.api";
 import { pad } from "../Shared/pad";
 import type { IProduct, IWishListItem } from "./product.types";
+import StarRating from "../Shared/StarRating";
 
 export const ProductCard = ({ item }: { item: IProduct }) => {
+  console.log(item)
   const [wishlisted, setWishlisted] = useState(false);
   const [addToWishlist] = useAddToWishlistMutation();
   const [removeFromWishlist] = useRemoveFromWishlistMutation();
   const [addToCart] = useAddToCartMutation();
 
-  const stockPercent = Math.round((Number(item.soldFromStock) / item.stock) * 100);
-  const stockLeft = Number(item.stock) - Number(item.soldFromStock);
+  const stockPercent = Math.round((item?.soldFromStock / item?.stock) * 100);
+  const stockLeft = item?.stock - item?.soldFromStock;
 
   const badges = [
     {
@@ -52,12 +54,12 @@ export const ProductCard = ({ item }: { item: IProduct }) => {
   ];
 
   const cartData: ICartItem = {
-    productId: item._id,
-    name: item.title,
+    productId: item?._id,
+    name: item?.title,
     category: item?.category?._id,
-    price: item.price,
+    price: item?.price,
     quantity: 1,
-    image: { src: item.thumbnail, alt: `Image of ${item.title}` },
+    image: { src: item?.thumbnail, alt: `Image of ${item?.title}` },
   };
 
   const handleAddToCart = async (data: ICartItem) => {
@@ -88,7 +90,7 @@ export const ProductCard = ({ item }: { item: IProduct }) => {
       const formattedToday = dd + "/" + mm + "/" + yyyy;
 
       const wishlistItem: IWishListItem = {
-        productId: item._id,
+        productId: item?._id,
         addedAt: formattedToday,
       };
 
@@ -111,7 +113,7 @@ export const ProductCard = ({ item }: { item: IProduct }) => {
     } else {
       const removeToastId = toast.loading("Removing product from wishlist...");
       try {
-        const res = await removeFromWishlist(_id).unwrap();
+        const res = await removeFromWishlist(item?._id).unwrap();
 
         if (res.success) {
           toast.success(res.message, { id: removeToastId });
@@ -132,16 +134,16 @@ export const ProductCard = ({ item }: { item: IProduct }) => {
         {/* Image */}
         <div className="relative h-48 overflow-hidden bg-muted shrink-0">
           <img
-            src={item.thumbnail}
-            alt={`Thumbnail of ${item.title}`}
-            className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+            src={item?.thumbnail}
+            alt={`Thumbnail of ${item?.title}`}
+            className="w-full h-full object-fill transition-transform duration-500 hover:scale-105"
           />
 
           {/* Badges */}
           <div className="absolute start-4 top-4">
             <div className="flex justify-items-start gap-1">
-              {item.discountPercentage && (
-                <Badge className="bg-destructive text-white">{`OFF ${item.discountPercentage}%`}</Badge>
+              {item?.discountPercentage && (
+                <Badge className="bg-destructive text-white">{`OFF ${item?.discountPercentage}%`}</Badge>
               )}
               {badges?.map((badge) => (
                 <div>
@@ -178,41 +180,28 @@ export const ProductCard = ({ item }: { item: IProduct }) => {
 
       <CardContent className="pt-3 px-3 pb-0 space-y-2 flex-1">
         <h3 className="font-semibold text-card-foreground text-sm leading-snug line-clamp-2">
-          {item.title}
+          {item?.title}
         </h3>
 
         {/* Ratings */}
-        {item.rating && item.ratingCount && (
-          <div className="flex items-center gap-1">
-            <div className="flex items-center gap-0.5">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <Star
-                  key={i}
-                  className={cn(
-                    "w-3 h-3",
-                    i < Math.floor(Number(item.rating))
-                      ? "text-[var(--chart-2)] fill-[var(--chart-2)]"
-                      : "text-border fill-border",
-                  )}
-                />
-              ))}
-            </div>
+        <div className="flex items-center gap-1">
+           
+            <StarRating rating={item?.rating}/>
+
             <span className="text-[11px] text-muted-foreground">
-              ({Number(item.ratingCount)?.toLocaleString()})
+              ({item?.ratingCount})
             </span>
           </div>
-        )
-        }
 
         {/* Price */}
         <div className="flex items-baseline gap-1.5">
-          <Price onSale={item.price.sale != null} className="text-xs font-medium">
-            <PriceValue price={item.price.regular} currency={item.price.currency} variant="regular" />
-            <PriceValue price={item.price.sale} currency={item.price.currency} variant="sale" />
+          <Price onSale={item?.price.sale != null} className="text-xs font-medium">
+            <PriceValue price={item?.price.regular} currency={item?.price.currency} variant="regular" />
+            <PriceValue price={item?.price.sale} currency={item?.price.currency} variant="sale" />
           </Price>
-          {item.price.sale && (
+          {item?.price.sale && (
             <span className="text-xs font-medium text-primary ml-auto">
-              SAVE BDT {item.price.regular - item.price.sale}
+              SAVE BDT {item?.price.regular - item?.price.sale}
             </span>
           )}
         </div>
@@ -223,7 +212,7 @@ export const ProductCard = ({ item }: { item: IProduct }) => {
             <span className="text-muted-foreground">
               Sold{" "}
               <span className="text-card-foreground font-semibold">
-                {item.soldFromStock}
+                {item?.soldFromStock}
               </span>
             </span>
             <span
@@ -256,7 +245,7 @@ export const ProductCard = ({ item }: { item: IProduct }) => {
           variant="outline"
           className="rounded-none hover:cursor-pointer flex-1"
         >
-          <Link to={`/product-details/${item.slug}`} className="asChild">
+          <Link to={`/product-details/${item?.slug}`} className="asChild">
             View Details
           </Link>
         </Button>

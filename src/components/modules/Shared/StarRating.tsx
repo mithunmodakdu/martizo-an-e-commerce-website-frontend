@@ -1,9 +1,9 @@
-export default function StarRating({ rating }: {rating: number}) {
+export default function StarRating({ rating }: {rating: number | undefined}) {
   return (
     <div className="flex gap-0.5">
       {Array.from({ length: 5 }).map((_, i) => {
-        const filled = i < Math.floor(rating);
-        const half = !filled && i < rating;
+        const filled = i < Math.floor(rating as number);
+        const half = !filled && i < (rating as number);
 
         return (
           <svg
