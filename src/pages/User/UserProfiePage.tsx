@@ -164,6 +164,48 @@ export default function UserProfilePage() {
             </div>
           </TabsContent>
 
+           {/* ── Payment ── */}
+          <TabsContent value="payment" className="mt-0">
+            <Card className="rounded-xl border-border shadow-sm">
+              <CardHeader className="px-6 pt-6 pb-1">
+                <CardTitle className="text-sm font-semibold text-foreground">Saved Payment Methods</CardTitle>
+              </CardHeader>
+              <CardContent className="px-6 pb-6 space-y-3">
+                <div className="flex items-center justify-between rounded-lg border border-primary/40 bg-primary/5 dark:bg-primary/10 px-4 py-4">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-7 rounded-md bg-primary flex items-center justify-center">
+                      <CreditCard className="w-4 h-4 text-primary-foreground" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-foreground">•••• •••• •••• 4782</p>
+                      <p className="text-xs text-muted-foreground">Expires 08/28</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="text-[11px] bg-primary text-primary-foreground px-2.5 py-0.5 rounded-full font-semibold">Default</span>
+                    <Button variant="ghost" size="sm" className="h-8 text-xs rounded-md text-muted-foreground">Remove</Button>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between rounded-lg border border-border px-4 py-4 hover:border-primary/40 transition-colors">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-7 rounded-md bg-pink-500 flex items-center justify-center">
+                      <span className="text-white text-[10px] font-bold">bKash</span>
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-foreground">+880 1712 345 678</p>
+                      <p className="text-xs text-muted-foreground">bKash Wallet</p>
+                    </div>
+                  </div>
+                  <Button variant="ghost" size="sm" className="h-8 text-xs rounded-md text-muted-foreground">Remove</Button>
+                </div>
+                <button className="w-full rounded-lg border-2 border-dashed border-border hover:border-primary/50 hover:bg-primary/5 flex items-center justify-center gap-2 py-4 text-muted-foreground hover:text-primary transition-all text-sm font-medium">
+                  <Plus className="w-4 h-4" /> Add Payment Method
+                </button>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+
 
 
          
