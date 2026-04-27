@@ -7,7 +7,7 @@ import { ProductCard } from "./ProductCard";
 export const ProductCardsContainer = ({
   productsData,
 }: IProductCardsContainerProps) => {
-  // console.log(className, productsData);
+  
 
   const productCardsData = productsData?.map(
     (item: IProduct) => ({
@@ -23,11 +23,7 @@ export const ProductCardsContainer = ({
         item.description.length > 25
           ? item.description.slice(0, 25)
           : item.description,
-      price: {
-        regular: item.price,
-        sale: item.salePrice,
-        currency: "BDT",
-      },
+      price: item.price,
       variants: item.variants,
       badges: [
         {
@@ -53,8 +49,8 @@ export const ProductCardsContainer = ({
   return (
     <div className="container">
       <div className="grid place-items-center gap-5 md:grid-cols-2 lg:grid-cols-3">
-        {productCardsData?.map((item, index) => (
-          <ProductCard key={`product-card-${index}`} {...item} />
+        {productCardsData?.map((item) => (
+          <ProductCard key={item._id} {...item} />
         ))}
       </div>
     </div>

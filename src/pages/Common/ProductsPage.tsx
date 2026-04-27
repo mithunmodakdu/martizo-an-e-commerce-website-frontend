@@ -38,6 +38,7 @@ export default function ProductsPage() {
     isMartizoExclusive: isCheckedMartizoExclusive,
     searchTerm: existedSearchTerm,
   });
+  console.log(productsData)
 
   const totalPage = productsData?.meta?.totalPage || 1;
 

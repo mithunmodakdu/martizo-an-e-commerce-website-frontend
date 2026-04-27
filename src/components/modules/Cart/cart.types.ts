@@ -1,6 +1,6 @@
 import type { UseFormReturn } from "react-hook-form";
 import type { CheckoutFormType } from "../Checkout/checkout.types";
-import type {IVariant } from "../Product/product.types";
+import type {ICategory, IVariant } from "../Product/product.types";
 
 export interface IProductPrice {
   regular: number;
@@ -15,7 +15,7 @@ export interface ICartItem {
   category: string;
   price: IProductPrice;
   quantity: number;
-  image?: {src: string, alt: string};
+  image?: {src: string | undefined, alt: string};
   variant?: IVariant;
   details?: {
     label: string;
