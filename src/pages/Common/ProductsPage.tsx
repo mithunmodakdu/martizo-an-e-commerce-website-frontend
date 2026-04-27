@@ -1,4 +1,3 @@
-import { ProductCardsContainer } from "@/components/modules/Product/ProductCardsContainer";
 import { useGetAllProductsQuery } from "@/redux/features/products/products.api";
 import Loading from "@/utils/Loading";
 import {
@@ -12,6 +11,8 @@ import {
 import { useState } from "react";
 import { useSearchParams } from "react-router";
 import ProductsFilter from "@/components/modules/Product/ProductsFilter";
+import { ProductCard } from "@/components/modules/Product/ProductCard";
+import type { IProduct } from "@/components/modules/Product/product.types";
 
 export default function ProductsPage() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -38,6 +39,7 @@ export default function ProductsPage() {
     isMartizoExclusive: isCheckedMartizoExclusive,
     searchTerm: existedSearchTerm,
   });
+  
 
   const totalPage = productsData?.meta?.totalPage || 1;
 
@@ -49,7 +51,13 @@ export default function ProductsPage() {
           {isLoading ? (
             <Loading />
           ) : (
-            <ProductCardsContainer productsData={productsData?.data} />
+            <div className="container">
+              <div className="grid place-items-center gap-5 md:grid-cols-2 lg:grid-cols-3">
+                {productsData?.data?.map((item: IProduct) => (
+                  <ProductCard key={item._id} item={item} />
+                ))}
+              </div>
+            </div>
           )}
         </div>
       </div>

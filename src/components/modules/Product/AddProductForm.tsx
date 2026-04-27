@@ -111,13 +111,14 @@ export function AddProductForm() {
 
     try {
       const res = await createProduct(formData).unwrap();
-      console.log(res);
+      // console.log(res);
 
       if (res.success) {
         toast.success(res.message, { id: toastId });
+        form.reset();
       }
     } catch (error: any) {
-      console.log(error);
+      // console.log(error);
       toast.error(error.data.message, { id: toastId });
     }
   };

@@ -1,4 +1,5 @@
 import z from "zod";
+import type { IProductPrice } from "../Cart/cart.types";
 
 export const VariantCreationZodSchema = z.object({
   name: z
@@ -228,12 +229,13 @@ export interface IProduct {
   brand?: string;
 
   // pricing
-  price: number;
-  salePrice?: number | undefined;
-  discountPercentage?: number;
+  price: IProductPrice;
+  discountPercentage: number;
+ 
   
   // stock + variants
   stock: number;
+  soldFromStock: number;
   variants: IVariant[];
 
   // media

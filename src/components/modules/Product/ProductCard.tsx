@@ -16,41 +16,50 @@ import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { Heart, ShoppingCart, Star } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
-import { useAddToWishlistMutation, useRemoveFromWishlistMutation } from "@/redux/features/wishlist/wishlist.api";
+import {
+  useAddToWishlistMutation,
+  useRemoveFromWishlistMutation,
+} from "@/redux/features/wishlist/wishlist.api";
 import { pad } from "../Shared/pad";
-import type { IWishListItem } from "./product.types";
+import type { IProduct, IWishListItem } from "./product.types";
+import StarRating from "../Shared/StarRating";
 
-export const ProductCard = ({
-  _id,
-  name,
-  slug,
-  category,
-  description,
-  image,
-  price,
-  badges,
-  stock = 50,
-  rating = 4,
-  ratingCount = 500,
-}) => {
+export const ProductCard = ({ item }: { item: IProduct }) => {
+  console.log(item)
   const [wishlisted, setWishlisted] = useState(false);
   const [addToWishlist] = useAddToWishlistMutation();
   const [removeFromWishlist] = useRemoveFromWishlistMutation();
-  const stockSold = 48;
-  const { regular, sale, currency } = price;
-  const stockPercent = Math.round((stockSold / stock) * 100);
-  const discountPercent =
-    sale && Math.round(((regular - sale) / regular) * 100);
-  const stockLeft = stock - stockSold;
   const [addToCart] = useAddToCartMutation();
 
+  const stockPercent = Math.round((item?.soldFromStock / item?.stock) * 100);
+  const stockLeft = item?.stock - item?.soldFromStock;
+
+  const badges = [
+    {
+      text: item?.isFlashSale && "Flash Sale",
+      color: item?.isFlashSale && "oklch(0.577 0.245 27.325)",
+    },
+    {
+      text: item?.isMartizoExclusive && "Exclusive",
+      color: item?.isMartizoExclusive && "oklch(0.5941 0.1635 150.03)",
+    },
+    {
+      text: item?.isTrending && "Trending",
+      color: item?.isTrending && "oklch(0.841 0.238 128.85)",
+    },
+    {
+      text: item?.isNewArrival && "New",
+      color: item?.isNewArrival && "oklch(0.448 0.119 151.328)",
+    },
+  ];
+
   const cartData: ICartItem = {
-    productId: _id,
-    name,
-    category: category?._id,
-    price,
+    productId: item?._id,
+    name: item?.title,
+    category: item?.category?._id,
+    price: item?.price,
     quantity: 1,
-    image,
+    image: { src: item?.thumbnail, alt: `Image of ${item?.title}` },
   };
 
   const handleAddToCart = async (data: ICartItem) => {
@@ -75,52 +84,47 @@ export const ProductCard = ({
     if (!wishlisted) {
       const today = new Date();
       const yyyy = today.getFullYear();
-      const mm = pad(today.getMonth() + 1); 
+      const mm = pad(today.getMonth() + 1);
       const dd = pad(today.getDate());
 
       const formattedToday = dd + "/" + mm + "/" + yyyy;
 
       const wishlistItem: IWishListItem = {
-        productId: _id,
-        addedAt: formattedToday
+        productId: item?._id,
+        addedAt: formattedToday,
       };
 
-      const toastId = toast.loading("Adding product to wishlist...")
+      const toastId = toast.loading("Adding product to wishlist...");
 
       try {
         const res = await addToWishlist(wishlistItem).unwrap();
-        
-        if(res.success){
-          toast.success(res.message, {id: toastId});
+
+        if (res.success) {
+          toast.success(res.message, { id: toastId });
           setWishlisted(true);
         }
-        
       } catch (error: any) {
-        console.log("error:", error)
-        if(!error.data.success){         
-          toast.error(error?.data?.message, {id: toastId});
+        console.log("error:", error);
+        if (!error.data.success) {
+          toast.error(error?.data?.message, { id: toastId });
           setWishlisted(false);
-          
         }
       }
-
     } else {
-      const removeToastId = toast.loading("Removing product from wishlist...")
+      const removeToastId = toast.loading("Removing product from wishlist...");
       try {
-        const res = await removeFromWishlist(_id).unwrap();
-        
-        if(res.success){
-          toast.success(res.message, {id: removeToastId});
+        const res = await removeFromWishlist(item?._id).unwrap();
+
+        if (res.success) {
+          toast.success(res.message, { id: removeToastId });
           setWishlisted(false);
         }
       } catch (error: any) {
-        
-        if(!error.data.success){
-          toast.error(error.data.message, {id: removeToastId});
-          setWishlisted(true)
+        if (!error.data.success) {
+          toast.error(error.data.message, { id: removeToastId });
+          setWishlisted(true);
         }
       }
-      
     }
   };
 
@@ -130,16 +134,16 @@ export const ProductCard = ({
         {/* Image */}
         <div className="relative h-48 overflow-hidden bg-muted shrink-0">
           <img
-            src={image.src}
-            alt={image.alt}
-            className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+            src={item?.thumbnail}
+            alt={`Thumbnail of ${item?.title}`}
+            className="w-full h-full object-fill transition-transform duration-500 hover:scale-105"
           />
 
           {/* Badges */}
           <div className="absolute start-4 top-4">
             <div className="flex justify-items-start gap-1">
-              {discountPercent && (
-                <Badge className="bg-destructive text-white">{`OFF ${discountPercent}%`}</Badge>
+              {item?.discountPercentage && (
+                <Badge className="bg-destructive text-white">{`OFF ${item?.discountPercentage}%`}</Badge>
               )}
               {badges?.map((badge) => (
                 <div>
@@ -176,38 +180,28 @@ export const ProductCard = ({
 
       <CardContent className="pt-3 px-3 pb-0 space-y-2 flex-1">
         <h3 className="font-semibold text-card-foreground text-sm leading-snug line-clamp-2">
-          {name}
+          {item?.title}
         </h3>
 
         {/* Ratings */}
         <div className="flex items-center gap-1">
-          <div className="flex items-center gap-0.5">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <Star
-                key={i}
-                className={cn(
-                  "w-3 h-3",
-                  i < Math.floor(rating)
-                    ? "text-[var(--chart-2)] fill-[var(--chart-2)]"
-                    : "text-border fill-border",
-                )}
-              />
-            ))}
+           
+            <StarRating rating={item?.rating}/>
+
+            <span className="text-[11px] text-muted-foreground">
+              ({item?.ratingCount})
+            </span>
           </div>
-          <span className="text-[11px] text-muted-foreground">
-            ({ratingCount?.toLocaleString()})
-          </span>
-        </div>
 
         {/* Price */}
         <div className="flex items-baseline gap-1.5">
-          <Price onSale={sale != null} className="text-xs font-medium">
-            <PriceValue price={regular} currency={currency} variant="regular" />
-            <PriceValue price={sale} currency={currency} variant="sale" />
+          <Price onSale={item?.price.sale != null} className="text-xs font-medium">
+            <PriceValue price={item?.price.regular} currency={item?.price.currency} variant="regular" />
+            <PriceValue price={item?.price.sale} currency={item?.price.currency} variant="sale" />
           </Price>
-          {sale && (
+          {item?.price.sale && (
             <span className="text-xs font-medium text-primary ml-auto">
-              SAVE BDT {regular - sale}
+              SAVE BDT {item?.price.regular - item?.price.sale}
             </span>
           )}
         </div>
@@ -218,7 +212,7 @@ export const ProductCard = ({
             <span className="text-muted-foreground">
               Sold{" "}
               <span className="text-card-foreground font-semibold">
-                {stockSold}
+                {item?.soldFromStock}
               </span>
             </span>
             <span
@@ -251,7 +245,7 @@ export const ProductCard = ({
           variant="outline"
           className="rounded-none hover:cursor-pointer flex-1"
         >
-          <Link to={`/product-details/${slug}`} className="asChild">
+          <Link to={`/product-details/${item?.slug}`} className="asChild">
             View Details
           </Link>
         </Button>

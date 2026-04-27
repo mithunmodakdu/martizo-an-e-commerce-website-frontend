@@ -14,7 +14,7 @@ export default function CategorySection() {
         {!categoryLoading &&
           categoryData?.map(
             (category: { _id: string; name: string; icon: string }) => (
-              <CategoryCard category={category} />
+              <CategoryCard key={category._id} category={category} />
             ),
           )}
       </div>

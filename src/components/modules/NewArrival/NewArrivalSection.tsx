@@ -15,44 +15,6 @@ const NewArrivalSection = () => {
   const { data: productsData, isLoading: productsLoading } =
     useGetAllProductsQuery({ isNewArrival: true, limit: 8 });
 
-  const productCardsData = productsData?.data?.map((item: IProduct) => ({
-    _id: item._id,
-    name: item.title,
-    slug: item.slug,
-    category: item.category,
-    image: {
-      src: item.thumbnail,
-      alt: `Thumbnail of ${item.title}`,
-    },
-    description:
-      item.description.length > 25
-        ? item.description.slice(0, 25)
-        : item.description,
-    price: {
-      regular: item.price,
-      sale: item.salePrice,
-      currency: "BDT",
-    },
-    variants: item.variants,
-    badges: [
-      {
-        text: item?.isFlashSale && "Flash Sale",
-        color: item?.isFlashSale && "oklch(0.577 0.245 27.325)",
-      },
-      {
-        text: item?.isMartizoExclusive && "Exclusive",
-        color: item?.isMartizoExclusive && "oklch(0.5941 0.1635 150.03)",
-      },
-      {
-        text: item?.isTrending && "Trending",
-        color: item?.isTrending && "oklch(0.841 0.238 128.85)",
-      },
-      {
-        text: item?.isNewArrival && "New",
-        color: item?.isNewArrival && "oklch(0.448 0.119 151.328)",
-      },
-    ],
-  }));
 
   return (
     <section className="border-2 border-border p-5">
@@ -80,19 +42,21 @@ const NewArrivalSection = () => {
       </div>
 
       {/* products card */}
-      <Carousel className="w-full">
+      {
+      !productsLoading && (<Carousel className="w-full">
         <CarouselContent className="-ml-1">
-          {productCardsData?.map((item, index) => (
-            <CarouselItem key={index} className="basis md:basis-1/2 lg:basis-1/3 xl:basis-1/4 pl-1">
+          {productsData?.data?.map((item: IProduct) => (
+            <CarouselItem key={item._id} className="basis md:basis-1/2 lg:basis-1/3 xl:basis-1/4 pl-1">
               <div className="p-1">
-                <ProductCard {...item} />
+                <ProductCard item={item} />
               </div>
             </CarouselItem>
           ))}
         </CarouselContent>
         <CarouselPrevious className="ml-4"/>
         <CarouselNext className="mr-4"/>
-      </Carousel>
+      </Carousel>)
+      }
     </section>
   );
 };
