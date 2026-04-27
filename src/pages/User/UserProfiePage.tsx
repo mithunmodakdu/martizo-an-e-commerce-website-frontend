@@ -379,6 +379,23 @@ export default function UserProfilePage() {
             </Card>
           </TabsContent>
         </Tabs>
+
+        {/* ── Danger Zone ── */}
+        <Card className="rounded-xl border-destructive/30 shadow-sm">
+          <CardHeader className="px-6 pt-5 pb-1">
+            <CardTitle className="text-sm font-semibold text-destructive">Danger Zone</CardTitle>
+          </CardHeader>
+          <CardContent className="px-6 pb-5">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <p className="text-sm font-medium text-foreground">Delete Account</p>
+                <p className="text-xs text-muted-foreground mt-0.5">Permanently delete your account and all associated data.</p>
+              </div>
+              <Button variant="destructive" size="sm" className="rounded-lg shrink-0">Delete Account</Button>
+            </div>
+          </CardContent>
+        </Card>
+
       </div>
     </div>
   );
