@@ -4,6 +4,7 @@ import { Link } from "react-router";
 import { ProductCard } from "../Product/ProductCard";
 import type { IProduct } from "../Product/product.types";
 import { CouponCountdownStrip } from "./CouponCountdownStrip";
+import ContentHeader from "../Shared/ContentHeader/ContentHeader";
 
 export default function SpecialOffersSection() {
   const { data: topDiscountProducts } = useGetAllProductsQuery({
@@ -103,7 +104,7 @@ export default function SpecialOffersSection() {
   return (
     <section aria-labelledby="special-offers-heading" className="border-2 border-border p-5">
       {/* Heading */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between mb-6 sm:mb-8">
+      {/* <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between mb-6 sm:mb-8">
         <div>
           <p className="text-xs font-medium tracking-widest uppercase text-destructive mb-1.5">
             Limited time
@@ -123,7 +124,16 @@ export default function SpecialOffersSection() {
         >
           <Link to="/products?filter=sale">View all deals</Link>
         </Button>
-      </div>
+      </div> */}
+
+       <ContentHeader
+          subTitle="Limited Time"
+          title="Grab the"
+          highlightedWord="Special Offers"
+          description="Don’t miss out on exclusive discounts and deals available for a limited time only."
+          btnText="All Deals"
+          btnLink="/products?isNewArrival=true"
+        />
 
       {/* Top deals */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">

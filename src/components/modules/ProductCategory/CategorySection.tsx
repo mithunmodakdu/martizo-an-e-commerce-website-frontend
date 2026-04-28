@@ -1,5 +1,6 @@
 import { useGetProductCategoriesQuery } from "@/redux/features/productCategories/productCategories.api";
 import CategoryCard from "./CategoryCard";
+import ContentHeader from "../Shared/ContentHeader/ContentHeader";
 
 export default function CategorySection() {
   const { data: categoryData, isLoading: categoryLoading } =
@@ -7,9 +8,16 @@ export default function CategorySection() {
 
   return (
     <section>
-      <h2 className="text-foreground font-bold text-2xl mb-2">
-        Shop by Categories
-      </h2>
+       {/* Header */}
+        <ContentHeader
+          subTitle="Start Exploring"
+          title="Shop Smarter by"
+          highlightedWord="Category"
+          description="Jump into your favorite categories and discover products tailored just for you."
+          btnText="Explore Products by Category"
+          btnLink="/products?category=696f45b6268046c0ac86fb94"
+        />
+        
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
         {!categoryLoading &&
           categoryData?.map(

@@ -13,6 +13,8 @@ import { useAddToCartMutation } from "@/redux/features/cart/cart.api";
 import { toast } from "sonner";
 import { Price, PriceValue } from "../Product/Price";
 import Autoplay from "embla-carousel-autoplay"
+import type { IProduct } from "../Product/product.types";
+import StarRating from "../Shared/StarRating";
 
 const stats = [
   { value: "12k+", label: "Happy customers" },
@@ -44,16 +46,16 @@ export default function Hero() {
     salePrice: number;
   }) => {
     const cartData = {
-      productId: item._id,
-      name: item.title,
-      category: item.category,
+      productId: item?._id,
+      name: item?.title,
+      category: item?.category,
       price: {
-        regular: item.price,
-        sale: item.salePrice,
+        regular: item?.price,
+        sale: item?.salePrice,
         currency: "BDT",
       },
       quantity: 1,
-      image: { src: item.thumbnail, alt: `Thumbnail of ${item.title}` },
+      image: { src: item?.thumbnail, alt: `Thumbnail of ${item?.title}` },
     };
 
     // console.log(data)
@@ -133,14 +135,14 @@ export default function Hero() {
       </div>
 
       {/* Right — part */}
-      <div className="relative flex items-center justify-center mb-8 md:mb-0 p-8">
+      <div className="relative flex items-center justify-center mb-8 md:mb-0 p-8 ">
         {/* Products carousel */}
         {
           !productsLoading && <Carousel
          
           plugins={[
             Autoplay({
-              delay: 3000,
+              delay: 2000,
               stopOnMouseEnter: true,
               
             })
@@ -150,23 +152,15 @@ export default function Hero() {
           opts={{
             loop: true
           }}
-          className="w-full max-w-[18rem]  "
+          className="w-full max-w-[400px]  "
         >
           <CarouselContent>
             {productsData?.data?.map(
               (
-                item: {
-                  _id: string;
-                  title: string;
-                  category: string;
-                  description: string;
-                  thumbnail: string;
-                  price: number;
-                  salePrice: number;
-                },
-                index: number,
+                item: IProduct,
+                
               ) => (
-                <CarouselItem key={index}>
+                <CarouselItem key={item?._id}>
                   <div className="p-1">
                     <div className="relative w-full rounded-xl border border-border bg-background p-5 shadow-sm">
                       {/* Image area */}
@@ -175,31 +169,32 @@ export default function Hero() {
                           New
                         </Badge>
                         <img
-                          src={item.thumbnail}
-                          alt={`Thumbnail of ${item.title}`}
+                          src={item?.thumbnail}
+                          alt={`Thumbnail of ${item?.title}`}
+                          
                         />
                       </div>
 
                       <p className="text-sm font-medium text-foreground">
-                        {item.title}
+                        {item?.title}
                       </p>
                       <p className="mb-3 text-xs text-muted-foreground">
-                        {item.description}
+                        {item?.description?.length > 100 ? (item?.description?.slice(0, 100).toString()) : (item?.description?.length)}
                       </p>
 
                       <div className="flex items-center justify-between">
                         <Price
-                          onSale={item.salePrice != null}
+                          onSale={item?.price.sale != null}
                           className="text-sm font-semibold"
                         >
                           <PriceValue
-                            price={item.price}
-                            currency={"BDT"}
+                            price={item?.price.regular}
+                            currency={item?.price.currency}
                             variant="regular"
                           />
                           <PriceValue
-                            price={item.salePrice}
-                            currency={"BDT"}
+                            price={item?.price.sale}
+                            currency={item?.price.currency}
                             variant="sale"
                           />
                         </Price>
@@ -235,19 +230,7 @@ export default function Hero() {
 
         {/* Rating chip */}
         <div className="absolute  right-7 -top-7 md:top-7 rounded-lg border border-border bg-card px-3 py-2 shadow-sm">
-          <div className="flex gap-0.5">
-            {[...Array(5)].map((_, i) => (
-              <svg
-                key={i}
-                width="10"
-                height="10"
-                viewBox="0 0 24 24"
-                className="fill-chart-1"
-              >
-                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-              </svg>
-            ))}
-          </div>
+         <StarRating rating={4.9}/>
           <div className="mt-1 flex items-baseline gap-1">
             <span className="text-[13px] font-medium text-foreground">4.9</span>
             <span className="text-xs text-muted-foreground">

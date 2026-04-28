@@ -12,7 +12,7 @@ export default function BrandShowcaseSection() {
   const regularBrands = brandData?.data?.filter((brand: IBrand) => !brand.isFeatured);
   
   return (
-    <section className="px-4" style={{ background: "var(--background)" }}>
+    <section style={{ background: "var(--background)" }}>
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <ContentHeader

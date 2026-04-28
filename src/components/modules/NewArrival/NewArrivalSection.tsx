@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/carousel";
 import { ProductCard } from "../Product/ProductCard";
 import type { IProduct } from "../Product/product.types";
+import ContentHeader from "../Shared/ContentHeader/ContentHeader";
 
 const NewArrivalSection = () => {
   const { data: productsData, isLoading: productsLoading } =
@@ -18,28 +19,15 @@ const NewArrivalSection = () => {
 
   return (
     <section className="border-2 border-border p-5">
-      {/* Heading */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between mb-4">
-        <div>
-          <p className="text-xs font-medium tracking-widest uppercase text-primary mb-1.5">
-            Just dropped
-          </p>
-          <h2
-            id="new-arrivals-heading"
-            className="text-xl sm:text-2xl font-medium text-foreground"
-          >
-            New arrivals
-          </h2>
-        </div>
-        <Button
-          asChild
-          variant="outline"
-          size="sm"
-          className="self-start sm:self-auto border-primary text-primary hover:bg-primary/10 hover:text-primary"
-        >
-          <Link to="/products?isNewArrival=true">View all new arrivals</Link>
-        </Button>
-      </div>
+      {/* Header */}
+        <ContentHeader
+          subTitle="Just Landed"
+          title="Discover the"
+          highlightedWord="New Arrivals"
+          description="Be the first to explore our newest products, freshly added to keep your style and lifestyle up to date."
+          btnText="All New Arrivals"
+          btnLink="/products?isNewArrival=true"
+        />
 
       {/* products card */}
       {
