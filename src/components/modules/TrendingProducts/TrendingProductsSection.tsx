@@ -16,14 +16,14 @@ export function TrendingProductsSection() {
   // console.log(listTrendingProducts)
 
   return (
-    <section className=" px-4 sm:px-6 lg:px-8 bg-background">
-      <div className="max-w-7xl mx-auto">
+    <section className="border-2 border-border p-5">
+      <div className="mx-auto">
         {/* Header */}
         <ContentHeader
           subTitle="Top Picks"
           title="Shop What’s"
           highlightedWord="Trending"
-          description="Explore our best-selling and most talked-about items, updated regularly to bring you what everyone is buying."
+          description="Explore our most talked-about items, updated regularly to bring you what everyone is buying."
           btnText="View All Trending Products"
           btnLink="/products?isTrending=true"
         />
