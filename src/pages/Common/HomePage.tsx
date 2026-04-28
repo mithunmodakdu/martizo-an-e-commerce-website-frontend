@@ -5,6 +5,7 @@ import NewArrivalSection from "@/components/modules/NewArrival/NewArrivalSection
 import CategorySection from "@/components/modules/ProductCategory/CategorySection";
 import SpecialOffersSection from "@/components/modules/SpecialOffer/SpecialOffersSection";
 import TestimonialsSection from "@/components/modules/Testimonial/TestimonialsSection";
+import { TrendingProductsSection } from "@/components/modules/TrendingProducts/TrendingProductsSection";
 import { WhyChooseUsSection } from "@/components/modules/WhyChooseUs/WhyChooseUsSection";
 
 
@@ -14,6 +15,7 @@ const HomePage = () => {
       <Hero/>
       <FlashSaleSection/>
       <CategorySection/>
+      <TrendingProductsSection/>
       <NewArrivalSection/>
       <SpecialOffersSection/>
       <BrandShowcaseSection/>

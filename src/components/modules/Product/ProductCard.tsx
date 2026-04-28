@@ -25,7 +25,6 @@ import type { IProduct, IWishListItem } from "./product.types";
 import StarRating from "../Shared/StarRating";
 
 export const ProductCard = ({ item }: { item: IProduct }) => {
-  console.log(item)
   const [wishlisted, setWishlisted] = useState(false);
   const [addToWishlist] = useAddToWishlistMutation();
   const [removeFromWishlist] = useRemoveFromWishlistMutation();
