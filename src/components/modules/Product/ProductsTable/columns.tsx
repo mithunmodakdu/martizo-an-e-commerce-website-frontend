@@ -14,12 +14,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { productsApi } from "@/redux/features/products/products.api";
 import { store } from "@/redux/store";
-
-import type { IProduct } from "@/types";
 import { type ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, Edit2, Trash2 } from "lucide-react";
 import { Link } from "react-router";
 import { toast } from "sonner";
+import type { IProduct } from "../product.types";
 
 const handleDelete = async (productId: string) => {
   const toastId = toast.loading("Deleting the product...");
@@ -86,33 +85,33 @@ export const columns: ColumnDef<IProduct>[] = [
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Price
+            Regular Price
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         </div>
       );
     },
     cell: ({ row }) => {
-      const price = parseFloat(row.getValue("price"));
+      const price = row.getValue("price");
       const formatted = new Intl.NumberFormat("en-US", {
         style: "currency",
-        currency: "USD",
-      }).format(price);
+        currency: "BDT",
+      }).format(price?.regular);
 
-      return <div className="text-right font-medium">{formatted}</div>;
+      return <div className="text-right pr-5">{formatted}</div>;
     },
   },
   {
-    accessorKey: "salePrice",
-    header: () => <div className="text-right">Sale Price</div>,
+    accessorKey: "price",
+    header: () => <div className="text-center ">Sale Price</div>,
     cell: ({ row }) => {
-      const salePrice = parseFloat(row.getValue("salePrice"));
+      const price = row.getValue("price");
       const formatted = new Intl.NumberFormat("en-US", {
         style: "currency",
-        currency: "USD",
-      }).format(salePrice);
+        currency: "BDT",
+      }).format(price?.sale);
 
-      return <div className="text-right font-medium">{salePrice? formatted : "---"}</div>;
+      return <div className="text-center ">{price?.sale ? formatted : "---"}</div>;
     },
   },
   {
