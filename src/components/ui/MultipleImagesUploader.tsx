@@ -10,7 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useEffect, type Dispatch, type SetStateAction } from "react";
 
-export default function MultipleImagesUploader({onChange}: {onChange: Dispatch<SetStateAction<[] | (File | FileMetadata)[]>>}) {
+export default function MultipleImagesUploader({onChange, resSuccess}: {onChange: Dispatch<SetStateAction<[] | (File | FileMetadata)[]>>, resSuccess: boolean}) {
   const maxSizeMB = 5;
   const maxSize = maxSizeMB * 1024 * 1024; // 5MB default
   const maxFiles = 6;
@@ -90,7 +90,7 @@ export default function MultipleImagesUploader({onChange}: {onChange: Dispatch<S
       )}
 
       {/* File list */}
-      {files.length > 0 && (
+      {!resSuccess && files.length > 0 && (
         <div className="space-y-2">
           {files.map((file) => (
             <div

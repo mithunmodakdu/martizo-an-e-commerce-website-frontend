@@ -712,7 +712,7 @@ export function AddProductForm() {
           </Field>
           <Field>
             <FieldLabel htmlFor="add-product-images">Images</FieldLabel>
-            <MultipleImagesUploader onChange={setImages} />
+            <MultipleImagesUploader onChange={setImages} resSuccess={resSuccess} />
           </Field>
         </div>
       </CardContent>
