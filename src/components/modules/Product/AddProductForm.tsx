@@ -48,8 +48,9 @@ import { PlusCircleIcon } from "lucide-react";
 import { ProductCreationZodSchema } from "./product.types";
 
 export function AddProductForm() {
-  const [thumbnail, setThumbnail] = useState<File | null>(null);
-  const [images, setImages] = useState<[] | (File | FileMetadata)[]>([]);
+  const [resSuccess, setResSuccess ] = useState<boolean>(false);
+  const [thumbnail, setThumbnail] = useState<FileMetadata | File | null>(null);
+  const [images, setImages] = useState<[] | (FileMetadata | File)[]>([]);
   const { data: categoriesData, isLoading: categoriesLoading } =
     useGetProductCategoriesQuery(undefined);
   const { data: brandsData, isLoading: brandsLoading } =
@@ -116,6 +117,7 @@ export function AddProductForm() {
       if (res.success) {
         toast.success(res.message, { id: toastId });
         form.reset();
+        setResSuccess(true);
       }
     } catch (error: any) {
       // console.log(error);
@@ -706,11 +708,11 @@ export function AddProductForm() {
         <div className="space-y-5 my-5">
           <Field>
             <FieldLabel htmlFor="add-product-thumbnail">Thumbnail</FieldLabel>
-            <SingleImageUploader onChange={setThumbnail} />
+            <SingleImageUploader onChange={setThumbnail} resSuccess={resSuccess} />
           </Field>
           <Field>
             <FieldLabel htmlFor="add-product-images">Images</FieldLabel>
-            <MultipleImagesUploader onChange={setImages} />
+            <MultipleImagesUploader onChange={setImages} resSuccess={resSuccess} />
           </Field>
         </div>
       </CardContent>

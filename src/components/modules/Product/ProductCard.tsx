@@ -35,22 +35,32 @@ export const ProductCard = ({ item }: { item: IProduct }) => {
 
   const badges = [
     {
-      text: item?.isFlashSale && "Flash Sale",
-      color: item?.isFlashSale && "oklch(0.577 0.245 27.325)",
+      text: item?.discountPercentage
+        ? `OFF ${item?.discountPercentage}%`
+        : undefined,
+      className: item?.discountPercentage ? "bg-destructive text-white" : undefined,
     },
     {
-      text: item?.isMartizoExclusive && "Exclusive",
-      color: item?.isMartizoExclusive && "oklch(0.5941 0.1635 150.03)",
+      text: item?.isFlashSale ? "Flash Sale" : undefined,
+      className: item?.isFlashSale ? "bg-chart-2 text-white" : undefined,
     },
     {
-      text: item?.isTrending && "Trending",
-      color: item?.isTrending && "oklch(0.841 0.238 128.85)",
+      text: item?.isMartizoExclusive ? "Exclusive" : undefined,
+      className: item?.isMartizoExclusive
+        ? "bg-primary text-primary-foreground"
+        : undefined,
     },
     {
-      text: item?.isNewArrival && "New",
-      color: item?.isNewArrival && "oklch(0.448 0.119 151.328)",
+      text: item?.isTrending ? "Trending" : undefined,
+      className: item?.isTrending ? "bg-chart-3 text-white" : undefined,
     },
-  ];
+    {
+      text: item?.isNewArrival ? "New" : undefined,
+      className: item?.isNewArrival
+        ? "bg-accent text-accent-foreground border border-border"
+        : undefined,
+    },
+  ].filter((badge) => badge.text);
 
   const cartData: ICartItem = {
     productId: item?._id,
@@ -139,24 +149,15 @@ export const ProductCard = ({ item }: { item: IProduct }) => {
           />
 
           {/* Badges */}
-          <div className="absolute start-4 top-4">
-            <div className="flex justify-items-start gap-1">
-              {item?.discountPercentage && (
-                <Badge className="bg-destructive text-white">{`OFF ${item?.discountPercentage}%`}</Badge>
-              )}
+          <div className="absolute start-2 top-2">
+            <div className="flex flex-col">
               {badges?.map((badge) => (
                 <div>
-                  {badge.text ? (
-                    <Badge
-                      style={{
-                        backgroundColor: badge.color,
-                      }}
+                 <Badge
+                      className={badge?.className}
                     >
                       {badge.text}
                     </Badge>
-                  ) : (
-                    ""
-                  )}
                 </div>
               ))}
             </div>
@@ -184,19 +185,29 @@ export const ProductCard = ({ item }: { item: IProduct }) => {
 
         {/* Ratings */}
         <div className="flex items-center gap-1">
-           
-            <StarRating rating={item?.rating}/>
+          <StarRating rating={item?.rating} />
 
-            <span className="text-[11px] text-muted-foreground">
-              ({item?.ratingCount})
-            </span>
-          </div>
+          <span className="text-[11px] text-muted-foreground">
+            ({item?.ratingCount})
+          </span>
+        </div>
 
         {/* Price */}
         <div className="flex items-baseline gap-1.5">
-          <Price onSale={item?.price.sale != null} className="text-xs font-medium">
-            <PriceValue price={item?.price.regular} currency={item?.price.currency} variant="regular" />
-            <PriceValue price={item?.price.sale} currency={item?.price.currency} variant="sale" />
+          <Price
+            onSale={item?.price.sale != null}
+            className="text-xs font-medium"
+          >
+            <PriceValue
+              price={item?.price.regular}
+              currency={item?.price.currency}
+              variant="regular"
+            />
+            <PriceValue
+              price={item?.price.sale}
+              currency={item?.price.currency}
+              variant="sale"
+            />
           </Price>
           {item?.price.sale && (
             <span className="text-xs font-medium text-primary ml-auto">

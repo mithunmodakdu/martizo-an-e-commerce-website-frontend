@@ -49,11 +49,12 @@ import {
 } from "@/redux/features/products/products.api";
 import { toast } from "sonner";
 import { PlusCircleIcon } from "lucide-react";
-import { ProductPriceZodSchema, ProductUpdateZodSchema } from "./product.types";
+import { ProductUpdateZodSchema } from "./product.types";
 
 export function UpdateProductForm() {
-  const [thumbnail, setThumbnail] = useState<File | null>(null);
-  const [images, setImages] = useState<[] | (File | FileMetadata)[]>([]);
+  const [resSuccess, setResSuccess ] = useState<boolean>(false);
+  const [thumbnail, setThumbnail] = useState<FileMetadata | File | null>(null);
+  const [images, setImages] = useState<[] | (FileMetadata| File)[]>([]);
   const [existedImages, setExistedImages] = useState<string[]>([]);
   const [deleteImages, setDeleteImages] = useState<string[]>([]);
   const [existedThumbnail, setExistedThumbnail] = useState<string | undefined>(
@@ -174,6 +175,7 @@ export function UpdateProductForm() {
       console.log(res);
       if (res.success) {
         toast.success(res.message, { id: toastId });
+        setResSuccess(true);
         navigate("/admin/products");
       }
     } catch (error: any) {
@@ -811,7 +813,7 @@ export function UpdateProductForm() {
               <FieldLabel htmlFor="update-product-thumbnail">
                 Add New Thumbnail
               </FieldLabel>
-              <SingleImageUploader onChange={setThumbnail} />
+              <SingleImageUploader onChange={setThumbnail} resSuccess={resSuccess} />
             </Field>
             {existedImages?.length > 0 ? (
               <Field>
@@ -849,7 +851,7 @@ export function UpdateProductForm() {
               <FieldLabel htmlFor="update-product-images">
                 Add New Images
               </FieldLabel>
-              <MultipleImagesUploader onChange={setImages} />
+              <MultipleImagesUploader onChange={setImages} resSuccess={resSuccess} />
             </Field>
           </div>
         </CardContent>
