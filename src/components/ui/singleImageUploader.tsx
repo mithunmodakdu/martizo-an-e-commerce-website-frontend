@@ -1,9 +1,10 @@
 import { AlertCircleIcon, ImageUpIcon, XIcon } from "lucide-react";
 
-import { useFileUpload } from "@/hooks/use-file-upload";
-import { useEffect, type Dispatch, type SetStateAction } from "react";
+import { useFileUpload, type FileMetadata } from "@/hooks/use-file-upload";
+import { useEffect,  type Dispatch, type SetStateAction } from "react";
 
-export default function SingleImageUploader({ onChange }: {onChange: Dispatch<SetStateAction<File | null>>}) {
+export default function SingleImageUploader({ onChange, resSuccess }: {onChange: Dispatch<SetStateAction<FileMetadata | File | null>>, resSuccess: boolean}) {
+
   const maxSizeMB = 5;
   const maxSize = maxSizeMB * 1024 * 1024; // 5MB default
 
@@ -26,14 +27,24 @@ export default function SingleImageUploader({ onChange }: {onChange: Dispatch<Se
   useEffect(() => {
     if (files.length > 0) {
       onChange(files[0].file);
+      
     } else {
       onChange(null);
+      
     }
   }, [files, onChange]);
 
+
+
+
   // console.log("Inside SingleImageUploader", files)
   
-  const previewUrl = files[0]?.preview || null;
+  
+ 
+    const previewUrl = resSuccess? null: files[0]?.preview;
+    
+    console.log(files)
+  console.log("previewUrl", typeof previewUrl)
 
 
   return (
@@ -61,7 +72,7 @@ export default function SingleImageUploader({ onChange }: {onChange: Dispatch<Se
             <div className="absolute inset-0">
               <img
                 alt={files[0]?.file?.name || "Uploaded image"}
-                className="size-full object-cover"
+                className="size-full object-contain"
                 src={previewUrl}
               />
             </div>
