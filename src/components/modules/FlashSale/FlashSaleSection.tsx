@@ -11,6 +11,10 @@ import { Zap, Clock, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FlashProductCard } from "./FlashSaleProductCard";
 import { cn } from "@/lib/utils";
+import { useGetAllProductsQuery } from "@/redux/features/products/products.api";
+import { ProductCard } from "../Product/ProductCard";
+import type { IProduct } from "../Product/product.types";
+import ContentHeader from "../Shared/ContentHeader/ContentHeader";
 
 interface Product {
   id: string;
@@ -138,6 +142,8 @@ function CountdownUnit({ value, label }: { value: number; label: string }) {
 
 
 export default function FlashSaleSection() {
+  const {data: flashProductsData} = useGetAllProductsQuery({isFlashSale: true});
+
   const saleEndsAt = useRef(
     new Date(Date.now() + 5 * 60 * 60 * 1000 + 43 * 60 * 1000 + 20 * 1000)
   ).current;
@@ -157,19 +163,12 @@ export default function FlashSaleSection() {
     <section className="w-full bg-background border-2 p-5">
       {/* Section Heading */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-        {/* Left: Title + badge */}
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 bg-primary px-3 py-1.5 rounded-lg">
-            <Zap className="w-4 h-4 text-primary-foreground fill-primary-foreground" />
-            <span className="text-primary-foreground font-bold text-sm uppercase tracking-widest">
-              Flash Sale
-            </span>
-          </div>
-          <div className="hidden sm:block w-px h-6 bg-border" />
-          <span className="hidden sm:block text-muted-foreground text-sm">
-            Unbeatable prices — today only
-          </span>
-        </div>
+        <ContentHeader
+          subTitle="Hurry Before It Ends"
+          title="Limited Drops at Unbeatable Prices — "
+          highlightedWord="Flash Sale"
+          description="Shop curated deals with exclusive pricing. Once they’re gone, they’re gone—don’t miss out."
+        />
 
         {/* Right: Countdown + View All */}
         <div className="flex items-center gap-4">
@@ -202,12 +201,12 @@ export default function FlashSaleSection() {
         className="w-full"
       >
         <CarouselContent className="-ml-4">
-          {FLASH_PRODUCTS.map((product) => (
+          {flashProductsData?.data?.map((item: IProduct) => (
             <CarouselItem
-              key={product.id}
+              key={item._id}
               className="pl-4 basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4"
             >
-              <FlashProductCard product={product} />
+              <ProductCard item={item}/>
             </CarouselItem>
           ))}
         </CarouselContent>
