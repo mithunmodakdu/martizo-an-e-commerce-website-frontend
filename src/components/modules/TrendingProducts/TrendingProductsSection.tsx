@@ -6,12 +6,12 @@ import ProductListCard from "../Product/ProductListCard";
 
 export function TrendingProductsSection() {
   const { data: trendingProducts } = useGetAllProductsQuery({
-    isNewArrival: true,
+    isTrending: true,
     limit: 6,
   });
   console.log("TrendingProductsSection", trendingProducts);
-  // const bigTrendingProducts = trendingProducts.data.slice(0, 3);
-  // const listTrendingProducts = trendingProducts.data.slice(3);
+  const bigTrendingProducts = trendingProducts?.data?.slice(0, 2);
+  const listTrendingProducts = trendingProducts?.data?.slice(2, 4);
   // console.log(bigTrendingProducts)
   // console.log(listTrendingProducts)
 
@@ -30,7 +30,7 @@ export function TrendingProductsSection() {
 
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
           <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 gap-5">
-            {trendingProducts?.data?.map((item: IProduct) => (
+            {bigTrendingProducts?.map((item: IProduct) => (
               <ProductCard key={item._id} item={item} />
             ))}
           </div>
@@ -40,7 +40,7 @@ export function TrendingProductsSection() {
             <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-1 px-1">
               Also trending
             </p>
-            {trendingProducts?.data?.map((item: IProduct) => (
+            {listTrendingProducts?.map((item: IProduct) => (
               <ProductListCard key={item._id} item={item} />
             ))}
           </div>
