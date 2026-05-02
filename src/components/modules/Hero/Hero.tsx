@@ -12,7 +12,7 @@ import { useGetAllProductsQuery } from "@/redux/features/products/products.api";
 import { useAddToCartMutation } from "@/redux/features/cart/cart.api";
 import { toast } from "sonner";
 import { Price, PriceValue } from "../Product/Price";
-import Autoplay from "embla-carousel-autoplay"
+import Autoplay from "embla-carousel-autoplay";
 import type { IProduct } from "../Product/product.types";
 import StarRating from "../Shared/StarRating";
 
@@ -29,10 +29,11 @@ const avatars = [
 ];
 
 export default function Hero() {
-  const { data: productsData, isLoading: productsLoading } = useGetAllProductsQuery({
-    isNewArrival: true,
-    limit: 5,
-  });
+  const { data: productsData, isLoading: productsLoading } =
+    useGetAllProductsQuery({
+      isNewArrival: true,
+      limit: 5,
+    });
 
   const [addToCart] = useAddToCartMutation();
 
@@ -137,100 +138,95 @@ export default function Hero() {
       {/* Right — part */}
       <div className="relative flex items-center justify-center mb-8 md:mb-0 p-8 ">
         {/* Products carousel */}
-        {
-          !productsLoading && <Carousel
-         
-          plugins={[
-            Autoplay({
-              delay: 2000,
-              stopOnMouseEnter: true,
-              
-            })
-            
-          ]}
-
-          opts={{
-            loop: true
-          }}
-          className="w-full max-w-[400px]  "
-        >
-          <CarouselContent>
-            {productsData?.data?.map(
-              (
-                item: IProduct,
-                
-              ) => (
+        {!productsLoading && (
+          <Carousel
+            plugins={[
+              Autoplay({
+                delay: 1500,
+                stopOnMouseEnter: true,
+              }),
+            ]}
+            opts={{
+              loop: true,
+            }}
+            className="w-full max-w-[400px]"
+          >
+            <CarouselContent>
+              {productsData?.data?.map((item: IProduct) => (
                 <CarouselItem key={item?._id}>
                   <div className="p-1">
-                    <div className="relative w-full rounded-xl border border-border bg-background p-5 shadow-sm">
+                    <div className="relative w-full rounded-xl border border-border bg-background  shadow-sm">
                       {/* Image area */}
-                      <div className="relative mb-4 flex h-40 items-center justify-center overflow-hidden rounded-lg bg-muted">
-                        <Badge className="absolute right-2 top-2 rounded-full bg-red-500  text-primary-foreground text-[10px] px-2 py-0.5">
+                      <div className="relative mb-4 flex h-48 items-center justify-center overflow-hidden rounded-t-lg bg-muted">
+                        <Badge className="absolute right-2 top-2 rounded-full text-sm px-2 py-0.5 bg-accent text-accent-foreground border border-border">
                           New
                         </Badge>
                         <img
                           src={item?.thumbnail}
                           alt={`Thumbnail of ${item?.title}`}
-                          
+                          className="w-full h-full object-fill transition-transform duration-500 hover:scale-105"
                         />
                       </div>
 
-                      <p className="text-sm font-medium text-foreground">
-                        {item?.title}
-                      </p>
-                      <p className="mb-3 text-xs text-muted-foreground">
-                        {item?.description?.length > 100 ? (item?.description?.slice(0, 100).toString()) : (item?.description?.length)}
-                      </p>
+                      <div className="px-5 pb-5">
+                        <p className="text-base font-medium text-foreground">
+                          {item?.title}
+                        </p>
+                        <p className="mb-3 text-sm text-muted-foreground">
+                          {item?.description?.length > 100
+                            ? item?.description?.slice(0, 100).toString()
+                            : item?.description?.length}
+                        </p>
 
-                      <div className="flex items-center justify-between">
-                        <Price
-                          onSale={item?.price.sale != null}
-                          className="text-sm font-semibold"
-                        >
-                          <PriceValue
-                            price={item?.price.regular}
-                            currency={item?.price.currency}
-                            variant="regular"
-                          />
-                          <PriceValue
-                            price={item?.price.sale}
-                            currency={item?.price.currency}
-                            variant="sale"
-                          />
-                        </Price>
-                        <button
-                          onClick={() => handleAddToCart(item)}
-                          className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground transition-transform hover:scale-105 active:scale-95 cursor-pointer"
-                          title="Add to cart"
-                        >
-                          <svg
-                            width="14"
-                            height="14"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2.5"
-                            strokeLinecap="round"
+                        <div className="flex items-center justify-between">
+                          <Price
+                            onSale={item?.price.sale != null}
+                            className="text-sm font-semibold"
                           >
-                            <line x1="12" y1="5" x2="12" y2="19" />
-                            <line x1="5" y1="12" x2="19" y2="12" />
-                          </svg>
-                        </button>
+                            <PriceValue
+                              price={item?.price.regular}
+                              currency={item?.price.currency}
+                              variant="regular"
+                            />
+                            <PriceValue
+                              price={item?.price.sale}
+                              currency={item?.price.currency}
+                              variant="sale"
+                            />
+                          </Price>
+                          <button
+                            onClick={() => handleAddToCart(item)}
+                            className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground transition-transform hover:scale-105 active:scale-95 cursor-pointer"
+                            title="Add to cart"
+                          >
+                            <svg
+                              width="14"
+                              height="14"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2.5"
+                              strokeLinecap="round"
+                            >
+                              <line x1="12" y1="5" x2="12" y2="19" />
+                              <line x1="5" y1="12" x2="19" y2="12" />
+                            </svg>
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </CarouselItem>
-              ),
-            )}
-          </CarouselContent>
-          <CarouselPrevious className="md:size-5 md:-left-6 lg:size-8 lg:-left-12" />
-          <CarouselNext className="md:size-5 md:-right-6 lg:size-8 lg:-right-12" />
-        </Carousel>
-        }
+              ))}
+            </CarouselContent>
+            <CarouselPrevious className="md:size-5 md:-left-6 lg:size-8 lg:-left-12" />
+            <CarouselNext className="md:size-5 md:-right-6 lg:size-8 lg:-right-12" />
+          </Carousel>
+        )}
 
         {/* Rating chip */}
-        <div className="absolute  right-7 -top-7 md:top-7 rounded-lg border border-border bg-card px-3 py-2 shadow-sm">
-         <StarRating rating={4.9}/>
+        <div className="absolute  right-7 -top-7 md:top-4 rounded-lg border border-border bg-card px-3 py-2 shadow-sm">
+          <StarRating rating={4.9} />
           <div className="mt-1 flex items-baseline gap-1">
             <span className="text-[13px] font-medium text-foreground">4.9</span>
             <span className="text-xs text-muted-foreground">

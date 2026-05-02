@@ -1,10 +1,15 @@
 import { AlertCircleIcon, ImageUpIcon, XIcon } from "lucide-react";
 
 import { useFileUpload, type FileMetadata } from "@/hooks/use-file-upload";
-import { useEffect,  type Dispatch, type SetStateAction } from "react";
+import { useEffect, type Dispatch, type SetStateAction } from "react";
 
-export default function SingleImageUploader({ onChange, resSuccess }: {onChange: Dispatch<SetStateAction<FileMetadata | File | null>>, resSuccess: boolean}) {
-
+export default function SingleImageUploader({
+  onChange,
+  resSuccess,
+}: {
+  onChange: Dispatch<SetStateAction<FileMetadata | File | null>>;
+  resSuccess: boolean;
+}) {
   const maxSizeMB = 5;
   const maxSize = maxSizeMB * 1024 * 1024; // 5MB default
 
@@ -27,25 +32,17 @@ export default function SingleImageUploader({ onChange, resSuccess }: {onChange:
   useEffect(() => {
     if (files.length > 0) {
       onChange(files[0].file);
-      
     } else {
       onChange(null);
-      
     }
   }, [files, onChange]);
 
-
-
-
   // console.log("Inside SingleImageUploader", files)
-  
-  
- 
-    const previewUrl = resSuccess? null: files[0]?.preview;
-    
-    console.log(files)
-  console.log("previewUrl", typeof previewUrl)
 
+  const previewUrl = resSuccess ? null : files[0]?.preview;
+
+  // console.log(files);
+  // console.log("previewUrl", typeof previewUrl);
 
   return (
     <div className="flex flex-col gap-2 border-2">
@@ -92,7 +89,6 @@ export default function SingleImageUploader({ onChange, resSuccess }: {onChange:
               </p>
             </div>
           )}
-
         </div>
 
         {previewUrl && (
@@ -100,7 +96,7 @@ export default function SingleImageUploader({ onChange, resSuccess }: {onChange:
             <button
               aria-label="Remove image"
               className="z-50 flex size-8 cursor-pointer items-center justify-center rounded-full bg-black/60 text-white outline-none transition-[color,box-shadow] hover:bg-black/80 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
-              onClick={() => removeFile(files[0]?.id )}
+              onClick={() => removeFile(files[0]?.id)}
               // onClick={handleRemoveImage}
               type="button"
             >
@@ -108,8 +104,6 @@ export default function SingleImageUploader({ onChange, resSuccess }: {onChange:
             </button>
           </div>
         )}
-
-
       </div>
 
       {errors.length > 0 && (
