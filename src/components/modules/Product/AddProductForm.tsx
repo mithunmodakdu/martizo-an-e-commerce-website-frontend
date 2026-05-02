@@ -71,8 +71,8 @@ export function AddProductForm() {
       features: [{ name: "", value: "" }],
 
       // categorization
-      category: "",
-      brand: "",
+      category: undefined,
+      brand: undefined,
 
       // pricing
       price: {regular: undefined, sale: undefined, currency: ""},
@@ -334,7 +334,7 @@ export function AddProductForm() {
             </div>
 
             {/* price & stock */}
-            <div className="flex gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <Controller
                 name="price.regular"
                 control={form.control}
@@ -347,11 +347,11 @@ export function AddProductForm() {
                       {...field}
                       id="add-product-form-regular-price"
                       aria-invalid={fieldState.invalid}
-                      placeholder="Write here product regular price"
+                      placeholder="Write here regular price"
                       autoComplete="off"
                       onChange={(event) => {
                         const value = event.target.value;
-                        field.onChange(value === "" ? "" : Number(value));
+                        field.onChange(Number(value));
                       }}
                     />
                     {fieldState.invalid && (
@@ -372,11 +372,11 @@ export function AddProductForm() {
                       {...field}
                       id="add-product-form-salePrice"
                       aria-invalid={fieldState.invalid}
-                      placeholder="Write here product sale price"
+                      placeholder="Write here sale price"
                       autoComplete="off"
                       onChange={(event) => {
                         const value = event.target.value;
-                        field.onChange(value === "" ? "" : Number(value));
+                        field.onChange(Number(value));
                       }}
                     />
                     {fieldState.invalid && (
@@ -423,7 +423,7 @@ export function AddProductForm() {
                       autoComplete="off"
                       onChange={(event) => {
                         const value = event.target.value;
-                        field.onChange(value === "" ? "" : Number(value));
+                        field.onChange(Number(value));
                       }}
                     />
                     {fieldState.invalid && (

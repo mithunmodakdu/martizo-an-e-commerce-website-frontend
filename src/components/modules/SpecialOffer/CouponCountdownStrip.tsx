@@ -1,19 +1,21 @@
-import { useState } from "react";
-import { useCountdown } from "./useCountDown";
+import { useRef, useState } from "react";
 import { Check, Copy, Tag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { pad } from "../Shared/pad";
+import Countdown from "../Shared/CountDown/Countdown";
+import useCountdown from "../Shared/CountDown/useCountdown";
 
 const COUPON_CODE = "MARTIZO10";
-// Update this to your real offer deadline
-const OFFER_END = new Date(Date.now() + 11 * 3_600_000 + 47 * 60_000);
-
-
 
 
 export const CouponCountdownStrip = () => {
-  const { hours, minutes, seconds } = useCountdown(OFFER_END);
   const [copied, setCopied] = useState(false);
+
+  const endsAt = useRef(
+      new Date(Date.now() + 12 * 60 * 60 * 1000 + 47 * 60 * 1000 + 15 * 1000),
+    ).current;
+  
+  const { hours, minutes, seconds } = useCountdown(endsAt);
 
   const copy = () => {
     navigator.clipboard.writeText(COUPON_CODE).catch((error) => {console.log("copy failed", error)});
@@ -66,25 +68,7 @@ export const CouponCountdownStrip = () => {
         aria-label={`Offer ends in ${pad(hours)} hours ${pad(minutes)} minutes ${pad(seconds)} seconds`}
       >
         <span className="text-xs text-muted-foreground">Offer ends in</span>
-        <div className="flex items-center gap-1" aria-hidden="true">
-          {[
-            { val: hours,   label: "hrs" },
-            { val: minutes, label: "min" },
-            { val: seconds, label: "sec" },
-          ].map((unit, i) => (
-            <span key={unit.label} className="flex items-center gap-1">
-              {i > 0 && (
-                <span className="text-muted-foreground font-medium pb-2">:</span>
-              )}
-              <span className="flex flex-col items-center">
-                <span className="text-lg font-medium text-foreground leading-none">
-                  {pad(unit.val)}
-                </span>
-                <span className="text-[10px] text-muted-foreground">{unit.label}</span>
-              </span>
-            </span>
-          ))}
-        </div>
+        <Countdown endsAt={endsAt}/>
       </div>
     </div>
   );
