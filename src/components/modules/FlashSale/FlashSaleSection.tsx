@@ -26,7 +26,7 @@ export default function FlashSaleSection() {
     new Date(Date.now() + 5 * 60 * 60 * 1000 + 43 * 60 * 1000 + 20 * 1000),
   ).current;
 
-  // console.log("endsAt", typeof endsAt)
+  // console.log(endsAt)
 
   useEffect(() => {
     if (!api) return;

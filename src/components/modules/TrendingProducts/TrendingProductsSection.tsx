@@ -9,7 +9,7 @@ export function TrendingProductsSection() {
     isTrending: true,
     limit: 6,
   });
-  console.log("TrendingProductsSection", trendingProducts);
+  // console.log("TrendingProductsSection", trendingProducts);
   const bigTrendingProducts = trendingProducts?.data?.slice(0, 2);
   const listTrendingProducts = trendingProducts?.data?.slice(2, 4);
   // console.log(bigTrendingProducts)
