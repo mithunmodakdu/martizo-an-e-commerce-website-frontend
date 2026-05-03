@@ -14,15 +14,16 @@ import { useAddToCartMutation } from "@/redux/features/cart/cart.api";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
-import { Heart, ShoppingCart, Star } from "lucide-react";
+import { Heart, ShoppingCart } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import {
   useAddToWishlistMutation,
   useRemoveFromWishlistMutation,
 } from "@/redux/features/wishlist/wishlist.api";
 import { pad } from "../Shared/pad";
-import type { IProduct, IWishListItem } from "./product.types";
+import type { IProduct} from "./product.types";
 import StarRating from "../Shared/StarRating";
+import type { IWishListItem } from "../Wishlist/wishlist.interface";
 
 export const ProductCard = ({ item }: { item: IProduct }) => {
   const [wishlisted, setWishlisted] = useState(false);
