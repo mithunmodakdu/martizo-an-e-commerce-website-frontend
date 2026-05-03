@@ -8,6 +8,7 @@ export interface IWishListItem {
 export interface IWishlistProductItem {
   _id: string;
   title: string;
+  category: {_id: string, name: string };
   thumbnail: string;
   price: IProductPrice;
   discountPercentage: number;

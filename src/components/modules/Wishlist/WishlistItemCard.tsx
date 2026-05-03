@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -20,12 +21,15 @@ import {
   MoreVertical,
   PackageCheck,
   PackageX,
+  Tag,
 } from "lucide-react";
 import { toast } from "sonner";
 import StarRating from "../Shared/StarRating";
 import type { IWishListCardItem } from "./wishlist.interface";
 import { Price, PriceValue } from "../Product/Price";
 import { useRemoveFromWishlistMutation } from "@/redux/features/wishlist/wishlist.api";
+import { useAddToCartMutation } from "@/redux/features/cart/cart.api";
+import type { ICartItem } from "../Cart/cart.types";
 
 export default function WishlistItemCard({
   item,
@@ -33,12 +37,14 @@ export default function WishlistItemCard({
   item: IWishListCardItem;
 }) {
 
+  const [addToCart] = useAddToCartMutation();
   const [removeFromWishlist] = useRemoveFromWishlistMutation();
 
   const {
     productId: {
       _id,
       title,
+      category: {_id: categoryId, name: categoryName},
       thumbnail,
       price: { regular, sale, currency },
       discountPercentage,
@@ -48,6 +54,30 @@ export default function WishlistItemCard({
     },
     addedAt,
   } = item;
+
+   const cartData: ICartItem = {
+      productId: _id,
+      name: title,
+      category: categoryId,
+      price: {regular, sale, currency},
+      quantity: 1,
+      image: { src: thumbnail, alt: `Image of ${title}` },
+    };
+  
+    const handleAddToCart = async (data: ICartItem) => {
+      const toastId = toast.loading("Adding product to cart...");
+  
+      try {
+        const res = await addToCart(data).unwrap();
+        if (res.success) {
+          toast.success(res.message, { id: toastId });
+        }
+      } catch (error: any) {
+        if (!error.data.success) {
+          toast.error(error.data.message, { id: toastId });
+        }
+      }
+    };
 
    const handleRemove = async (productId: string) => {
     const toastId = toast.loading("Removing product from the wishlist...");
@@ -86,6 +116,10 @@ export default function WishlistItemCard({
             <div className="space-y-3">
               <div className="flex items-start justify-between gap-5">
                 <div>
+                  <Badge variant="outline" className="text-xs w-fit text-muted-foreground">
+                <Tag size={10} className="mr-1" />
+                {categoryName}
+              </Badge>
                   <h3 className="font-semibold text-foreground leading-snug mt-0.5 mb-2">
                     {title}
                   </h3>
@@ -121,7 +155,7 @@ export default function WishlistItemCard({
                 <span className="text-xs text-muted-foreground">
                   {rating} ({ratingCount.toLocaleString()})
                 </span>
-              </div>
+              </div>             
             </div>
 
             <div className="flex items-end justify-between gap-3">
@@ -184,6 +218,7 @@ export default function WishlistItemCard({
                     size="sm"
                     className="gap-1.5 h-9 px-4 cursor-pointer"
                     disabled={!(stock > 0)}
+                    onClick={() => handleAddToCart(cartData)}
                   >
                     <ShoppingCart size={14} />
                     {stock > 0 ? "Add to Cart" : "Notify Me"}
