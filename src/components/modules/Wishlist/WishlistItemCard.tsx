@@ -25,15 +25,19 @@ import { toast } from "sonner";
 import StarRating from "../Shared/StarRating";
 import type { IWishListCardItem } from "./wishlist.interface";
 import { Price, PriceValue } from "../Product/Price";
+import { useRemoveFromWishlistMutation } from "@/redux/features/wishlist/wishlist.api";
 
 export default function WishlistItemCard({
   item,
 }: {
   item: IWishListCardItem;
 }) {
-  
+
+  const [removeFromWishlist] = useRemoveFromWishlistMutation();
+
   const {
     productId: {
+      _id,
       title,
       thumbnail,
       price: { regular, sale, currency },
@@ -44,6 +48,20 @@ export default function WishlistItemCard({
     },
     addedAt,
   } = item;
+
+   const handleRemove = async (productId: string) => {
+    const toastId = toast.loading("Removing product from the wishlist...");
+    try {
+      const res = await removeFromWishlist(productId);
+      if (res.data.success) {
+        toast.success(res?.data?.message, { id: toastId });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
 
   return (
     <Card className="group overflow-hidden border border-border/60 hover:border-border hover:shadow-md transition-all duration-300 bg-card">
@@ -79,7 +97,7 @@ export default function WishlistItemCard({
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-7 w-7 shrink-0 text-muted-foreground hover:text-foreground"
+                      className="h-7 w-7 shrink-0 text-muted-foreground hover:text-foreground cursor-pointer"
                     >
                       <MoreVertical size={15} />
                     </Button>
@@ -93,11 +111,7 @@ export default function WishlistItemCard({
                     >
                       <Share2 size={14} className="mr-2" />
                       Share
-                    </DropdownMenuItem>
-                    <DropdownMenuItem className="text-destructive focus:text-destructive">
-                      <Trash2 size={14} className="mr-2" />
-                      Remove
-                    </DropdownMenuItem>
+                    </DropdownMenuItem>                    
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
@@ -131,7 +145,7 @@ export default function WishlistItemCard({
                     </span>
                   )}
                 </div>
-                <div className="flex items-center gap-1 mt-0.5">
+                <div className="flex items-center gap-1 mt-2">
                   {stock > 0 ? (
                     <>
                       <PackageCheck size={12} className="text-emerald-500" />
@@ -157,7 +171,8 @@ export default function WishlistItemCard({
                       <Button
                         variant="outline"
                         size="icon"
-                        className="h-9 w-9 text-muted-foreground hover:text-destructive hover:border-destructive/50 transition-colors"
+                        className="h-9 w-9 text-muted-foreground hover:text-destructive hover:border-destructive/50 transition-colors cursor-pointer"
+                        onClick={() => handleRemove(_id)}
                       >
                         <Trash2 size={15} />
                       </Button>
@@ -167,7 +182,7 @@ export default function WishlistItemCard({
 
                   <Button
                     size="sm"
-                    className="gap-1.5 h-9 px-4"
+                    className="gap-1.5 h-9 px-4 cursor-pointer"
                     disabled={!(stock > 0)}
                   >
                     <ShoppingCart size={14} />

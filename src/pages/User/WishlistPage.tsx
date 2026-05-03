@@ -20,12 +20,11 @@ export default function WishlistPage() {
         />
 
         {/* Items */}
-        <div className="space-y-3">
+        <div className="space-y-5">
           {wishlistData?.items?.map((item: IWishListCardItem) => (
             <WishlistItemCard
               key={item?.productId?._id}
-              item={item}
-              
+              item={item}             
             />
           ))}
         </div>
