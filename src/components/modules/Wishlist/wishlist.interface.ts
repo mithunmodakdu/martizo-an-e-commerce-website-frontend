@@ -10,8 +10,10 @@ export interface IWishlistProductItem {
   title: string;
   thumbnail: string;
   price: IProductPrice;
-  inStock: boolean;
-  priceDrop?: boolean;
+  discountPercentage: number;
+  stock: number;
+  rating: number;
+  ratingCount: number;
 }
 
 export interface IWishListCardItem {

@@ -1,4 +1,3 @@
-
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -19,21 +18,32 @@ import {
   Trash2,
   Share2,
   MoreVertical,
-  Tag,
   PackageCheck,
   PackageX,
 } from "lucide-react";
 import { toast } from "sonner";
 import StarRating from "../Shared/StarRating";
+import type { IWishListCardItem } from "./wishlist.interface";
+import { Price, PriceValue } from "../Product/Price";
 
-
-export default function WishlistItemCard({ item }) {
- 
-
-  const discount = item.originalPrice
-    ? Math.round(((item.originalPrice - item.price) / item.originalPrice) * 100)
-    : null;
-
+export default function WishlistItemCard({
+  item,
+}: {
+  item: IWishListCardItem;
+}) {
+  
+  const {
+    productId: {
+      title,
+      thumbnail,
+      price: { regular, sale, currency },
+      discountPercentage,
+      stock,
+      rating,
+      ratingCount,
+    },
+    addedAt,
+  } = item;
 
   return (
     <Card className="group overflow-hidden border border-border/60 hover:border-border hover:shadow-md transition-all duration-300 bg-card">
@@ -42,36 +52,27 @@ export default function WishlistItemCard({ item }) {
           {/* Image */}
           <div className="relative sm:w-40 h-44 sm:h-auto shrink-0 overflow-hidden bg-muted">
             <img
-              src={item.image}
-              alt={item.name}
+              src={thumbnail}
+              alt={`Thumbnail of ${title}`}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
             />
-            {discount && (
+            {discountPercentage && (
               <Badge className="absolute top-2 left-2 bg-rose-500 hover:bg-rose-500 text-white text-xs font-semibold px-1.5 py-0.5 rounded-sm">
-                -{discount}%
-              </Badge>
-            )}
-            {item.tags.includes("popular") && (
-              <Badge className="absolute top-2 right-2 bg-amber-500 hover:bg-amber-500 text-white text-xs font-semibold px-1.5 py-0.5 rounded-sm">
-                Popular
+                -{discountPercentage}%
               </Badge>
             )}
           </div>
 
-
           {/* Content */}
           <div className="flex flex-col flex-1 p-4 gap-2 justify-between">
-            <div className="space-y-1">
-              <div className="flex items-start justify-between gap-2">
+            <div className="space-y-3">
+              <div className="flex items-start justify-between gap-5">
                 <div>
-                  <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider">
-                    {item.brand}
-                  </p>
-                  <h3 className="font-semibold text-foreground leading-snug mt-0.5">
-                    {item.name}
+                  <h3 className="font-semibold text-foreground leading-snug mt-0.5 mb-2">
+                    {title}
                   </h3>
+                  <p className="text-xs text-muted-foreground">Added to wishlist on {addedAt}</p>
                 </div>
-
 
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -93,10 +94,7 @@ export default function WishlistItemCard({ item }) {
                       <Share2 size={14} className="mr-2" />
                       Share
                     </DropdownMenuItem>
-                    <DropdownMenuItem
-                      className="text-destructive focus:text-destructive"
-                      
-                    >
+                    <DropdownMenuItem className="text-destructive focus:text-destructive">
                       <Trash2 size={14} className="mr-2" />
                       Remove
                     </DropdownMenuItem>
@@ -104,36 +102,37 @@ export default function WishlistItemCard({ item }) {
                 </DropdownMenu>
               </div>
 
-
               <div className="flex items-center gap-2">
-                <StarRating rating={item.rating} />
+                <StarRating rating={rating} />
                 <span className="text-xs text-muted-foreground">
-                  {item.rating} ({item.reviews.toLocaleString()})
+                  {rating} ({ratingCount.toLocaleString()})
                 </span>
               </div>
-
-
-              <Badge variant="outline" className="text-xs w-fit">
-                <Tag size={10} className="mr-1" />
-                {item.category}
-              </Badge>
             </div>
-
 
             <div className="flex items-end justify-between gap-3">
               <div>
-                <div className="flex items-baseline gap-2">
-                  <span className="text-xl font-bold text-foreground">
-                    ${item.price.toFixed(2)}
-                  </span>
-                  {item.originalPrice && (
-                    <span className="text-sm text-muted-foreground line-through">
-                      ${item.originalPrice.toFixed(2)}
+                <div className="flex items-baseline gap-5">
+                  <Price onSale={sale != null} className="text-xs font-medium">
+                    <PriceValue
+                      price={regular}
+                      currency={currency}
+                      variant="regular"
+                    />
+                    <PriceValue
+                      price={sale}
+                      currency={currency}
+                      variant="sale"
+                    />
+                  </Price>
+                  {sale && (
+                    <span className="text-xs font-medium text-primary ml-auto">
+                      SAVE BDT {regular - sale}
                     </span>
                   )}
                 </div>
                 <div className="flex items-center gap-1 mt-0.5">
-                  {item.inStock ? (
+                  {stock > 0 ? (
                     <>
                       <PackageCheck size={12} className="text-emerald-500" />
                       <span className="text-xs text-emerald-600 dark:text-emerald-400 font-medium">
@@ -151,7 +150,6 @@ export default function WishlistItemCard({ item }) {
                 </div>
               </div>
 
-
               <TooltipProvider>
                 <div className="flex items-center gap-2">
                   <Tooltip>
@@ -160,7 +158,6 @@ export default function WishlistItemCard({ item }) {
                         variant="outline"
                         size="icon"
                         className="h-9 w-9 text-muted-foreground hover:text-destructive hover:border-destructive/50 transition-colors"
-                        
                       >
                         <Trash2 size={15} />
                       </Button>
@@ -168,15 +165,13 @@ export default function WishlistItemCard({ item }) {
                     <TooltipContent>Remove from wishlist</TooltipContent>
                   </Tooltip>
 
-
                   <Button
                     size="sm"
                     className="gap-1.5 h-9 px-4"
-                    disabled={!item.inStock}
-                    
+                    disabled={!(stock > 0)}
                   >
                     <ShoppingCart size={14} />
-                    {item.inStock ? "Add to Cart" : "Notify Me"}
+                    {stock > 0 ? "Add to Cart" : "Notify Me"}
                   </Button>
                 </div>
               </TooltipProvider>
