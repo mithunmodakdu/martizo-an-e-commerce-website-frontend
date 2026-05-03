@@ -8,6 +8,7 @@ const wishlistApi = baseApi.injectEndpoints({
         url: "/wishlist",
         method: "GET"
       }),
+      transformResponse: res => res.data,
       providesTags: ["WISHLIST"]
     }),
 

@@ -1,12 +1,7 @@
 import type { UseFormReturn } from "react-hook-form";
 import type { CheckoutFormType } from "../Checkout/checkout.types";
-import type {ICategory, IVariant } from "../Product/product.types";
+import type {IVariant } from "../Product/product.types";
 
-export interface IProductPrice {
-  regular: number;
-  sale?: number;
-  currency: string;
-}
 
 export interface ICartItem {
   productId: string;

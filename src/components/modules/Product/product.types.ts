@@ -1,5 +1,4 @@
 import z from "zod";
-import type { IProductPrice } from "../Cart/cart.types";
 
 export const VariantCreationZodSchema = z.object({
   name: z
@@ -214,6 +213,12 @@ export interface IVariant{
   sku?: string
 } 
 
+export interface IProductPrice {
+  regular: number;
+  sale?: number | undefined;
+  currency: string;
+}
+
 export interface IProduct {
   _id: string;
 
@@ -263,11 +268,6 @@ export interface IProduct {
 
 }
 
-export interface ProductPrice {
-  regular: number;
-  sale?: number | undefined;
-  currency: string;
-}
 
 export interface IProductCard {
   _id: string;
@@ -296,7 +296,4 @@ export interface IProductCardsContainerProps {
   productsData?: IProduct[];
 }
 
-export interface IWishListItem {
-  productId: string;
-  addedAt: string; 
-}
+

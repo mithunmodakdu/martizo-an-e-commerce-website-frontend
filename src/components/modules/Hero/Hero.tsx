@@ -15,6 +15,7 @@ import { Price, PriceValue } from "../Product/Price";
 import Autoplay from "embla-carousel-autoplay";
 import type { IProduct } from "../Product/product.types";
 import StarRating from "../Shared/StarRating";
+import type { ICartItem } from "../Cart/cart.types";
 
 const stats = [
   { value: "12k+", label: "Happy customers" },
@@ -37,23 +38,15 @@ export default function Hero() {
 
   const [addToCart] = useAddToCartMutation();
 
-  const handleAddToCart = async (item: {
-    _id: string;
-    title: string;
-    category: string;
-    description: string;
-    thumbnail: string;
-    price: number;
-    salePrice: number;
-  }) => {
-    const cartData = {
+  const handleAddToCart = async (item: IProduct) => {
+    const cartData: ICartItem = {
       productId: item?._id,
       name: item?.title,
-      category: item?.category,
+      category: item?.category?._id,
       price: {
-        regular: item?.price,
-        sale: item?.salePrice,
-        currency: "BDT",
+        regular: item?.price?.regular,
+        sale: item?.price?.sale,
+        currency: item?.price?.currency,
       },
       quantity: 1,
       image: { src: item?.thumbnail, alt: `Thumbnail of ${item?.title}` },

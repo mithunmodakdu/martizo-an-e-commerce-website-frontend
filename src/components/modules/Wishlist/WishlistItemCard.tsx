@@ -26,7 +26,10 @@ import {
 import { toast } from "sonner";
 import StarRating from "../Shared/StarRating";
 
+
 export default function WishlistItemCard({ item }) {
+ 
+
   const discount = item.originalPrice
     ? Math.round(((item.originalPrice - item.price) / item.originalPrice) * 100)
     : null;

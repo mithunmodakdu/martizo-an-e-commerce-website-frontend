@@ -65,7 +65,7 @@ export default function Navbar() {
   };
 
   const id = useId();
-  const wishlistLength = wishlistData?.data?.items?.length;
+  const wishlistLength = wishlistData?.items?.length;
 
   const navItems = [
     {
