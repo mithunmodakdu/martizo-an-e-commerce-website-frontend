@@ -8,8 +8,8 @@ const ContentHeader = (props: IContentHeaderProps) => {
     props;
   return (
     <div className="flex flex-col md:flex-row md:items-end justify-between gap-5 mb-10">
-      <div className="w-[375px]">
-        <div className="flex items-center gap-2 mb-3">
+      <div>
+       {subTitle && ( <div className="flex items-center gap-2 mb-3">
           <div className="w-5 h-px" style={{ background: "var(--primary)" }} />
           <span
             className="text-xs font-semibold tracking-[0.2em] uppercase"
@@ -17,7 +17,7 @@ const ContentHeader = (props: IContentHeaderProps) => {
           >
             {subTitle}
           </span>
-        </div>
+        </div>)}
         <h2
           className="text-2xl font-bold tracking-tight leading-tight"
           style={{
@@ -25,15 +25,15 @@ const ContentHeader = (props: IContentHeaderProps) => {
             fontFamily: "'Georgia', serif",
           }}
         >
-          {title}{" "}
-          <span style={{ color: "var(--primary)" }}>{highlightedWord}</span>
+          {title && title}{" "}
+          <span style={{ color: "var(--primary)" }}>{highlightedWord && highlightedWord}</span>
         </h2>
-        <p
-          className="mt-2 text-base max-w-sm"
+        {description && (<p
+          className="mt-2 text-base max-w-lg"
           style={{ color: "var(--muted-foreground)" }}
         >
           {description}
-        </p>
+        </p>)}
       </div>
 
       {btnText && btnLink && (
