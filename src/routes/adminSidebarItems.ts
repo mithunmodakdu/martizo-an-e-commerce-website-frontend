@@ -4,10 +4,9 @@ import ProductsTablePage from "@/pages/Admin/ProductsTablePage";
 import type { ISidebarItem } from "@/types";
 import { lazy } from "react";
 
-const Analytics = lazy(() => import("@/pages/Admin/Analytics"));
+const Analytics = lazy(() => import("@/pages/Admin/AnalyticsPage"));
 const AddProduct = lazy(() => import("@/pages/Admin/AddProduct"));
 const UpdateProduct = lazy(() => import("@/pages/Admin/UpdateProduct"));
-const DeleteProduct = lazy(() => import("@/pages/Admin/DeleteProduct"));
 const ProductCategories = lazy(() => import("@/pages/Admin/ProductCategories"));
 const ProductBrands = lazy(() => import("@/pages/Admin/ProductBrands"));
 

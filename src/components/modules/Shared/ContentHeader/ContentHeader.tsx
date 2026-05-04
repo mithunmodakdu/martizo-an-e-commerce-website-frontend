@@ -8,7 +8,7 @@ const ContentHeader = (props: IContentHeaderProps) => {
     props;
   return (
     <div className="flex flex-col md:flex-row md:items-end justify-between gap-5 mb-10">
-      <div>
+      <div className="w-[375px]">
         <div className="flex items-center gap-2 mb-3">
           <div className="w-5 h-px" style={{ background: "var(--primary)" }} />
           <span
@@ -19,7 +19,7 @@ const ContentHeader = (props: IContentHeaderProps) => {
           </span>
         </div>
         <h2
-          className="text-3xl font-bold tracking-tight leading-tight"
+          className="text-2xl font-bold tracking-tight leading-tight"
           style={{
             color: "var(--foreground)",
             fontFamily: "'Georgia', serif",
