@@ -1,4 +1,5 @@
 import AnalyticsStatCard from "@/components/modules/Analytics/AnalyticsStatCard";
+import RevenueChart from "@/components/modules/Analytics/RevenueChart";
 import ContentHeader from "@/components/modules/Shared/ContentHeader/ContentHeader";
 import { Button } from "@/components/ui/button";
 import {
@@ -7,8 +8,17 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ChevronDown, DollarSign, Package, ShoppingBag, Users } from "lucide-react";
+import {
+  ChevronDown,
+  DollarSign,
+  Package,
+  ShoppingBag,
+  Users,
+} from "lucide-react";
+
+
 import { useState } from "react";
+
 
 export default function Analytics() {
   const [period, setPeriod] = useState("This Year");
@@ -20,7 +30,8 @@ export default function Analytics() {
     month: "long",
     year: "numeric",
   });
-  
+
+
 
   return (
     <div className="min-h-screen bg-background">
@@ -50,12 +61,47 @@ export default function Analytics() {
 
         {/* Analytics StatCard */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <AnalyticsStatCard title="Total Revenue" value="$784.2K" change="18.4%" changeType="up" icon={DollarSign} sub="$112K this month" />
-          <AnalyticsStatCard title="Total Orders" value="6,248" change="12.1%" changeType="up" icon={ShoppingBag} sub="861 this month" />
-          <AnalyticsStatCard title="Active Customers" value="18,492" change="9.3%" changeType="up" icon={Users} sub="1,204 new this month" />
-          <AnalyticsStatCard title="Avg. Order Value" value="$125.50" change="3.2%" changeType="down" icon={Package} sub="Down from $129.70" />
+          <AnalyticsStatCard
+            title="Total Revenue"
+            value="$784.2K"
+            change="18.4%"
+            changeType="up"
+            icon={DollarSign}
+            sub="$112K this month"
+          />
+          <AnalyticsStatCard
+            title="Total Orders"
+            value="6,248"
+            change="12.1%"
+            changeType="up"
+            icon={ShoppingBag}
+            sub="861 this month"
+          />
+          <AnalyticsStatCard
+            title="Active Customers"
+            value="18,492"
+            change="9.3%"
+            changeType="up"
+            icon={Users}
+            sub="1,204 new this month"
+          />
+          <AnalyticsStatCard
+            title="Avg. Order Value"
+            value="$125.50"
+            change="3.2%"
+            changeType="down"
+            icon={Package}
+            sub="Down from $129.70"
+          />
         </div>
 
+        {/* Charts row 1 */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+          
+          {/* Revenue chart */}
+          <RevenueChart/>
+          
+        </div>
       </main>
     </div>
   );
