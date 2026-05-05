@@ -4,7 +4,7 @@ import ProductsTablePage from "@/pages/Admin/ProductsTablePage";
 import type { ISidebarItem } from "@/types";
 import { lazy } from "react";
 
-const Analytics = lazy(() => import("@/pages/Admin/AnalyticsPage"));
+const AnalyticsPage = lazy(() => import("@/pages/Admin/AnalyticsPage"));
 const AddProduct = lazy(() => import("@/pages/Admin/AddProduct"));
 const UpdateProduct = lazy(() => import("@/pages/Admin/UpdateProduct"));
 const ProductCategories = lazy(() => import("@/pages/Admin/ProductCategories"));
@@ -19,7 +19,7 @@ export const adminSidebarItems: ISidebarItem[] = [
         {
           title: "Analytics",
           url: "/admin/analytics",
-          component: Analytics
+          component: AnalyticsPage
         }
         
       ],

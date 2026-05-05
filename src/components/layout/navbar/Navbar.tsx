@@ -1,9 +1,7 @@
-import React, { useEffect, useId, useState } from "react";
-import { CircleIcon, Heart, SearchIcon, ShoppingCart } from "lucide-react";
+import { CircleIcon, Heart, ShoppingCart } from "lucide-react";
 import logoImage from "@/assets/images/martizo-logo.png";
 import UserMenu from "@/components/layout/navbar/user-menu";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -13,7 +11,7 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import { Link, useLocation, useNavigate } from "react-router";
+import { Link, useLocation} from "react-router";
 import { ListItem } from "./ListItem";
 import { ModeToggler } from "../MoodToggler";
 import {
@@ -25,46 +23,16 @@ import { useGetCartQuery } from "@/redux/features/cart/cart.api";
 import { useGetProductCategoriesQuery } from "@/redux/features/productCategories/productCategories.api";
 import { useGetAllBrandsQuery } from "@/redux/features/brands/brands.api";
 import { useGetWishlistQuery } from "@/redux/features/wishlist/wishlist.api";
+import SearchBox from "../SearchBox";
 
 
 export default function Navbar() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
-  const navigate = useNavigate();
   const { pathname } = useLocation();
   const { data: categoriesData } = useGetProductCategoriesQuery(undefined);
   const { data: brandsData } = useGetAllBrandsQuery(undefined);
   const { data: cartData, isLoading: cartLoading } = useGetCartQuery(undefined);
   const { data: wishlistData, isLoading: wishlistLoading } =
     useGetWishlistQuery(undefined);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedSearchQuery(searchQuery);
-    }, 300);
-
-    return () => clearTimeout(timer);
-  }, [searchQuery]);
-
-  useEffect(() => {
-    handleSearch(debouncedSearchQuery);
-  }, [debouncedSearchQuery]);
-
-  const handleSearch = (value: string) => {
-    if (value) {
-      navigate(`/products?searchTerm=${value}`);
-    } else {
-      navigate("/");
-    }
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      setDebouncedSearchQuery(searchQuery);
-    }
-  };
-
-  const id = useId();
   const wishlistLength = wishlistData?.items?.length;
 
   const navItems = [
@@ -186,8 +154,7 @@ export default function Navbar() {
   ];
 
   return (
-    <header>
-      
+    <header>     
       <div className="flex flex-col px-4 md:px-6 md:flex-row items-center justify-between gap-4">
         {/* Left side */}
         <div className="flex flex-1 items-center gap-2">
@@ -200,23 +167,7 @@ export default function Navbar() {
         </div>
 
         {/* Middle area */}
-        <div className="grow">
-          {/* Search form */}
-          <div className="relative mx-auto w-full max-w-lg">
-            <Input
-              id={id}
-              className="peer h-12 ps-8 pe-10"
-              placeholder="Search..."
-              type="search"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyDown={handleKeyDown}
-            />
-            <div className="pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-2 text-muted-foreground/80 peer-disabled:opacity-50">
-              <SearchIcon size={16} />
-            </div>
-          </div>
-        </div>
+        <SearchBox/>
 
         {/* Right side */}
         <div className="flex flex-1 items-center justify-end gap-5 md:gap-2">

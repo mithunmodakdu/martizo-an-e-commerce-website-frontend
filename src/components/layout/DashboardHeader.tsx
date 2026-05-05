@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Bell, ChevronDown, Search, Settings } from "lucide-react";
 import { SidebarTrigger } from "../ui/sidebar";
+import SearchBox from "./SearchBox";
 
 const DashboardHeader = () => {
   return (
@@ -12,13 +13,7 @@ const DashboardHeader = () => {
         <SidebarTrigger />
 
         {/* Search */}
-        <div className="hidden md:flex items-center gap-2 bg-muted/60 rounded-xl px-3 py-3 w-1/2 border border-border/40">
-          <Search className="w-3.5 h-3.5 text-muted-foreground" />
-          <Input
-            className="border-0 bg-transparent p-0 text-sm h-auto focus-visible:ring-0 placeholder:text-muted-foreground/70"
-            placeholder="Search orders, products…"
-          />
-        </div>
+        <SearchBox/>
 
         {/* Right */}
         <div className="flex items-center gap-3">

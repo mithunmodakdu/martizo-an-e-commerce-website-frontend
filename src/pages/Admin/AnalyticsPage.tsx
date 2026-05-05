@@ -20,7 +20,7 @@ export default function Analytics() {
     month: "long",
     year: "numeric",
   });
-  console.log(formattedToday);
+  
 
   return (
     <div className="min-h-screen bg-background">
