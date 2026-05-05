@@ -1,4 +1,5 @@
 import AnalyticsStatCard from "@/components/modules/Analytics/AnalyticsStatCard";
+import CategoryPie from "@/components/modules/Analytics/CategoryPie";
 import RevenueChart from "@/components/modules/Analytics/RevenueChart";
 import ContentHeader from "@/components/modules/Shared/ContentHeader/ContentHeader";
 import { Button } from "@/components/ui/button";
@@ -100,6 +101,9 @@ export default function Analytics() {
           
           {/* Revenue chart */}
           <RevenueChart/>
+          
+          {/*Sales by Category Pie */}
+          <CategoryPie/>
           
         </div>
       </main>
