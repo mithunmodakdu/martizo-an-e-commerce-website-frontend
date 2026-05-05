@@ -4,7 +4,6 @@ import { useEffect, useId, useState } from "react";
 import { useNavigate } from "react-router";
 
 const SearchBox = () => {
-  console.log(location)
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
   const navigate = useNavigate();

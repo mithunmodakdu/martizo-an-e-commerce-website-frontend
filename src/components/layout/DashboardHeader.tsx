@@ -1,19 +1,21 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { Bell, ChevronDown, Search, Settings } from "lucide-react";
+import { Bell, Settings, User } from "lucide-react";
 import { SidebarTrigger } from "../ui/sidebar";
 import SearchBox from "./SearchBox";
+import { useGetMeQuery } from "@/redux/features/users/users.api";
 
 const DashboardHeader = () => {
+  const { data: userData } = useGetMeQuery(undefined);
+
   return (
     <header className="sticky top-0 z-30 bg-background/80 backdrop-blur-md border-b border-border/60 px-6 py-3">
       <div className="flex items-center justify-between max-w-screen-2xl mx-auto">
         <SidebarTrigger />
 
         {/* Search */}
-        <SearchBox/>
+        <SearchBox />
 
         {/* Right */}
         <div className="flex items-center gap-3">
@@ -26,21 +28,20 @@ const DashboardHeader = () => {
           </Button>
           <Separator orientation="vertical" className="h-6" />
           <div className="flex items-center gap-2 cursor-pointer">
-            <Avatar className="w-8 h-8">
-              <AvatarImage src="" />
-              <AvatarFallback className="bg-primary/20 text-primary text-xs font-bold">
-                MA
+            <Avatar className="h-10 w-10">
+              <AvatarImage src={userData?.data?.avatar} alt="Profile image" />
+              <AvatarFallback>
+                <User />
               </AvatarFallback>
             </Avatar>
             <div className="hidden md:block">
               <p className="text-sm font-semibold leading-none">
-                Martizo Admin
+                {userData?.data?.name}
               </p>
               <p className="text-xs text-muted-foreground mt-0.5">
-                Super Admin
+                {userData?.data?.email}
               </p>
             </div>
-            <ChevronDown className="w-3.5 h-3.5 text-muted-foreground" />
           </div>
         </div>
       </div>
