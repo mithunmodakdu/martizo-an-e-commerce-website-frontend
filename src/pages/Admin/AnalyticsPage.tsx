@@ -1,6 +1,7 @@
 import AnalyticsStatCard from "@/components/modules/Analytics/AnalyticsStatCard";
 import CategoryPie from "@/components/modules/Analytics/CategoryPie";
 import RevenueChart from "@/components/modules/Analytics/RevenueChart";
+import WeeklyVisitors from "@/components/modules/Analytics/WeeklyVisitors";
 import ContentHeader from "@/components/modules/Shared/ContentHeader/ContentHeader";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,9 +18,7 @@ import {
   Users,
 } from "lucide-react";
 
-
 import { useState } from "react";
-
 
 export default function Analytics() {
   const [period, setPeriod] = useState("This Year");
@@ -31,8 +30,6 @@ export default function Analytics() {
     month: "long",
     year: "numeric",
   });
-
-
 
   return (
     <div className="min-h-screen bg-background">
@@ -98,14 +95,20 @@ export default function Analytics() {
 
         {/* Charts row 1 */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-          
           {/* Revenue chart */}
-          <RevenueChart/>
-          
+          <RevenueChart />
+
           {/*Sales by Category Pie */}
-          <CategoryPie/>
-          
+          <CategoryPie />
         </div>
+
+        {/* Charts row 2 */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <WeeklyVisitors/>
+
+        </div>
+
+
       </main>
     </div>
   );
