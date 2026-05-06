@@ -1,5 +1,6 @@
 import AnalyticsStatCard from "@/components/modules/Analytics/AnalyticsStatCard";
 import CategoryPie from "@/components/modules/Analytics/CategoryPie";
+import RecentOrders from "@/components/modules/Analytics/RecentOrders";
 import RevenueChart from "@/components/modules/Analytics/RevenueChart";
 import TopProducts from "@/components/modules/Analytics/TopProducts";
 import WeeklyVisitors from "@/components/modules/Analytics/WeeklyVisitors";
@@ -110,6 +111,8 @@ export default function Analytics() {
           {/* Top Products */}
           <TopProducts/>
         </div>
+
+        <RecentOrders/>
 
 
       </main>
