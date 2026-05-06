@@ -1,6 +1,7 @@
 import AnalyticsStatCard from "@/components/modules/Analytics/AnalyticsStatCard";
 import CategoryPie from "@/components/modules/Analytics/CategoryPie";
 import RevenueChart from "@/components/modules/Analytics/RevenueChart";
+import TopProducts from "@/components/modules/Analytics/TopProducts";
 import WeeklyVisitors from "@/components/modules/Analytics/WeeklyVisitors";
 import ContentHeader from "@/components/modules/Shared/ContentHeader/ContentHeader";
 import { Button } from "@/components/ui/button";
@@ -104,8 +105,10 @@ export default function Analytics() {
 
         {/* Charts row 2 */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          {/* Weekly Visitors */}
           <WeeklyVisitors/>
-
+          {/* Top Products */}
+          <TopProducts/>
         </div>
 
 
