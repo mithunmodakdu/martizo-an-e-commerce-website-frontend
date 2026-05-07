@@ -1,6 +1,7 @@
 import { AddProductBrand } from "@/components/modules/ProductBrand/AddProductBrand";
 import { UpdateProductBrand } from "@/components/modules/ProductBrand/UpdateProductBrand";
 import ProductsTablePage from "@/pages/Admin/ProductsTablePage";
+import SalesSummaryPage from "@/pages/Admin/SalesSummaryPage";
 import type { ISidebarItem } from "@/types";
 import { lazy } from "react";
 
@@ -20,6 +21,11 @@ export const adminSidebarItems: ISidebarItem[] = [
           title: "Analytics",
           url: "/admin/analytics",
           component: AnalyticsPage
+        },
+        {
+          title: "Sales Summary",
+          url: "/admin/sales-summary",
+          component: SalesSummaryPage
         }
         
       ],
