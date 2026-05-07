@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import DailyRevenueChart from "@/components/modules/SalesSummary/DailyRevenueChart";
+import MonthlyGoal from "@/components/modules/SalesSummary/MonthlyGoal";
 
 export default function SalesSummaryPage() {
   const [period, setPeriod] = useState("This Year");
@@ -49,8 +50,9 @@ export default function SalesSummaryPage() {
       {/* Row 1 — Revenue Chart + Monthly Goal */}
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
         <DailyRevenueChart/>
-
+        <MonthlyGoal/>
       </div>
+      
     </div>
   );
 }
