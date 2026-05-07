@@ -12,6 +12,7 @@ import DailyRevenueChart from "@/components/modules/SalesSummary/DailyRevenueCha
 import MonthlyGoal from "@/components/modules/SalesSummary/MonthlyGoal";
 import ConversionFunnel from "@/components/modules/SalesSummary/ConversionFunnel";
 import SalesByChannel from "@/components/modules/SalesSummary/SalesByChannel";
+import RecentTransactions from "@/components/modules/SalesSummary/RecentTransactions";
 
 export default function SalesSummaryPage() {
   const [period, setPeriod] = useState("This Year");
@@ -60,6 +61,9 @@ export default function SalesSummaryPage() {
         <ConversionFunnel />
         <SalesByChannel />
       </div>
+      
+      {/* Row 3 — Recent Transactions */}
+      <RecentTransactions/>
     </div>
   );
 }
