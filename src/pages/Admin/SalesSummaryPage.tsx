@@ -1,13 +1,17 @@
 import { useState } from "react";
-import {
-  ChevronDown
-} from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import ContentHeader from "@/components/modules/Shared/ContentHeader/ContentHeader";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import DailyRevenueChart from "@/components/modules/SalesSummary/DailyRevenueChart";
 
 export default function SalesSummaryPage() {
-   const [period, setPeriod] = useState("This Year");
+  const [period, setPeriod] = useState("This Year");
 
   const today = new Date();
   const formattedToday = today.toLocaleDateString("en-GB", {
@@ -18,33 +22,35 @@ export default function SalesSummaryPage() {
   });
 
   return (
-    <section className="space-y-5 p-6 bg-background">
-
+    <div className="space-y-5 p-6 bg-background">
       {/* Sales Summary Page Header */}
-        <div className="flex items-start justify-between">
-          <ContentHeader
-            title="Sales Summary"
-            description={`${formattedToday} · All data refreshed 5 minutes ago`}
-          />
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="gap-2 font-medium">
-                {period}
-                <ChevronDown className="w-3.5 h-3.5" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {["Today", "This Week", "This Month", "This Year"].map((p) => (
-                <DropdownMenuItem key={p} onClick={() => setPeriod(p)}>
-                  {p}
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
+      <div className="flex items-start justify-between">
+        <ContentHeader
+          title="Sales Summary"
+          description={`${formattedToday} · All data refreshed 5 minutes ago`}
+        />
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" className="gap-2 font-medium">
+              {period}
+              <ChevronDown className="w-3.5 h-3.5" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            {["Today", "This Week", "This Month", "This Year"].map((p) => (
+              <DropdownMenuItem key={p} onClick={() => setPeriod(p)}>
+                {p}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
 
+      {/* Row 1 — Revenue Chart + Monthly Goal */}
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
+        <DailyRevenueChart/>
 
-
-    </section>
+      </div>
+    </div>
   );
 }
