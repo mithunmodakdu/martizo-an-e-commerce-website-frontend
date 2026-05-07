@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import DailyRevenueChart from "@/components/modules/SalesSummary/DailyRevenueChart";
 import MonthlyGoal from "@/components/modules/SalesSummary/MonthlyGoal";
 import ConversionFunnel from "@/components/modules/SalesSummary/ConversionFunnel";
+import SalesByChannel from "@/components/modules/SalesSummary/SalesByChannel";
 
 export default function SalesSummaryPage() {
   const [period, setPeriod] = useState("This Year");
@@ -50,17 +51,15 @@ export default function SalesSummaryPage() {
 
       {/* Row 1 — Revenue Chart + Monthly Goal */}
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
-        <DailyRevenueChart/>
-        <MonthlyGoal/>
+        <DailyRevenueChart />
+        <MonthlyGoal />
       </div>
 
-        {/* Row 2 — Funnel + Channels */}
+      {/* Row 2 — Funnel + Channels */}
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
-        <ConversionFunnel/>
-
+        <ConversionFunnel />
+        <SalesByChannel />
       </div>
-
-
     </div>
   );
 }
