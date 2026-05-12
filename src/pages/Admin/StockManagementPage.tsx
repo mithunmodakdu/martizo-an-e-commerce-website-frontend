@@ -1,6 +1,15 @@
 import ContentHeader from "@/components/modules/Shared/ContentHeader/ContentHeader";
+import StockBar from "@/components/modules/StockManagement/StockBar";
 import StockStatCard from "@/components/modules/StockManagement/StockStatCard";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -9,18 +18,30 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Table, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { cn } from "@/lib/utils";
 import {
   AlertTriangle,
   ArrowUpDown,
   ChevronDown,
   ChevronUp,
   Download,
+  Edit2,
+  Eye,
   Filter,
+  MoreHorizontal,
   Package,
   Plus,
   RefreshCw,
   Search,
+  Trash2,
   TrendingDown,
   TrendingUp,
   X,
@@ -49,6 +70,32 @@ interface IStockItem {
   lastUpdated: string;
   status: IStockStatus;
 }
+
+const STATUS_CONFIG: Record<
+  IStockStatus,
+  { label: string; className: string }
+> = {
+  in_stock: {
+    label: "In Stock",
+    className:
+      "bg-emerald-100 text-emerald-700 border-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-400 dark:border-emerald-800",
+  },
+  low_stock: {
+    label: "Low Stock",
+    className:
+      "bg-amber-100 text-amber-700 border-amber-200 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-800",
+  },
+  out_of_stock: {
+    label: "Out of Stock",
+    className:
+      "bg-red-100 text-red-600 border-red-200 dark:bg-red-900/30 dark:text-red-400 dark:border-red-800",
+  },
+  overstocked: {
+    label: "Overstocked",
+    className:
+      "bg-blue-100 text-blue-700 border-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:border-blue-800",
+  },
+};
 
 const CATEGORIES: ICategory[] = [
   "Electronics",
@@ -427,6 +474,104 @@ export default function StockManagementPage() {
                 <TableHead className="w-10" />
               </TableRow>
             </TableHeader>
+            {/* Table Body */}
+            <TableBody>
+              {filtered.length === 0 ? (
+                <TableRow>
+                  <TableCell
+                    colSpan={9}
+                    className="text-center py-12 text-sm text-muted-foreground"
+                  >
+                    No items match your filters.
+                  </TableCell>
+                </TableRow>
+              ) : (
+                filtered.map((item) => {
+                  const s = STATUS_CONFIG[item.status];
+                  return (
+                    <TableRow
+                      key={item.id}
+                      className="group border-border hover:bg-muted/40 transition-colors"
+                    >
+                      <TableCell className="text-xs font-mono text-muted-foreground py-3">
+                        {item.sku}
+                      </TableCell>
+                      <TableCell className="py-3">
+                        <span className="text-sm font-medium leading-tight">
+                          {item.name}
+                        </span>
+                      </TableCell>
+                      <TableCell className="py-3">
+                        <span className="text-xs text-muted-foreground">
+                          {item.category}
+                        </span>
+                      </TableCell>
+                      <TableCell className="py-3 min-w-[140px]">
+                        <StockBar
+                          quantity={item.quantity}
+                          min={item.minThreshold}
+                          max={item.maxThreshold}
+                        />
+                      </TableCell>
+                      <TableCell className="py-3 text-sm font-mono tabular-nums">
+                        ${item.unitPrice.toFixed(2)}
+                      </TableCell>
+                      <TableCell className="py-3">
+                        <Badge
+                          variant="outline"
+                          className={cn(
+                            "text-[10px] font-medium px-2 py-0.5 rounded-md",
+                            s.className,
+                          )}
+                        >
+                          {s.label}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="py-3 text-xs text-muted-foreground max-w-[140px] truncate">
+                        {item.supplier}
+                      </TableCell>
+                      <TableCell className="py-3 text-xs text-muted-foreground font-mono">
+                        {item.lastUpdated}
+                      </TableCell>
+                      <TableCell className="py-3">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-7 w-7 opacity-0 group-hover:opacity-100 transition-opacity"
+                            >
+                              <MoreHorizontal className="h-3.5 w-3.5" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent
+                            align="end"
+                            className="text-sm w-36"
+                          >
+                            <DropdownMenuItem className="gap-2 text-xs cursor-pointer">
+                              <Eye className="h-3.5 w-3.5" /> View Details
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              className="gap-2 text-xs cursor-pointer"
+                              // onClick={() => openEdit(item)}
+                            >
+                              <Edit2 className="h-3.5 w-3.5" /> Edit
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem
+                              className="gap-2 text-xs cursor-pointer text-destructive focus:text-destructive"
+                              // onClick={() => handleDelete(item.id)}
+                            >
+                              <Trash2 className="h-3.5 w-3.5" /> Delete
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })
+              )}
+            </TableBody>
           </Table>
         </div>
       </div>
