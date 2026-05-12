@@ -574,6 +574,29 @@ export default function StockManagementPage() {
             </TableBody>
           </Table>
         </div>
+
+        {/* table footer */}
+        <div className="flex items-center justify-between px-4 py-3 border-t border-border text-xs text-muted-foreground">
+          <span>
+            Showing{" "}
+            <span className="font-medium text-foreground">
+              {filtered.length}
+            </span>{" "}
+            items
+          </span>
+          <span className="font-mono">
+            Total value:{" "}
+            <span className="text-foreground font-semibold">
+              $
+              {filtered
+                .reduce((s, i) => s + i.quantity * i.unitPrice, 0)
+                .toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+            </span>
+          </span>
+        </div>
       </div>
     </div>
   );
