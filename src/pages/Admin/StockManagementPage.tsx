@@ -2,9 +2,19 @@ import ContentHeader from "@/components/modules/Shared/ContentHeader/ContentHead
 import StockStatCard from "@/components/modules/StockManagement/StockStatCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Table, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import {
   AlertTriangle,
+  ArrowUpDown,
+  ChevronDown,
+  ChevronUp,
   Download,
   Filter,
   Package,
@@ -40,7 +50,14 @@ interface IStockItem {
   status: IStockStatus;
 }
 
-const CATEGORIES: ICategory[] = ["Electronics", "Clothing", "Food & Beverage", "Furniture", "Tools", "Beauty"];
+const CATEGORIES: ICategory[] = [
+  "Electronics",
+  "Clothing",
+  "Food & Beverage",
+  "Furniture",
+  "Tools",
+  "Beauty",
+];
 
 const INITIAL_DATA: IStockItem[] = [
   {
@@ -225,22 +242,52 @@ export default function StockManagementPage() {
     let rows = [...items];
     if (search) {
       const q = search.toLowerCase();
-      rows = rows.filter((r) => r.name.toLowerCase().includes(q) || r.sku.toLowerCase().includes(q) || r.supplier.toLowerCase().includes(q));
+      rows = rows.filter(
+        (r) =>
+          r.name.toLowerCase().includes(q) ||
+          r.sku.toLowerCase().includes(q) ||
+          r.supplier.toLowerCase().includes(q),
+      );
     }
-    if (categoryFilter !== "all") rows = rows.filter((r) => r.category === categoryFilter);
-    if (statusFilter !== "all") rows = rows.filter((r) => r.status === statusFilter);
+    if (categoryFilter !== "all")
+      rows = rows.filter((r) => r.category === categoryFilter);
+    if (statusFilter !== "all")
+      rows = rows.filter((r) => r.status === statusFilter);
     rows.sort((a, b) => {
-      const av = a[sortKey], bv = b[sortKey];
+      const av = a[sortKey],
+        bv = b[sortKey];
       const cmp = av < bv ? -1 : av > bv ? 1 : 0;
       return sortDir === "asc" ? cmp : -cmp;
     });
     return rows;
   }, [items, search, categoryFilter, statusFilter, sortKey, sortDir]);
 
+  const clearFilters = () => {
+    setSearch("");
+    setCategoryFilter("all");
+    setStatusFilter("all");
+  };
+  const hasFilters =
+    search || categoryFilter !== "all" || statusFilter !== "all";
 
+  const toggleSort = (key: keyof IStockItem) => {
+    if (sortKey === key) setSortDir((d) => (d === "asc" ? "desc" : "asc"));
+    else {
+      setSortKey(key);
+      setSortDir("asc");
+    }
+  };
 
-  const clearFilters = () => { setSearch(""); setCategoryFilter("all"); setStatusFilter("all"); };
-  const hasFilters = search || categoryFilter !== "all" || statusFilter !== "all";
+  const SortIcon = ({ col }: { col: keyof IStockItem }) =>
+    sortKey === col ? (
+      sortDir === "asc" ? (
+        <ChevronUp className="h-4 w-4" />
+      ) : (
+        <ChevronDown className="h-4 w-4" />
+      )
+    ) : (
+      <ArrowUpDown className="h-4 w-4 opacity-50" />
+    );
 
   return (
     <div className="min-h-screen bg-background p-6 space-y-6 font-sans">
@@ -347,6 +394,40 @@ export default function StockManagementPage() {
           <span className="ml-auto text-xs text-muted-foreground tabular-nums">
             {filtered.length} of {items.length} items
           </span>
+        </div>
+
+        {/* table */}
+        <div className="overflow-x-auto">
+          <Table>
+            {/* Table Header */}
+            <TableHeader>
+              <TableRow className="hover:bg-transparent border-border">
+                {[
+                  { key: "sku" as keyof IStockItem, label: "SKU" },
+                  { key: "name" as keyof IStockItem, label: "Product" },
+                  { key: "category" as keyof IStockItem, label: "Category" },
+                  { key: "quantity" as keyof IStockItem, label: "Stock Level" },
+                  { key: "unitPrice" as keyof IStockItem, label: "Unit Price" },
+                  { key: "status" as keyof IStockItem, label: "Status" },
+                  { key: "supplier" as keyof IStockItem, label: "Supplier" },
+                  { key: "lastUpdated" as keyof IStockItem, label: "Updated" },
+                ].map(({ key, label }) => (
+                  <TableHead
+                    key={key}
+                    className="text-sm font-semibold uppercase tracking-wider text-muted-foreground h-10 whitespace-nowrap"
+                  >
+                    <button
+                      className="flex items-center gap-1 hover:text-foreground transition-colors"
+                      onClick={() => toggleSort(key)}
+                    >
+                      {label} <SortIcon col={key} />
+                    </button>
+                  </TableHead>
+                ))}
+                <TableHead className="w-10" />
+              </TableRow>
+            </TableHeader>
+          </Table>
         </div>
       </div>
     </div>
