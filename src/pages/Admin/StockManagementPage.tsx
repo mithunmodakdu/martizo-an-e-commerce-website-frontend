@@ -1,14 +1,19 @@
 import ContentHeader from "@/components/modules/Shared/ContentHeader/ContentHeader";
 import StockStatCard from "@/components/modules/StockManagement/StockStatCard";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
   AlertTriangle,
   Download,
+  Filter,
   Package,
   Plus,
   RefreshCw,
+  Search,
   TrendingDown,
   TrendingUp,
+  X,
 } from "lucide-react";
 import { useMemo, useState } from "react";
 
@@ -25,15 +30,17 @@ interface IStockItem {
   id: string;
   sku: string;
   name: string;
-  category: Category;
+  category: ICategory;
   quantity: number;
   minThreshold: number;
   maxThreshold: number;
   unitPrice: number;
   supplier: string;
   lastUpdated: string;
-  status: StockStatus;
+  status: IStockStatus;
 }
+
+const CATEGORIES: ICategory[] = ["Electronics", "Clothing", "Food & Beverage", "Furniture", "Tools", "Beauty"];
 
 const INITIAL_DATA: IStockItem[] = [
   {
@@ -196,6 +203,12 @@ const INITIAL_DATA: IStockItem[] = [
 
 export default function StockManagementPage() {
   const [items, setItems] = useState<IStockItem[]>(INITIAL_DATA);
+  const [search, setSearch] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState<string>("all");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [sortKey, setSortKey] = useState<keyof IStockItem>("name");
+  const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
+
   // ── Stats
   const stats = useMemo(() => {
     const totalSKUs = items.length;
@@ -207,9 +220,31 @@ export default function StockManagementPage() {
     return { totalSKUs, totalValue, alerts, overstocked };
   }, [items]);
 
+  // ── Filtered + sorted rows
+  const filtered = useMemo(() => {
+    let rows = [...items];
+    if (search) {
+      const q = search.toLowerCase();
+      rows = rows.filter((r) => r.name.toLowerCase().includes(q) || r.sku.toLowerCase().includes(q) || r.supplier.toLowerCase().includes(q));
+    }
+    if (categoryFilter !== "all") rows = rows.filter((r) => r.category === categoryFilter);
+    if (statusFilter !== "all") rows = rows.filter((r) => r.status === statusFilter);
+    rows.sort((a, b) => {
+      const av = a[sortKey], bv = b[sortKey];
+      const cmp = av < bv ? -1 : av > bv ? 1 : 0;
+      return sortDir === "asc" ? cmp : -cmp;
+    });
+    return rows;
+  }, [items, search, categoryFilter, statusFilter, sortKey, sortDir]);
+
+
+
+  const clearFilters = () => { setSearch(""); setCategoryFilter("all"); setStatusFilter("all"); };
+  const hasFilters = search || categoryFilter !== "all" || statusFilter !== "all";
+
   return (
     <div className="min-h-screen bg-background p-6 space-y-6 font-sans">
-      {/* ── Header */}
+      {/* Header */}
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <ContentHeader
           title="Stock Management"
@@ -228,7 +263,7 @@ export default function StockManagementPage() {
         </div>
       </div>
 
-      {/* ── Stat Cards */}
+      {/* Stock Stat Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <StockStatCard
           label="Total SKUs"
@@ -258,6 +293,61 @@ export default function StockManagementPage() {
           icon={TrendingDown}
           accent="bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400"
         />
+      </div>
+
+      {/* ── Table Card */}
+      <div className="rounded-xl border border-border bg-card">
+        {/* toolbar */}
+        <div className="flex items-center gap-3 p-4 border-b border-border flex-wrap">
+          <div className="relative flex-1 min-w-[200px] max-w-xs">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+            <Input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search SKU, name, supplier…"
+              className="pl-8 h-8 text-xs"
+            />
+          </div>
+          <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+            <SelectTrigger className="h-8 text-xs w-[150px]">
+              <Filter className="h-3 w-3 mr-1.5 text-muted-foreground" />
+              <SelectValue placeholder="Category" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Categories</SelectItem>
+              {CATEGORIES.map((c) => (
+                <SelectItem key={c} value={c}>
+                  {c}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Select value={statusFilter} onValueChange={setStatusFilter}>
+            <SelectTrigger className="h-8 text-xs w-[140px]">
+              <SelectValue placeholder="Status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Statuses</SelectItem>
+              <SelectItem value="in_stock">In Stock</SelectItem>
+              <SelectItem value="low_stock">Low Stock</SelectItem>
+              <SelectItem value="out_of_stock">Out of Stock</SelectItem>
+              <SelectItem value="overstocked">Overstocked</SelectItem>
+            </SelectContent>
+          </Select>
+          {hasFilters && (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-8 text-xs gap-1 text-muted-foreground"
+              onClick={clearFilters}
+            >
+              <X className="h-3 w-3" /> Clear
+            </Button>
+          )}
+          <span className="ml-auto text-xs text-muted-foreground tabular-nums">
+            {filtered.length} of {items.length} items
+          </span>
+        </div>
       </div>
     </div>
   );
