@@ -18,7 +18,7 @@ export type TOrderStatus =
   | "cancelled"
   | "refunded";
 
-export type TSortField =
+export type TOrderSortField =
   | "orderId"
   | "customer"
   | "date"
