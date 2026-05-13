@@ -40,3 +40,13 @@ export interface IOrder {
   status: TOrderStatus;
   paymentMethod: string;
 }
+
+export interface IOrderSortableHeaderProps {
+  field: TOrderSortField;
+  label: string;
+  sortField: TOrderSortField;
+  sortDir: TSortDirection;
+  onSort: (field: TOrderSortField) => void;
+  className?: string;
+}
+
