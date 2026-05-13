@@ -27,11 +27,12 @@ import {
   Save,
   X,
 } from "lucide-react";
-import { StatCard } from "@/components/modules/User/StatCard";
 import PersonalInfoCard from "@/components/modules/User/PersonalInfoCard";
 import LoyaltyCard from "@/components/modules/User/LoyaltyCard";
 import { OrderRow } from "@/components/modules/User/OrderRow";
 import { AddressCard } from "@/components/modules/User/AddressCard";
+import type { IStatCard } from "@/components/modules/Shared/StatCard";
+import StatCard from "@/components/modules/Shared/StatCard";
 
 const user = {
   name: "Rayan Chowdhury",
@@ -51,6 +52,30 @@ const stats = [
   { label: "Reviews", value: "9", icon: Star },
   { label: "Points", value: "3,240", icon: Shield },
 ];
+
+ const statItems: IStatCard[] = [
+    {
+      title: "Orders",
+      value: "48",
+      icon: <ShoppingBag className="h-5 w-5 bg-primary"/>,
+    },
+    {
+      title: "Wishlist",
+      value: "12",
+      icon: <Heart className="h-5 w-5 bg-primary"/>,
+    },
+    {
+      title: "Reviews",
+      value: "9",
+      icon: <Star className="h-5 w-5 bg-primary"/>,
+    },
+    {
+      title: "Points",
+      value: "3,240",
+      icon: <Shield className="h-5 w-5 bg-primary"/>,
+    },
+
+  ];
 
 const notificationPrefs = [
   {
@@ -198,8 +223,8 @@ export default function UserProfilePage() {
               </Button>
             </div>
             <div className="grid grid-cols-4 gap-3">
-              {stats.map((stat) => (
-                <StatCard key={stat.label} {...stat} />
+              {statItems.map((item) => (
+                <StatCard key={item.title} item={item} />
               ))}
             </div>
           </CardContent>

@@ -1,5 +1,6 @@
 import { AddProductBrand } from "@/components/modules/ProductBrand/AddProductBrand";
 import { UpdateProductBrand } from "@/components/modules/ProductBrand/UpdateProductBrand";
+import AllOrdersPage from "@/pages/Admin/AllOrdersPage";
 import ProductsTablePage from "@/pages/Admin/ProductsTablePage";
 import SalesSummaryPage from "@/pages/Admin/SalesSummaryPage";
 import StockManagementPage from "@/pages/Admin/StockManagementPage";
@@ -77,5 +78,16 @@ export const adminSidebarItems: ISidebarItem[] = [
   
       ],
     },
+    {
+      title: "Orders Management",
+      url: "#",
+      items: [
+        {
+          title: "All Orders",
+          url: "/admin/all-orders",
+          component: AllOrdersPage
+        }
+      ]
+    }
    
   ]

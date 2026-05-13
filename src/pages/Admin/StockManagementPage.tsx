@@ -1,6 +1,7 @@
 import ContentHeader from "@/components/modules/Shared/ContentHeader/ContentHeader";
+import type { IStatCard } from "@/components/modules/Shared/StatCard";
+import StatCard from "@/components/modules/Shared/StatCard";
 import StockBar from "@/components/modules/StockManagement/StockBar";
-import StockStatCard from "@/components/modules/StockManagement/StockStatCard";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -284,6 +285,38 @@ export default function StockManagementPage() {
     return { totalSKUs, totalValue, alerts, overstocked };
   }, [items]);
 
+   const statItems: IStatCard[] = [
+    {
+      title: "Total SKUs",
+      value: String(stats.totalSKUs),
+      icon: <Package/>,
+      sub: "Active product lines",
+      accent:"bg-primary/10 text-primary" 
+    },
+    {
+      title: "Stock Value",
+      value: `BDT ${String(stats.totalValue)}`,
+      icon: <TrendingUp/>,
+      sub: "Total inventory cost",
+      accent:"bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400" 
+    },
+    {
+      title: "Alerts",
+      value: String(stats.alerts),
+      icon: <AlertTriangle/>,
+      sub: "Low / out of stock",
+      accent:"bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400"
+    },
+    {
+      title: "Overstocked",
+      value: String(stats.overstocked),
+      icon: <TrendingDown/>,
+      sub: "Exceeds max threshold",
+      accent:"bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400"
+    },
+
+  ];
+
   // ── Filtered + sorted rows
   const filtered = useMemo(() => {
     let rows = [...items];
@@ -359,34 +392,11 @@ export default function StockManagementPage() {
 
       {/* Stock Stat Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <StockStatCard
-          label="Total SKUs"
-          value={stats.totalSKUs}
-          sub="Active product lines"
-          icon={Package}
-          accent="bg-primary/10 text-primary"
-        />
-        <StockStatCard
-          label="Stock Value"
-          value={`$${stats.totalValue.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`}
-          sub="Total inventory cost"
-          icon={TrendingUp}
-          accent="bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400"
-        />
-        <StockStatCard
-          label="Alerts"
-          value={stats.alerts}
-          sub="Low / out of stock"
-          icon={AlertTriangle}
-          accent="bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400"
-        />
-        <StockStatCard
-          label="Overstocked"
-          value={stats.overstocked}
-          sub="Exceeds max threshold"
-          icon={TrendingDown}
-          accent="bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400"
-        />
+        {
+          statItems.map((item) => (
+            <StatCard key={item.title} item={item}/>
+          ))
+        }
       </div>
 
       {/* ── Table Card */}

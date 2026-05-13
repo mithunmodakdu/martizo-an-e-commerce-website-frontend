@@ -1,10 +1,12 @@
-import AnalyticsStatCard from "@/components/modules/Analytics/AnalyticsStatCard";
+// import AnalyticsStatCard from "@/components/modules/Analytics/AnalyticsStatCard";
 import CategoryPie from "@/components/modules/Analytics/CategoryPie";
 import RecentOrders from "@/components/modules/Analytics/RecentOrders";
 import RevenueChart from "@/components/modules/Analytics/RevenueChart";
 import TopProducts from "@/components/modules/Analytics/TopProducts";
 import WeeklyVisitors from "@/components/modules/Analytics/WeeklyVisitors";
 import ContentHeader from "@/components/modules/Shared/ContentHeader/ContentHeader";
+import type { IStatCard } from "@/components/modules/Shared/StatCard";
+import StatCard from "@/components/modules/Shared/StatCard";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -32,6 +34,41 @@ export default function Analytics() {
     month: "long",
     year: "numeric",
   });
+
+  const statItems: IStatCard[] = [
+    {
+      title: "Total Revenue",
+      value: "$784.2K",
+      change: "18.4%",
+      changeType: "up",
+      icon: <DollarSign/>,
+      sub: "$112K this month",
+    },
+    {
+      title: "Total Orders",
+      value: "6,248",
+      change: "12.1%",
+      changeType: "up",
+      icon: <ShoppingBag/>,
+      sub: "861 this month",
+    },
+    {
+      title: "Active Customers",
+      value: "18,492",
+      change: "9.3%",
+      changeType: "up",
+      icon: <Users/>,
+      sub: "1,204 new this month",
+    },
+    {
+      title: "Avg. Order Value",
+      value: "$125.50",
+      change: "3.2%",
+      changeType: "down",
+      icon: <Package/>,
+      sub: "Down from $129.70",
+    },
+  ];
 
   return (
     <div className="min-h-screen bg-background">
@@ -61,38 +98,11 @@ export default function Analytics() {
 
         {/* Analytics StatCard */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <AnalyticsStatCard
-            title="Total Revenue"
-            value="$784.2K"
-            change="18.4%"
-            changeType="up"
-            icon={DollarSign}
-            sub="$112K this month"
-          />
-          <AnalyticsStatCard
-            title="Total Orders"
-            value="6,248"
-            change="12.1%"
-            changeType="up"
-            icon={ShoppingBag}
-            sub="861 this month"
-          />
-          <AnalyticsStatCard
-            title="Active Customers"
-            value="18,492"
-            change="9.3%"
-            changeType="up"
-            icon={Users}
-            sub="1,204 new this month"
-          />
-          <AnalyticsStatCard
-            title="Avg. Order Value"
-            value="$125.50"
-            change="3.2%"
-            changeType="down"
-            icon={Package}
-            sub="Down from $129.70"
-          />
+          {
+            statItems?.map(item => (
+              <StatCard key={item.title} item={item}/>
+            ))
+          }
         </div>
 
         {/* Charts row 1 */}
@@ -107,14 +117,12 @@ export default function Analytics() {
         {/* Charts row 2 */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           {/* Weekly Visitors */}
-          <WeeklyVisitors/>
+          <WeeklyVisitors />
           {/* Top Products */}
-          <TopProducts/>
+          <TopProducts />
         </div>
 
-        <RecentOrders/>
-
-
+        <RecentOrders />
       </main>
     </div>
   );
