@@ -41,7 +41,7 @@ export default function Analytics() {
       value: "$784.2K",
       change: "18.4%",
       changeType: "up",
-      icon: DollarSign,
+      icon: <DollarSign/>,
       sub: "$112K this month",
     },
     {
@@ -49,7 +49,7 @@ export default function Analytics() {
       value: "6,248",
       change: "12.1%",
       changeType: "up",
-      icon: ShoppingBag,
+      icon: <ShoppingBag/>,
       sub: "861 this month",
     },
     {
@@ -57,7 +57,7 @@ export default function Analytics() {
       value: "18,492",
       change: "9.3%",
       changeType: "up",
-      icon: Users,
+      icon: <Users/>,
       sub: "1,204 new this month",
     },
     {
@@ -65,7 +65,7 @@ export default function Analytics() {
       value: "$125.50",
       change: "3.2%",
       changeType: "down",
-      icon: Package,
+      icon: <Package/>,
       sub: "Down from $129.70",
     },
   ];

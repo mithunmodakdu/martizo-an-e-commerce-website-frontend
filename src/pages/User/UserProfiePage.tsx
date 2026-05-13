@@ -57,22 +57,22 @@ const stats = [
     {
       title: "Orders",
       value: "48",
-      icon: ShoppingBag,
+      icon: <ShoppingBag className="h-5 w-5 bg-primary"/>,
     },
     {
       title: "Wishlist",
       value: "12",
-      icon: Heart,
+      icon: <Heart className="h-5 w-5 bg-primary"/>,
     },
     {
       title: "Reviews",
       value: "9",
-      icon: Star,
+      icon: <Star className="h-5 w-5 bg-primary"/>,
     },
     {
       title: "Points",
       value: "3,240",
-      icon: Shield,
+      icon: <Shield className="h-5 w-5 bg-primary"/>,
     },
 
   ];

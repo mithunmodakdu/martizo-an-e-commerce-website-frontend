@@ -4,11 +4,12 @@ import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 
 export interface IStatCard {
   title: string;
-  value: string;
+  value: string | number;
   change?: string | undefined;
   changeType?: "up" | "down" | undefined;
-  icon: React.ElementType;
+  icon: React.ReactNode;
   sub?: string | undefined;
+  accent?: string | undefined;
 }
 
 const StatCard = ({
@@ -20,8 +21,9 @@ const StatCard = ({
   value,
   change,
   changeType,
-  icon: Icon,
-  sub} = item;
+  icon,
+  sub,
+accent} = item;
 
   const isUp = changeType === "up";
   return (
@@ -36,8 +38,8 @@ const StatCard = ({
             </p>
             {sub && <p className="text-xs text-muted-foreground">{sub}</p>}
           </div>
-          <div className="p-2.5 rounded-xl bg-primary/10">
-            <Icon className="w-5 h-5 text-primary" />
+          <div className={`p-2.5 rounded-xl bg-primary/10 ${accent && accent}`}>
+           {icon}
           </div>
         </div>
         {change && (<div className="mt-4 flex items-center gap-1.5">

@@ -289,26 +289,30 @@ export default function StockManagementPage() {
     {
       title: "Total SKUs",
       value: String(stats.totalSKUs),
-      icon: Package,
-      sub: "Active product lines"
+      icon: <Package/>,
+      sub: "Active product lines",
+      accent:"bg-primary/10 text-primary" 
     },
     {
       title: "Stock Value",
       value: `BDT ${String(stats.totalValue)}`,
-      icon: TrendingUp,
-      sub: "Total inventory cost"
+      icon: <TrendingUp/>,
+      sub: "Total inventory cost",
+      accent:"bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400" 
     },
     {
       title: "Alerts",
       value: String(stats.alerts),
-      icon: AlertTriangle,
-      sub: "Low / out of stock"
+      icon: <AlertTriangle/>,
+      sub: "Low / out of stock",
+      accent:"bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400"
     },
     {
       title: "Overstocked",
       value: String(stats.overstocked),
-      icon: TrendingDown,
-      sub: "Exceeds max threshold"
+      icon: <TrendingDown/>,
+      sub: "Exceeds max threshold",
+      accent:"bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400"
     },
 
   ];
