@@ -1,10 +1,13 @@
 import { ORDER_STATUS_CONFIG } from "@/components/modules/Order/order.constants";
 import type {
   IOrder,
+  TOrderSortField,
   TOrderStatus,
+  TSortDirection,
 } from "@/components/modules/Order/order.interface";
 import ContentHeader from "@/components/modules/Shared/ContentHeader/ContentHeader";
 import StatCard from "@/components/modules/Shared/StatCard";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -13,12 +16,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import {
   CheckCircle2,
   Clock,
+  Download,
   Filter,
   Package,
   Search,
+  Trash2,
   TrendingUp,
 } from "lucide-react";
 import { useMemo, useState } from "react";
@@ -247,8 +254,13 @@ const ORDERS_DATA: IOrder[] = [
 ];
 
 const AllOrdersPage = () => {
-  const [search, setSearch] = useState("");
+ const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [sortField, setSortField] = useState<TOrderSortField>("date");
+  const [sortDir, setSortDir] = useState<TSortDirection>("desc");
+  
+
+  // ── stats ──
   const stats = useMemo(() => {
     const total = ORDERS_DATA.length;
     const revenue = ORDERS_DATA.reduce((s, o) => s + o.total, 0);
@@ -292,6 +304,54 @@ const AllOrdersPage = () => {
     },
   ];
 
+    // ── Filtering ──
+  const filteredOrders = useMemo(() => {
+    let data = [...ORDERS_DATA];
+
+    if (search.trim()) {
+      const q = search.toLowerCase();
+      data = data.filter(
+        (o) =>
+          o.orderId.toLowerCase().includes(q) ||
+          o.customer.toLowerCase().includes(q) ||
+          o.email.toLowerCase().includes(q)
+      );
+    }
+
+    if (statusFilter !== "all") {
+      data = data.filter((o) => o.status === statusFilter);
+    }
+
+    if (sortField) {
+      data.sort((a, b) => {
+        let aVal: string | number = "";
+        let bVal: string | number = "";
+        
+        switch (sortField) {
+          case "orderId": aVal = a.orderId; bVal = b.orderId; break;
+          case "customer": aVal = a.customer; bVal = b.customer; break;
+          case "date": aVal = a.date; bVal = b.date; break;
+          case "total": aVal = a.total; bVal = b.total; break;
+          case "items": aVal = a.items; bVal = b.items; break;
+          case "status": aVal = a.status; bVal = b.status; break;
+        }
+
+        if (typeof aVal === "number" && typeof bVal === "number") {
+          return sortDir === "asc" ? aVal - bVal : bVal - aVal;
+        }
+
+        return sortDir === "asc"
+          ? String(aVal).localeCompare(String(bVal))
+          : String(bVal).localeCompare(String(aVal));
+      });
+    }
+
+    return data;
+  }, [search, statusFilter, sortField, sortDir]);
+
+
+
+
   const handleSearchChange = (v: string) => {
     setSearch(v);
   };
@@ -299,6 +359,9 @@ const AllOrdersPage = () => {
   const handleStatusFilter = (v: string) => {
     setStatusFilter(v);
   };
+
+ 
+
 
   return (
     <div className="space-y-5">
@@ -360,6 +423,9 @@ const AllOrdersPage = () => {
               </SelectContent>
             </Select>
           </div>
+
+           
+
 
         </div>
       </section>
