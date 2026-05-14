@@ -1,8 +1,38 @@
-import type { IOrder } from "@/components/modules/Order/order.interface";
+import { ORDER_STATUS_CONFIG } from "@/components/modules/Order/order.constants";
+import type {
+  IOrder,
+  TOrderSortField,
+  TOrderStatus,
+  TSortDirection,
+} from "@/components/modules/Order/order.interface";
 import ContentHeader from "@/components/modules/Shared/ContentHeader/ContentHeader";
 import StatCard from "@/components/modules/Shared/StatCard";
-import { CheckCircle2, Clock, Package, TrendingUp } from "lucide-react";
-import { useMemo } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
+  CheckCircle2,
+  Clock,
+  Download,
+  Filter,
+  Package,
+  Search,
+  Trash2,
+  TrendingUp,
+} from "lucide-react";
+import { useMemo, useState } from "react";
 
 const ORDERS_DATA: IOrder[] = [
   {
@@ -228,6 +258,13 @@ const ORDERS_DATA: IOrder[] = [
 ];
 
 const AllOrdersPage = () => {
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [sortField, setSortField] = useState<TOrderSortField>("date");
+  const [sortDir, setSortDir] = useState<TSortDirection>("desc");
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+
+  // ── stats ──
   const stats = useMemo(() => {
     const total = ORDERS_DATA.length;
     const revenue = ORDERS_DATA.reduce((s, o) => s + o.total, 0);
@@ -271,8 +308,112 @@ const AllOrdersPage = () => {
     },
   ];
 
+  // ── Filtering ──
+  const filteredOrders = useMemo(() => {
+    let data = [...ORDERS_DATA];
+
+    if (search.trim()) {
+      const q = search.toLowerCase();
+      data = data.filter(
+        (o) =>
+          o.orderId.toLowerCase().includes(q) ||
+          o.customer.toLowerCase().includes(q) ||
+          o.email.toLowerCase().includes(q),
+      );
+    }
+
+    if (statusFilter !== "all") {
+      data = data.filter((o) => o.status === statusFilter);
+    }
+
+    if (sortField) {
+      data.sort((a, b) => {
+        let aVal: string | number = "";
+        let bVal: string | number = "";
+
+        switch (sortField) {
+          case "orderId":
+            aVal = a.orderId;
+            bVal = b.orderId;
+            break;
+          case "customer":
+            aVal = a.customer;
+            bVal = b.customer;
+            break;
+          case "date":
+            aVal = a.date;
+            bVal = b.date;
+            break;
+          case "total":
+            aVal = a.total;
+            bVal = b.total;
+            break;
+          case "items":
+            aVal = a.items;
+            bVal = b.items;
+            break;
+          case "status":
+            aVal = a.status;
+            bVal = b.status;
+            break;
+        }
+
+        if (typeof aVal === "number" && typeof bVal === "number") {
+          return sortDir === "asc" ? aVal - bVal : bVal - aVal;
+        }
+
+        return sortDir === "asc"
+          ? String(aVal).localeCompare(String(bVal))
+          : String(bVal).localeCompare(String(aVal));
+      });
+    }
+
+    return data;
+  }, [search, statusFilter, sortField, sortDir]);
+
+  const handleSearchChange = (v: string) => {
+    setSearch(v);
+  };
+
+  const handleStatusFilter = (v: string) => {
+    setStatusFilter(v);
+  };
+
+  const handleExport = () => {
+    const headers = [
+      "Order ID",
+      "Customer",
+      "Email",
+      "Date",
+      "Items",
+      "Total",
+      "Status",
+      "Payment",
+    ];
+    const rows = filteredOrders.map((o) =>
+      [
+        o.orderId,
+        o.customer,
+        o.email,
+        o.date,
+        o.items,
+        `$${o.total.toFixed(2)}`,
+        o.status,
+        o.paymentMethod,
+      ].join(","),
+    );
+    const csv = [headers.join(","), ...rows].join("\n");
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "orders.csv";
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   return (
-    <div>
+    <div className="space-y-5">
       {/* Page Header */}
       <ContentHeader
         title="All Orders"
@@ -288,6 +429,86 @@ const AllOrdersPage = () => {
           <StatCard key={item.title} item={item} />
         ))}
       </div>
+
+      {/* Table Card */}
+      <section
+        aria-label="Orders table"
+        className="rounded-xl border border-border bg-card shadow-sm overflow-hidden"
+      >
+        {/* Toolbar */}
+        <div className="flex flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:justify-between border-b border-border">
+          <div className="flex flex-1 items-center gap-5">
+            {/* search */}
+            <div className="relative flex-1 max-w-xs">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+              <Input
+                type="search"
+                placeholder="Search orders…"
+                value={search}
+                onChange={(e) => handleSearchChange(e.target.value)}
+                className="pl-9 h-9 text-sm"
+                aria-label="Search orders"
+              />
+            </div>
+
+            {/* Status Filter */}
+            <Select value={statusFilter} onValueChange={handleStatusFilter}>
+              <SelectTrigger
+                className="h-9 w-38 text-sm"
+                aria-label="Filter by status"
+              >
+                <Filter className="h-3.5 w-3.5 text-muted-foreground mr-1" />
+                <SelectValue placeholder="Status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Statuses</SelectItem>
+                {(Object.keys(ORDER_STATUS_CONFIG) as TOrderStatus[]).map(
+                  (s) => (
+                    <SelectItem key={s} value={s}>
+                      {ORDER_STATUS_CONFIG[s].label}
+                    </SelectItem>
+                  ),
+                )}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Delete and Export as CSV */}
+          <div className="flex items-center gap-2">
+            {selected.size > 0 && (
+              <>
+                <span className="text-xs text-muted-foreground">
+                  {selected.size} selected
+                </span>
+                <Separator orientation="vertical" className="h-4" />
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  className="h-8 text-xs gap-1.5"
+                >
+                  <Trash2 className="h-3.5 w-3.5" />
+                  Delete
+                </Button>
+              </>
+            )}
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-9 gap-1.5 text-sm"
+                  onClick={handleExport}
+                  aria-label="Export orders as CSV"
+                >
+                  <Download className="h-4 w-4" />
+                  Export
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Export as CSV</TooltipContent>
+            </Tooltip>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };
