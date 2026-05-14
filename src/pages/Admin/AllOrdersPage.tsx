@@ -1,8 +1,27 @@
-import type { IOrder } from "@/components/modules/Order/order.interface";
+import { ORDER_STATUS_CONFIG } from "@/components/modules/Order/order.constants";
+import type {
+  IOrder,
+  TOrderStatus,
+} from "@/components/modules/Order/order.interface";
 import ContentHeader from "@/components/modules/Shared/ContentHeader/ContentHeader";
 import StatCard from "@/components/modules/Shared/StatCard";
-import { CheckCircle2, Clock, Package, TrendingUp } from "lucide-react";
-import { useMemo } from "react";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  CheckCircle2,
+  Clock,
+  Filter,
+  Package,
+  Search,
+  TrendingUp,
+} from "lucide-react";
+import { useMemo, useState } from "react";
 
 const ORDERS_DATA: IOrder[] = [
   {
@@ -228,6 +247,8 @@ const ORDERS_DATA: IOrder[] = [
 ];
 
 const AllOrdersPage = () => {
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
   const stats = useMemo(() => {
     const total = ORDERS_DATA.length;
     const revenue = ORDERS_DATA.reduce((s, o) => s + o.total, 0);
@@ -271,8 +292,16 @@ const AllOrdersPage = () => {
     },
   ];
 
+  const handleSearchChange = (v: string) => {
+    setSearch(v);
+  };
+
+  const handleStatusFilter = (v: string) => {
+    setStatusFilter(v);
+  };
+
   return (
-    <div>
+    <div className="space-y-5">
       {/* Page Header */}
       <ContentHeader
         title="All Orders"
@@ -288,6 +317,52 @@ const AllOrdersPage = () => {
           <StatCard key={item.title} item={item} />
         ))}
       </div>
+
+      {/* Table Card */}
+      <section
+        aria-label="Orders table"
+        className="rounded-xl border border-border bg-card shadow-sm overflow-hidden"
+      >
+        {/* Toolbar */}
+        <div className="flex flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:justify-between border-b border-border">
+          <div className="flex flex-1 items-center gap-5">
+            {/* search */}
+            <div className="relative flex-1 max-w-xs">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+              <Input
+                type="search"
+                placeholder="Search orders…"
+                value={search}
+                onChange={(e) => handleSearchChange(e.target.value)}
+                className="pl-9 h-9 text-sm"
+                aria-label="Search orders"
+              />
+            </div>
+
+            {/* Status Filter */}
+            <Select value={statusFilter} onValueChange={handleStatusFilter}>
+              <SelectTrigger
+                className="h-9 w-38 text-sm"
+                aria-label="Filter by status"
+              >
+                <Filter className="h-3.5 w-3.5 text-muted-foreground mr-1" />
+                <SelectValue placeholder="Status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Statuses</SelectItem>
+                {(Object.keys(ORDER_STATUS_CONFIG) as TOrderStatus[]).map(
+                  (s) => (
+                    <SelectItem key={s} value={s}>
+                      {ORDER_STATUS_CONFIG[s].label}
+                    </SelectItem>
+                  ),
+                )}
+              </SelectContent>
+            </Select>
+          </div>
+
+        </div>
+      </section>
     </div>
   );
 };
