@@ -17,7 +17,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import {
   CheckCircle2,
   Clock,
@@ -254,11 +258,11 @@ const ORDERS_DATA: IOrder[] = [
 ];
 
 const AllOrdersPage = () => {
- const [search, setSearch] = useState("");
+  const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [sortField, setSortField] = useState<TOrderSortField>("date");
   const [sortDir, setSortDir] = useState<TSortDirection>("desc");
-  
+  const [selected, setSelected] = useState<Set<string>>(new Set());
 
   // ── stats ──
   const stats = useMemo(() => {
@@ -304,7 +308,7 @@ const AllOrdersPage = () => {
     },
   ];
 
-    // ── Filtering ──
+  // ── Filtering ──
   const filteredOrders = useMemo(() => {
     let data = [...ORDERS_DATA];
 
@@ -314,7 +318,7 @@ const AllOrdersPage = () => {
         (o) =>
           o.orderId.toLowerCase().includes(q) ||
           o.customer.toLowerCase().includes(q) ||
-          o.email.toLowerCase().includes(q)
+          o.email.toLowerCase().includes(q),
       );
     }
 
@@ -326,14 +330,32 @@ const AllOrdersPage = () => {
       data.sort((a, b) => {
         let aVal: string | number = "";
         let bVal: string | number = "";
-        
+
         switch (sortField) {
-          case "orderId": aVal = a.orderId; bVal = b.orderId; break;
-          case "customer": aVal = a.customer; bVal = b.customer; break;
-          case "date": aVal = a.date; bVal = b.date; break;
-          case "total": aVal = a.total; bVal = b.total; break;
-          case "items": aVal = a.items; bVal = b.items; break;
-          case "status": aVal = a.status; bVal = b.status; break;
+          case "orderId":
+            aVal = a.orderId;
+            bVal = b.orderId;
+            break;
+          case "customer":
+            aVal = a.customer;
+            bVal = b.customer;
+            break;
+          case "date":
+            aVal = a.date;
+            bVal = b.date;
+            break;
+          case "total":
+            aVal = a.total;
+            bVal = b.total;
+            break;
+          case "items":
+            aVal = a.items;
+            bVal = b.items;
+            break;
+          case "status":
+            aVal = a.status;
+            bVal = b.status;
+            break;
         }
 
         if (typeof aVal === "number" && typeof bVal === "number") {
@@ -349,9 +371,6 @@ const AllOrdersPage = () => {
     return data;
   }, [search, statusFilter, sortField, sortDir]);
 
-
-
-
   const handleSearchChange = (v: string) => {
     setSearch(v);
   };
@@ -360,8 +379,38 @@ const AllOrdersPage = () => {
     setStatusFilter(v);
   };
 
- 
-
+  const handleExport = () => {
+    const headers = [
+      "Order ID",
+      "Customer",
+      "Email",
+      "Date",
+      "Items",
+      "Total",
+      "Status",
+      "Payment",
+    ];
+    const rows = filteredOrders.map((o) =>
+      [
+        o.orderId,
+        o.customer,
+        o.email,
+        o.date,
+        o.items,
+        `$${o.total.toFixed(2)}`,
+        o.status,
+        o.paymentMethod,
+      ].join(","),
+    );
+    const csv = [headers.join(","), ...rows].join("\n");
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "orders.csv";
+    a.click();
+    URL.revokeObjectURL(url);
+  };
 
   return (
     <div className="space-y-5">
@@ -424,9 +473,40 @@ const AllOrdersPage = () => {
             </Select>
           </div>
 
-           
-
-
+          {/* Delete and Export as CSV */}
+          <div className="flex items-center gap-2">
+            {selected.size > 0 && (
+              <>
+                <span className="text-xs text-muted-foreground">
+                  {selected.size} selected
+                </span>
+                <Separator orientation="vertical" className="h-4" />
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  className="h-8 text-xs gap-1.5"
+                >
+                  <Trash2 className="h-3.5 w-3.5" />
+                  Delete
+                </Button>
+              </>
+            )}
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-9 gap-1.5 text-sm"
+                  onClick={handleExport}
+                  aria-label="Export orders as CSV"
+                >
+                  <Download className="h-4 w-4" />
+                  Export
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Export as CSV</TooltipContent>
+            </Tooltip>
+          </div>
         </div>
       </section>
     </div>
