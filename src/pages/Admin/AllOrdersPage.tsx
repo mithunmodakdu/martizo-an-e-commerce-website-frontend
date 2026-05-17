@@ -5,9 +5,11 @@ import type {
   TOrderStatus,
   TSortDirection,
 } from "@/components/modules/Order/order.interface";
+import OrderSortableHeader from "@/components/modules/Order/OrderSortableHeader";
 import ContentHeader from "@/components/modules/Shared/ContentHeader/ContentHeader";
 import StatCard from "@/components/modules/Shared/StatCard";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -17,6 +19,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
+import { Table, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import {
   Tooltip,
   TooltipContent,
@@ -262,6 +265,8 @@ const AllOrdersPage = () => {
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [sortField, setSortField] = useState<TOrderSortField>("date");
   const [sortDir, setSortDir] = useState<TSortDirection>("desc");
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const [selected, setSelected] = useState<Set<string>>(new Set());
 
   // ── stats ──
@@ -378,6 +383,43 @@ const AllOrdersPage = () => {
   const handleStatusFilter = (v: string) => {
     setStatusFilter(v);
   };
+
+  // ── Pagination ──
+  const totalPages = Math.ceil(filteredOrders.length / pageSize);
+  const paginated = filteredOrders.slice(
+    (page - 1) * pageSize,
+    page * pageSize,
+  );
+
+    const handleSort = (field: TOrderSortField) => {
+    if (sortField === field) {
+      setSortDir((d) => (d === "asc" ? "desc" : "asc"));
+    } else {
+      setSortField(field);
+      setSortDir("asc");
+    }
+    setPage(1);
+  };
+
+
+   // ── Selection ──
+  const allOnPageSelected = paginated.every((o) => selected.has(o.id));
+  const someOnPageSelected = paginated.some((o) => selected.has(o.id)) && !allOnPageSelected;
+
+  const toggleAll = () => {
+    if (allOnPageSelected) {
+      const next = new Set(selected);
+      paginated.forEach((o) => next.delete(o.id));
+      setSelected(next);
+    } else {
+      const next = new Set(selected);
+      paginated.forEach((o) => next.add(o.id));
+      setSelected(next);
+    }
+  };
+
+
+
 
   const handleExport = () => {
     const headers = [
@@ -507,6 +549,85 @@ const AllOrdersPage = () => {
               <TooltipContent>Export as CSV</TooltipContent>
             </Tooltip>
           </div>
+        </div>
+
+        {/* Table */}
+        <div className="overflow-x-auto">
+          <Table>
+            <TableHeader>
+              <TableRow className="bg-muted/40 hover:bg-muted/40">
+                <TableHead className="w-10 pl-4">
+                  <Checkbox
+                    checked={allOnPageSelected}
+                    ref={(el) => {
+                      if (el)
+                        (el as HTMLButtonElement).dataset.indeterminate =
+                          String(someOnPageSelected);
+                    }}
+                    onCheckedChange={toggleAll}
+                    aria-label="Select all on page"
+                    className="data-[state=indeterminate]:bg-primary/20"
+                  />
+                </TableHead>
+                <OrderSortableHeader
+                  field="orderId"
+                  label="Order"
+                  sortField={sortField}
+                  sortDir={sortDir}
+                  onSort={handleSort}
+                  className="min-w-[110px]"
+                />
+                <OrderSortableHeader
+                  field="customer"
+                  label="Customer"
+                  sortField={sortField}
+                  sortDir={sortDir}
+                  onSort={handleSort}
+                  className="min-w-[160px]"
+                />
+                <OrderSortableHeader
+                  field="date"
+                  label="Date"
+                  sortField={sortField}
+                  sortDir={sortDir}
+                  onSort={handleSort}
+                  className="min-w-[110px]"
+                />
+                <OrderSortableHeader
+                  field="items"
+                  label="Items"
+                  sortField={sortField}
+                  sortDir={sortDir}
+                  onSort={handleSort}
+                  className="w-16 text-center"
+                />
+                <OrderSortableHeader
+                  field="total"
+                  label="Total"
+                  sortField={sortField}
+                  sortDir={sortDir}
+                  onSort={handleSort}
+                  className="min-w-[100px]"
+                />
+                <TableHead className="min-w-[120px]">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                    Payment
+                  </span>
+                </TableHead>
+                <OrderSortableHeader
+                  field="status"
+                  label="Status"
+                  sortField={sortField}
+                  sortDir={sortDir}
+                  onSort={handleSort}
+                  className="min-w-[120px]"
+                />
+                <TableHead className="w-12 pr-4">
+                  <span className="sr-only">Actions</span>
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+          </Table>
         </div>
       </section>
     </div>
