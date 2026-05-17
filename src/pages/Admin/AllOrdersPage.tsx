@@ -6,10 +6,12 @@ import type {
   TSortDirection,
 } from "@/components/modules/Order/order.interface";
 import OrderSortableHeader from "@/components/modules/Order/OrderSortableHeader";
+import OrderStatusBadge from "@/components/modules/Order/OrderStatusBadge";
 import ContentHeader from "@/components/modules/Shared/ContentHeader/ContentHeader";
 import StatCard from "@/components/modules/Shared/StatCard";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -19,7 +21,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { Table, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import {
   Tooltip,
   TooltipContent,
@@ -29,8 +31,11 @@ import {
   CheckCircle2,
   Clock,
   Download,
+  Eye,
   Filter,
+  MoreHorizontal,
   Package,
+  Pencil,
   Search,
   Trash2,
   TrendingUp,
@@ -418,6 +423,13 @@ const AllOrdersPage = () => {
     }
   };
 
+    const toggleRow = (id: string) => {
+    const next = new Set(selected);
+    next.has(id) ? next.delete(id) : next.add(id);
+    setSelected(next);
+  };
+
+
 
 
 
@@ -554,6 +566,7 @@ const AllOrdersPage = () => {
         {/* Table */}
         <div className="overflow-x-auto">
           <Table>
+            {/* table header */}
             <TableHeader>
               <TableRow className="bg-muted/40 hover:bg-muted/40">
                 <TableHead className="w-10 pl-4">
@@ -627,6 +640,109 @@ const AllOrdersPage = () => {
                 </TableHead>
               </TableRow>
             </TableHeader>
+
+            {/* table body */}
+                          <TableBody>
+                {paginated.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={9} className="h-32 text-center text-sm text-muted-foreground">
+                      No orders found.
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  paginated.map((order) => (
+                    <TableRow
+                      key={order.id}
+                      data-state={selected.has(order.id) ? "selected" : undefined}
+                      className="group hover:bg-muted/30 transition-colors data-[state=selected]:bg-primary/5"
+                    >
+                      <TableCell className="pl-4">
+                        <Checkbox
+                          checked={selected.has(order.id)}
+                          onCheckedChange={() => toggleRow(order.id)}
+                          aria-label={`Select order ${order.orderId}`}
+                        />
+                      </TableCell>
+
+                      <TableCell>
+                        <span className="font-mono text-sm font-semibold text-primary">
+                          {order.orderId}
+                        </span>
+                      </TableCell>
+
+                      <TableCell>
+                        <div>
+                          <p className="text-sm font-medium text-foreground leading-none">{order.customer}</p>
+                          <p className="mt-0.5 text-xs text-muted-foreground">{order.email}</p>
+                        </div>
+                      </TableCell>
+
+                      <TableCell>
+                        <time
+                          dateTime={order.date}
+                          className="text-sm text-muted-foreground"
+                        >
+                          {new Date(order.date).toLocaleDateString("en-US", {
+                            month: "short",
+                            day: "numeric",
+                            year: "numeric",
+                          })}
+                        </time>
+                      </TableCell>
+
+                      <TableCell className="text-center">
+                        <span className="text-sm tabular-nums">{order.items}</span>
+                      </TableCell>
+
+                      <TableCell>
+                        <span className="text-sm font-semibold tabular-nums">
+                          ${order.total.toFixed(2)}
+                        </span>
+                      </TableCell>
+
+                      <TableCell>
+                        <span className="text-sm text-muted-foreground">{order.paymentMethod}</span>
+                      </TableCell>
+
+                      <TableCell>
+                        <OrderStatusBadge status={order.status} />
+                      </TableCell>
+
+                      <TableCell className="pr-4">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8 opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity"
+                              aria-label={`Actions for ${order.orderId}`}
+                            >
+                              <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end" className="w-40">
+                            <DropdownMenuItem className="gap-2 text-sm cursor-pointer">
+                              <Eye className="h-3.5 w-3.5" />
+                              View
+                            </DropdownMenuItem>
+                            <DropdownMenuItem className="gap-2 text-sm cursor-pointer">
+                              <Pencil className="h-3.5 w-3.5" />
+                              Edit
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem className="gap-2 text-sm cursor-pointer text-destructive focus:text-destructive">
+                              <Trash2 className="h-3.5 w-3.5" />
+                              Delete
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+
+
           </Table>
         </div>
       </section>
