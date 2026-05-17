@@ -1,4 +1,4 @@
-import { ORDER_STATUS_CONFIG } from "@/components/modules/Order/order.constants";
+import { ORDER_STATUS_CONFIG, PAGE_SIZE_OPTIONS } from "@/components/modules/Order/order.constants";
 import type {
   IOrder,
   TOrderSortField,
@@ -29,6 +29,8 @@ import {
 } from "@/components/ui/tooltip";
 import {
   CheckCircle2,
+  ChevronLeft,
+  ChevronRight,
   Clock,
   Download,
   Eye,
@@ -741,10 +743,88 @@ const AllOrdersPage = () => {
                   ))
                 )}
               </TableBody>
-
-
           </Table>
         </div>
+
+           {/* Pagination Footer */}
+          <div className="flex flex-col gap-3 px-4 py-3 border-t border-border sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <span>
+                Showing{" "}
+                <strong className="text-foreground">
+                  {filteredOrders.length === 0 ? 0 : (page - 1) * pageSize + 1}–
+                  {Math.min(page * pageSize, filteredOrders.length)}
+                </strong>{" "}
+                of <strong className="text-foreground">{filteredOrders.length}</strong> orders
+              </span>
+              <Separator orientation="vertical" className="h-3" />
+              <Select
+                value={String(pageSize)}
+                onValueChange={(v) => { setPageSize(Number(v)); setPage(1); }}
+              >
+                <SelectTrigger className="h-7 w-28 text-xs" aria-label="Rows per page">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {PAGE_SIZE_OPTIONS.map((n) => (
+                    <SelectItem key={n} value={String(n)} className="text-xs">
+                      {n} / page
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <nav aria-label="Pagination" className="flex items-center gap-1">
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-7 w-7"
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                disabled={page === 1}
+                aria-label="Previous page"
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+
+              {Array.from({ length: totalPages }, (_, i) => i + 1)
+                .filter((p) => p === 1 || p === totalPages || Math.abs(p - page) <= 1)
+                .reduce<(number | "…")[]>((acc, p, idx, arr) => {
+                  if (idx > 0 && p - (arr[idx - 1] as number) > 1) acc.push("…");
+                  acc.push(p);
+                  return acc;
+                }, [])
+                .map((item, idx) =>
+                  item === "…" ? (
+                    <span key={`ellipsis-${idx}`} className="px-1 text-xs text-muted-foreground">…</span>
+                  ) : (
+                    <Button
+                      key={item}
+                      variant={page === item ? "default" : "outline"}
+                      size="icon"
+                      className="h-7 w-7 text-xs"
+                      onClick={() => setPage(item as number)}
+                      aria-label={`Page ${item}`}
+                      aria-current={page === item ? "page" : undefined}
+                    >
+                      {item}
+                    </Button>
+                  )
+                )}
+
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-7 w-7"
+                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                disabled={page === totalPages || totalPages === 0}
+                aria-label="Next page"
+              >
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </nav>
+          </div>
+
       </section>
     </div>
   );
