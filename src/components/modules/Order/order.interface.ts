@@ -1,3 +1,4 @@
+import type { IShippingAddress, TPaymentMethod } from "../Checkout/checkout.types";
 import type { IProductPrice, IVariant } from "../Product/product.types";
 
 export interface IOrderItem {
@@ -10,12 +11,7 @@ export interface IOrderItem {
   image?: { src: string; alt: string };
 }
 
-export type TOrderStatus =
-  | "pending"
-  | "processing"
-  | "shipped"
-  | "delivered"
-  | "cancelled"
+export type TOrderStatus = "pending" | "paid" | "processing"  | "shipped" | "delivered" | "cancelled"
   | "refunded";
 
 export type TOrderSortField =
@@ -30,6 +26,33 @@ export type TOrderSortField =
 export type TSortDirection = "asc" | "desc";
 
 export interface IOrder {
+  _id: string;
+  orderNo: string;
+  userId: {_id: string; name: string; email: string};
+  shippingAddress: IShippingAddress;
+
+  items: IOrderItem[];
+  itemsPrice : number;
+  taxPrice: number;
+  shippingPrice: number;
+  totalPrice: number;
+  
+  paymentMethod: TPaymentMethod;
+  paymentId?: string;
+  status: TOrderStatus
+
+  paidAt?: Date | null;
+  shippedAt?: Date | null;
+  deliveredAt?: Date | null;
+  cancelledAt?: Date | null;
+  refundedAt?: Date | null;
+
+  createdAt?: Date;
+  invoiceNo: string;
+
+}
+
+export interface IOrderTableRow {
   id: string;
   orderId: string;
   customer: string;

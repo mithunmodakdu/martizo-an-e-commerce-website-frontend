@@ -1,6 +1,8 @@
 import { ORDER_STATUS_CONFIG, PAGE_SIZE_OPTIONS } from "@/components/modules/Order/order.constants";
 import type {
   IOrder,
+  IOrderItem,
+  IOrderTableRow,
   TOrderSortField,
   TOrderStatus,
   TSortDirection,
@@ -57,21 +59,22 @@ const AllOrdersPage = () => {
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const {data: ordersData} = useGetAllOrdersQuery(undefined);
   console.log(ordersData?.data)
-  const ods = ordersData?.data?.map((orderItem) => (
-    {id: "1",
-    orderId: "#ORD-8821",
-    customer: "Ayesha Rahman",
-    email: "ayesha.r@email.com",
-    date: "2025-05-12",
-    items: 3,
-    total: 245.0,
-    status: "delivered",
-    paymentMethod: "bKash"
+
+  const ORDERS_TABLE_DATA: IOrderTableRow[] = ordersData?.data?.map((order: IOrder) => (
+    {id: order?._id,
+    orderId: order?.orderNo,
+    customer: order?.userId?.name,
+    email: order?.userId?.email,
+    date: order?.createdAt,
+    items: order.items.length,
+    total: order?.itemsPrice,
+    status: order?.status,
+    paymentMethod: order?.paymentMethod
   }
   ))
-  console.log(ods)
+  console.log(ORDERS_TABLE_DATA)
 
-  const ORDERS_DATA: IOrder[] = [
+  const ORDERS_DATA: IOrderTableRow[] = [
   {
     id: "1",
     orderId: "#ORD-8821",
@@ -294,7 +297,9 @@ const AllOrdersPage = () => {
   },
 ];
 
+
   // ── stats ──
+  
   const stats = useMemo(() => {
     const total = ORDERS_DATA.length;
     const revenue = ORDERS_DATA.reduce((s, o) => s + o.total, 0);
