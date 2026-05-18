@@ -27,6 +27,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useGetAllOrdersQuery } from "@/redux/features/order/order.api";
 import {
   CheckCircle2,
   ChevronLeft,
@@ -44,7 +45,33 @@ import {
 } from "lucide-react";
 import { useMemo, useState } from "react";
 
-const ORDERS_DATA: IOrder[] = [
+
+
+const AllOrdersPage = () => {
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [sortField, setSortField] = useState<TOrderSortField>("date");
+  const [sortDir, setSortDir] = useState<TSortDirection>("desc");
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const {data: ordersData} = useGetAllOrdersQuery(undefined);
+  console.log(ordersData?.data)
+  const ods = ordersData?.data?.map((orderItem) => (
+    {id: "1",
+    orderId: "#ORD-8821",
+    customer: "Ayesha Rahman",
+    email: "ayesha.r@email.com",
+    date: "2025-05-12",
+    items: 3,
+    total: 245.0,
+    status: "delivered",
+    paymentMethod: "bKash"
+  }
+  ))
+  console.log(ods)
+
+  const ORDERS_DATA: IOrder[] = [
   {
     id: "1",
     orderId: "#ORD-8821",
@@ -266,15 +293,6 @@ const ORDERS_DATA: IOrder[] = [
     paymentMethod: "Card",
   },
 ];
-
-const AllOrdersPage = () => {
-  const [search, setSearch] = useState("");
-  const [statusFilter, setStatusFilter] = useState<string>("all");
-  const [sortField, setSortField] = useState<TOrderSortField>("date");
-  const [sortDir, setSortDir] = useState<TSortDirection>("desc");
-  const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
-  const [selected, setSelected] = useState<Set<string>>(new Set());
 
   // ── stats ──
   const stats = useMemo(() => {
