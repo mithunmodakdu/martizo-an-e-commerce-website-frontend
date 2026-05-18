@@ -10,6 +10,14 @@ export const ordersApi = baseApi.injectEndpoints({
       providesTags: ["ORDERS"]
     }),
 
+    getAllOrders: builder.query({
+      query: () => ({
+        url: "/orders",
+        method: "GET"
+      }),
+      providesTags: ["ORDERS"]
+    }),
+
     createOrder: builder.mutation({
       query: (checkoutData) => ({
         url: "/orders/create",
@@ -23,5 +31,6 @@ export const ordersApi = baseApi.injectEndpoints({
 
 export const { 
   useGetOrderByTransactionIdQuery,
+  useGetAllOrdersQuery,
   useCreateOrderMutation
  } = ordersApi;

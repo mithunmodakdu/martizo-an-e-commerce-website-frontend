@@ -1,4 +1,4 @@
-import { CheckCircle2, Clock, RefreshCw, TrendingUp, XCircle } from "lucide-react";
+import { CheckCheck, CheckCircle2, Clock, RefreshCw, TrendingUp, XCircle } from "lucide-react";
 import type { TOrderStatus } from "./order.interface";
 
 export const ORDER_STATUS_CONFIG: Record<
@@ -10,6 +10,12 @@ export const ORDER_STATUS_CONFIG: Record<
     variant: "outline",
     icon: <Clock className="h-3 w-3" />,
     className: "border-amber-300 bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-300 dark:border-amber-800",
+  },
+  paid: {
+    label: "Paid",
+    variant: "outline",
+    icon: <CheckCheck className="h-3 w-3" />,
+    className: "border-green-300 bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300 dark:border-green-800",
   },
   processing: {
     label: "Processing",
