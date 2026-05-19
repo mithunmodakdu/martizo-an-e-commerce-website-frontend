@@ -90,7 +90,6 @@ const AllOrdersPage = () => {
       })) ?? [],
     [allOrders],
   );
-  console.log("ORDERS_DATA:", ORDERS_DATA);
 
   // ── stats ──
   const stats = useMemo(() => {
@@ -141,7 +140,6 @@ const AllOrdersPage = () => {
 
   // ── Filtering ──
   const filteredOrders = useMemo(() => {
-    console.log("from filer", ORDERS_DATA);
     let data = [...(ORDERS_DATA ?? [])];
 
     if (search.trim()) {
@@ -203,14 +201,6 @@ const AllOrdersPage = () => {
     return data;
   }, [ORDERS_DATA, search, statusFilter, sortField, sortDir]);
 
-  const handleSearchChange = (v: string) => {
-    setSearch(v);
-  };
-
-  const handleStatusFilter = (v: string) => {
-    setStatusFilter(v);
-  };
-
   // ── Pagination ──
   const totalPages = Math.ceil(filteredOrders.length / pageSize);
   const paginated = filteredOrders.slice(
@@ -225,6 +215,16 @@ const AllOrdersPage = () => {
       setSortField(field);
       setSortDir("asc");
     }
+    setPage(1);
+  };
+
+  const handleSearchChange = (v: string) => {
+    setSearch(v);
+    setPage(1);
+  };
+
+  const handleStatusFilter = (v: string) => {
+    setStatusFilter(v);
     setPage(1);
   };
 
@@ -295,7 +295,7 @@ const AllOrdersPage = () => {
       {ordersLoading ? (
         <Loading />
       ) : (
-        <div>
+        <div className="space-y-5">
           {/* stat cards */}
           <div
             aria-label="Order statistics"
@@ -393,12 +393,13 @@ const AllOrdersPage = () => {
                   <TableRow className="bg-muted/40 hover:bg-muted/40">
                     <TableHead className="w-10 pl-4">
                       <Checkbox
-                        checked={allOnPageSelected}
-                        ref={(el) => {
-                          if (el)
-                            (el as HTMLButtonElement).dataset.indeterminate =
-                              String(someOnPageSelected);
-                        }}
+                        checked={
+                          allOnPageSelected
+                            ? true
+                            : someOnPageSelected
+                              ? "indeterminate"
+                              : false
+                        }
                         onCheckedChange={toggleAll}
                         aria-label="Select all on page"
                         className="data-[state=indeterminate]:bg-primary/20"
