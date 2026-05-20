@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -31,6 +32,9 @@ import { useCreateProductCategoryMutation, useGetProductCategoriesQuery } from "
 import { useId, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import type z from "zod";
+import { CreateCategoryZodSchema } from "./category.interface";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export function AddProductCategoryModal() {
   const [image, setImage] = useState<File | null>(null);
@@ -39,14 +43,15 @@ export function AddProductCategoryModal() {
   const {data: categoriesData, isLoading: categoriesLoading} = useGetProductCategoriesQuery(undefined);
   const id = useId();
 
-  const form = useForm({
+  const form = useForm<z.infer<typeof CreateCategoryZodSchema>>({
+    resolver: zodResolver(CreateCategoryZodSchema),
     defaultValues: {
       name: "",
-      parent: "",
+      parent: null,
     },
   });
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: z.infer<typeof CreateCategoryZodSchema>) => {
     const formData = new FormData();
 
     formData.append("data", JSON.stringify(data));
@@ -65,8 +70,9 @@ export function AddProductCategoryModal() {
         toast.success(res.message, { id: toastId });
         setOpen(false);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
+      toast.error(error.data.message, { id: toastId });
     }
   };
 
