@@ -1,20 +1,33 @@
 import { role } from "@/constants/role";
-import { adminSidebarItems } from "@/routes/adminSidebarItems";
-import { userSidebarItems } from "@/routes/userSidebarItems";
-import type { TUserRole } from "@/types";
+import { adminPanelSidebarItems } from "@/routes/adminPanelSidebarItems";
+import { dashboardSidebarItems } from "@/routes/dashboardSidebarItems";
+import type { TSidebarType, TUserRole } from "@/types";
 
-export const getSidebarItems = (userRole: TUserRole) =>{
-  switch(userRole){
-    case role.superAdmin:
-      return [...adminSidebarItems];
+export const getSidebarItems = (sideBarType: TSidebarType, userRole: TUserRole) =>{
+  // switch(userRole){
+  //   case role.superAdmin:
+  //     return [...adminPanelSidebarItems];
 
-    case role.admin:
-      return [...adminSidebarItems];
+  //   case role.admin:
+  //     return [...adminPanelSidebarItems];
 
-    case role.user:
-      return [...userSidebarItems];
+  //   case role.user:
+  //     return [...dashboardSidebarItems];
       
-    default:
-      return [];
+  //   default:
+  //     return [];
+  // }
+  if(sideBarType === "dashboard"){
+    return [...dashboardSidebarItems]
   }
+
+  if(sideBarType === "admin-panel" && userRole === "SUPER_ADMIN"){
+    return [...adminPanelSidebarItems]
+  }
+
+  if(sideBarType === "admin-panel" && userRole === "ADMIN"){
+    return [...adminPanelSidebarItems]
+  }
+
+  
 }

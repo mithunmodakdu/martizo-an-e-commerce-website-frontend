@@ -6,19 +6,16 @@ import SignupPage from "@/pages/Common/SignupPage";
 import Verify from "@/pages/Common/Verify";
 import { createBrowserRouter, Navigate } from "react-router";
 import { generateRoutes } from "@/utils/generateRoutes";
-import { adminSidebarItems } from "./adminSidebarItems";
-import { userSidebarItems } from "./userSidebarItems";
+import { adminPanelSidebarItems} from "./adminPanelSidebarItems";
+import { dashboardSidebarItems} from "./dashboardSidebarItems";
 import { withAuth } from "@/utils/withAuth";
 import Unauthorized from "@/pages/Common/Unauthorized";
 import ProductsPage from "@/pages/Common/ProductsPage";
 import ProductDetailsPage from "@/pages/Common/ProductDetailsPage";
-import CartPage from "@/pages/User/CartPage";
 import CheckoutPage from "@/pages/User/CheckoutPage";
 import PaymentMessagePage from "@/pages/User/PaymentMessagePage";
 import OrderSummaryPage from "@/pages/User/OrderSummaryPage";
 import HomePage from "@/pages/Common/HomePage";
-import WishlistPage from "@/pages/User/WishlistPage";
-import UserProfilePage from "@/pages/User/UserProfiePage";
 
 
 export const router = createBrowserRouter([
@@ -41,18 +38,6 @@ export const router = createBrowserRouter([
       {
         Component: About,
         path: "about",
-      },
-      {
-        Component: withAuth(UserProfilePage, ["SUPER_ADMIN", "ADMIN", "USER"]),
-        path: "/user-profile"
-      },
-      {
-        Component: withAuth(CartPage, ["SUPER_ADMIN", "ADMIN", "USER"]),
-        path: "/cart",
-      },
-      {
-        Component: withAuth(WishlistPage, ["SUPER_ADMIN", "ADMIN", "USER"]),
-        path: "/wishlist"
       },
       {
         Component: withAuth(CheckoutPage, ["SUPER_ADMIN", "ADMIN", "USER"]),
@@ -81,15 +66,15 @@ export const router = createBrowserRouter([
     path: "/admin",
     children: [
       { index: true, element: <Navigate to={"/admin/analytics"} /> },
-      ...generateRoutes(adminSidebarItems),
+      ...generateRoutes(adminPanelSidebarItems),
     ],
   },
   {
-    Component: withAuth(DashboardLayout, ["USER", "SUPER_ADMIN"]),
-    path: "/user",
+    Component: withAuth(DashboardLayout, ["USER", "ADMIN", "SUPER_ADMIN"]),
+    path: "/dashboard",
     children: [
-      { index: true, element: <Navigate to={"/user/orders"} /> },
-      ...generateRoutes(userSidebarItems),
+      { index: true, element: <Navigate to={"/dashboard/profile"} /> },
+      ...generateRoutes(dashboardSidebarItems),
     ],
   },
   {

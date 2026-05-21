@@ -14,9 +14,9 @@ const ProductCategories = lazy(() => import("@/pages/Admin/ProductCategories"));
 const ProductBrands = lazy(() => import("@/pages/Admin/ProductBrands"));
 
 
-export const adminSidebarItems: ISidebarItem[] = [
+export const adminPanelSidebarItems: ISidebarItem[] = [
     {
-      title: "Dashboard",
+      title: "Admin Panel",
       url: "#",
       items: [
         {

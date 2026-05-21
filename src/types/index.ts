@@ -27,3 +27,4 @@ export interface ISidebarItem {
 }
 
 export type TUserRole = "SUPER_ADMIN" | "ADMIN" | "USER";
+export type TSidebarType = "dashboard" | "admin-panel";
