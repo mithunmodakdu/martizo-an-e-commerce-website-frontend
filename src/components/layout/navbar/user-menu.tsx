@@ -31,7 +31,7 @@ export default function UserMenu() {
   const [logout] = useLogoutMutation();
   const dispatch = useAppDispatch();
 
-  const handleLogout = async() => {
+  const handleLogout = async () => {
     await logout(undefined);
     dispatch(userApi.util.resetApiState());
   };
@@ -70,71 +70,109 @@ export default function UserMenu() {
         <DropdownMenuSeparator />
         <DropdownMenuSeparator />
         {role.superAdmin === data?.data?.role && (
-          <Link to={"/admin"}>
+          <DropdownMenuGroup>
             <DropdownMenuItem className="cursor-pointer">
               <LayoutDashboard
                 size={16}
                 className="opacity-60"
                 aria-hidden="true"
               />
-              <span>Dashboard</span>
+              <span>
+                <Link to={"/admin"}>Super Admin Panel</Link>
+              </span>
             </DropdownMenuItem>
-          </Link>
+            <DropdownMenuItem className="cursor-pointer">
+              <LayoutDashboard
+                size={16}
+                className="opacity-60"
+                aria-hidden="true"
+              />
+              <span>
+                <Link to={"/dashboard"}>Dashboard</Link>
+              </span>
+            </DropdownMenuItem>
+          </DropdownMenuGroup>
         )}
         {role.admin === data?.data?.role && (
-          <Link to={"/admin"}>
+          <DropdownMenuGroup>
             <DropdownMenuItem className="cursor-pointer">
               <LayoutDashboard
                 size={16}
                 className="opacity-60"
                 aria-hidden="true"
               />
-              <span>Dashboard</span>
+              <span>
+                <Link to={"/admin"}>Admin Panel</Link>
+              </span>
             </DropdownMenuItem>
-          </Link>
+            <DropdownMenuItem className="cursor-pointer">
+              <LayoutDashboard
+                size={16}
+                className="opacity-60"
+                aria-hidden="true"
+              />
+              <span>
+                <Link to={"/dashboard"}>Dashboard</Link>
+              </span>
+            </DropdownMenuItem>
+          </DropdownMenuGroup>
         )}
         {role.user === data?.data?.role && (
-          <Link to={"/user"}>
-            <DropdownMenuItem className="cursor-pointer">
-              <LayoutDashboard
-                size={16}
-                className="opacity-60"
-                aria-hidden="true"
-              />
-              <span>Dashboard</span>
-            </DropdownMenuItem>
-          </Link>
+          <DropdownMenuItem className="cursor-pointer">
+            <LayoutDashboard
+              size={16}
+              className="opacity-60"
+              aria-hidden="true"
+            />
+            <span>
+              <Link to={"/dashboard"}>Dashboard</Link>
+            </span>
+          </DropdownMenuItem>
         )}
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem className="cursor-pointer">
             <UserPen size={16} className="opacity-60" aria-hidden="true" />
-            
-            <span><Link to={"/user-profile"}>My Profile</Link></span>
-            
-          </DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer">
-            <Layers2Icon size={16} className="opacity-60" aria-hidden="true" />
-            <span>My Orders</span>
+            <span>
+              <Link to={"/dashboard/profile"}>My Profile</Link>
+            </span>
           </DropdownMenuItem>
           <DropdownMenuItem className="cursor-pointer">
             <Heart size={16} className="opacity-60" aria-hidden="true" />
-            <span>My Wishlist</span>
+            <span>
+              <Link to={"/dashboard/wishlist"}>My Wishlist</Link>
+            </span>
+          </DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer">
+            <Heart size={16} className="opacity-60" aria-hidden="true" />
+            <span>
+              <Link to={"/dashboard/cart"}>My Cart</Link>
+            </span>
+          </DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer">
+            <Layers2Icon size={16} className="opacity-60" aria-hidden="true" />
+            <span>
+              <Link to={"/dashboard/orders"}>My Orders</Link>
+            </span>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem className="cursor-pointer">
             <MapPin size={16} className="opacity-60" aria-hidden="true" />
-            <span>My Addresses</span>
+            <span>
+              <Link to={"/dashboard/address"}>My Addresses</Link>
+            </span>
           </DropdownMenuItem>
           <DropdownMenuItem className="cursor-pointer">
             <Receipt size={16} className="opacity-60" aria-hidden="true" />
-            <span>Payment Methods</span>
+            <span>
+              <Link to={"/dashboard/payment-methods"}>Payment Methods</Link>
+            </span>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="cursor-pointer"  onClick={handleLogout}>
+        <DropdownMenuItem className="cursor-pointer" onClick={handleLogout}>
           <LogOutIcon size={16} className="opacity-60" aria-hidden="true" />
           <span>Logout</span>
         </DropdownMenuItem>

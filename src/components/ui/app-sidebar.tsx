@@ -14,17 +14,18 @@ import {
   SidebarMenuSubItem,
   SidebarRail,
 } from "@/components/ui/sidebar"
-import { Link } from "react-router"
+import { Link, useLocation } from "react-router"
 import { getSidebarItems } from "@/utils/getSidebarItems"
 import { useGetMeQuery } from "@/redux/features/users/users.api"
 
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const {data: userData} = useGetMeQuery(undefined);
-  // console.log(userData)
+    const {data: userData} = useGetMeQuery(undefined);
+    const location = useLocation();
+    const sideBarType = location.pathname.startsWith("/dashboard")? "dashboard" : "admin-panel"
 
   const data = {
-    navMain: getSidebarItems(userData?.data?.role)
+    navMain: getSidebarItems(sideBarType, userData?.data?.role) || []
   }
 
   return (
