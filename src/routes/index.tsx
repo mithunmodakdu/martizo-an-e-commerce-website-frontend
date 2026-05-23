@@ -1,6 +1,6 @@
 import App from "@/App";
 import DashboardLayout from "@/components/layout/DashboardLayout";
-import About from "@/pages/Common/About";
+import About from "@/pages/Common/AboutPage";
 import LoginPage from "@/pages/Common/Login";
 import SignupPage from "@/pages/Common/SignupPage";
 import Verify from "@/pages/Common/Verify";
@@ -16,6 +16,7 @@ import CheckoutPage from "@/pages/User/CheckoutPage";
 import PaymentMessagePage from "@/pages/User/PaymentMessagePage";
 import OrderSummaryPage from "@/pages/User/OrderSummaryPage";
 import HomePage from "@/pages/Common/HomePage";
+import AboutPage from "@/pages/Common/AboutPage";
 
 
 export const router = createBrowserRouter([
@@ -36,7 +37,7 @@ export const router = createBrowserRouter([
         path: "product-details/:slug",
       },
       {
-        Component: About,
+        Component: AboutPage,
         path: "about",
       },
       {
