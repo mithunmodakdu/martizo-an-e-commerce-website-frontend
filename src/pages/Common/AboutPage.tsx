@@ -5,8 +5,19 @@ import {
   ArrowRight,
   ShoppingBag,
   ChevronDown,
+  Users,
+  Truck,
+  Star,
 } from "lucide-react";
+import type { IStatCard } from "@/components/modules/Shared/StatCard";
+import StatCard from "@/components/modules/Shared/StatCard";
 
+const stats: IStatCard[] = [
+  { value: "2.4M+", title: "Happy Customers", icon: <Users size={18} /> },
+  { value: "180K+", title: "Products Listed", icon: <ShoppingBag size={18} /> },
+  { value: "99.1%", title: "On-Time Delivery", icon: <Truck size={18} /> },
+  { value: "4.9★", title: "Average Rating", icon: <Star size={18} /> },
+];
 
 export default function AboutPage() {
   const [scrollY, setScrollY] = useState(0);
@@ -18,10 +29,12 @@ export default function AboutPage() {
 
   return (
     <main
-      className="bg-background text-foreground overflow-x-hidden"
-      style={{ fontFamily: "'Palatino Linotype', 'Book Antiqua', Palatino, serif" }}
+      className="bg-background text-foreground overflow-x-hidden space-y-10"
+      style={{
+        fontFamily: "'Palatino Linotype', 'Book Antiqua', Palatino, serif",
+      }}
     >
-
+      {/* Hero */}
       <section className="relative min-h-screen flex flex-col justify-center items-center overflow-hidden">
         <div
           className="absolute inset-0 pointer-events-none"
@@ -35,7 +48,8 @@ export default function AboutPage() {
         <div
           className="absolute inset-0 pointer-events-none opacity-[0.035]"
           style={{
-            backgroundImage: "radial-gradient(circle, var(--color-foreground) 1px, transparent 1px)",
+            backgroundImage:
+              "radial-gradient(circle, var(--color-foreground) 1px, transparent 1px)",
             backgroundSize: "28px 28px",
           }}
         />
@@ -62,26 +76,47 @@ export default function AboutPage() {
             className="max-w-2xl mx-auto text-muted-foreground text-lg md:text-xl leading-relaxed mb-10"
             style={{ fontFamily: "system-ui, sans-serif" }}
           >
-            Martizo started with one simple belief — great products should be easy to find, fairly
-            priced, and delivered with joy. We've been proving it every day since 2017.
+            Martizo started with one simple belief — great products should be
+            easy to find, fairly priced, and delivered with joy. We've been
+            proving it every day since 2017.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="gap-2 px-8 font-bold text-base rounded-xl">
+            <Button
+              size="lg"
+              className="gap-2 px-8 font-bold text-base rounded-xl"
+            >
               Shop Now <ArrowRight size={16} />
             </Button>
-            <Button size="lg" variant="outline" className="px-8 font-bold text-base rounded-xl">
+            <Button
+              size="lg"
+              variant="outline"
+              className="px-8 font-bold text-base rounded-xl"
+            >
               Our Promise
             </Button>
           </div>
         </div>
 
         <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-muted-foreground animate-bounce">
-          <span className="text-[10px] tracking-[0.2em] uppercase" style={{ fontFamily: "system-ui" }}>Scroll</span>
+          <span
+            className="text-[10px] tracking-[0.2em] uppercase"
+            style={{ fontFamily: "system-ui" }}
+          >
+            Scroll
+          </span>
           <ChevronDown size={15} />
         </div>
       </section>
 
+      {/* STATS */}
+      <section className="border-y border-border bg-muted/40">
+        <div className="max-w-5xl mx-auto px-6 py-14 grid grid-cols-2 md:grid-cols-4 gap-8">
+          {stats.map((item) => (
+            <StatCard key={item.title} item={item} />
+          ))}
+        </div>
+      </section>
     </main>
   );
 }
