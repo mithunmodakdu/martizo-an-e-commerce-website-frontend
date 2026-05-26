@@ -8,10 +8,16 @@ import {
   Users,
   Truck,
   Star,
+  PackageCheck,
+  Globe2,
+  Recycle,
+  ShieldCheck,
 } from "lucide-react";
 import type { IStatCard } from "@/components/modules/Shared/StatCard";
 import StatCard from "@/components/modules/Shared/StatCard";
 import FadeIn from "@/components/modules/Shared/FadeIn";
+import { Card, CardContent } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 
 const stats: IStatCard[] = [
   { value: "2.4M+", title: "Happy Customers", icon: <Users size={18} /> },
@@ -30,7 +36,7 @@ export default function AboutPage() {
   }, []);
 
   return (
-    <main className="bg-background text-foreground overflow-x-hidden space-y-10">
+    <main className="bg-background text-foreground overflow-x-hidden space-y-18">
       {/* Hero */}
       <section className="relative min-h-screen flex flex-col justify-center items-center overflow-hidden">
         <div
@@ -102,12 +108,95 @@ export default function AboutPage() {
       <section className="border-y border-border bg-muted/40">
         <div className="mx-auto px-6 py-14 grid grid-cols-2 md:grid-cols-4 gap-8">
           {stats.map((item, index) => (
-            <FadeIn key={item.title} delay={index * 900} className="text-center">
+            <FadeIn
+              key={item.title}
+              delay={index * 500}
+              className="text-center"
+            >
               <StatCard key={item.title} item={item} />
             </FadeIn>
           ))}
         </div>
       </section>
+
+      {/*  Mission */}
+      <section>
+        <div className="grid md:grid-cols-2 gap-16 items-center">
+          <FadeIn direction="left">
+            <Badge
+              variant="outline"
+              className="mb-5 text-primary border-primary/40 text-xs tracking-widest uppercase"
+            >
+              Who We Are
+            </Badge>
+            <h2 className="text-4xl md:text-5xl font-black leading-tight mb-6">
+              More than a store —<br />
+              <span className="text-primary">a trusted partner.</span>
+            </h2>
+            <p className="text-muted-foreground text-base leading-relaxed mb-5">
+              Martizo is Bangladesh's fastest-growing e-commerce platform, built
+              on the idea that online shopping should feel personal, not
+              transactional. From fashion and electronics to home essentials and
+              fresh groceries — we curate every category with care.
+            </p>
+            <p className="text-muted-foreground text-base leading-relaxed">
+              We work directly with local artisans, national brands, and
+              international suppliers to bring you the widest selection at the
+              fairest prices — no hidden fees, no empty promises.
+            </p>
+          </FadeIn>
+
+          <FadeIn
+            direction="right"
+            delay={1000}
+            className="grid grid-cols-2 gap-4"
+          >
+            {[
+              {
+                icon: <PackageCheck size={22} />,
+                label: "180K+ Products",
+                sub: "Across 40+ categories",
+              },
+              {
+                icon: <Globe2 size={22} />,
+                label: "Nationwide",
+                sub: "Delivery to 64 districts",
+              },
+              {
+                icon: <Recycle size={22} />,
+                label: "Eco Packaging",
+                sub: "100% recyclable boxes",
+              },
+              {
+                icon: <ShieldCheck size={22} />,
+                label: "Secure Checkout",
+                sub: "SSL & fraud protection",
+              },
+            ].map((item) => (
+              <Card
+                key={item.label}
+                className="border border-border hover:border-primary/50 hover:shadow-md hover:-translate-y-1 transition-all duration-300 group"
+              >
+                <CardContent className="p-5 flex flex-col gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors duration-300">
+                    {item.icon}
+                  </div>
+                  <div>
+                    <p className="font-bold text-sm text-foreground">
+                      {item.label}
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-0.5">
+                      {item.sub}
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </FadeIn>
+        </div>
+      </section>
+
+      <Separator className="max-w-5xl mx-auto opacity-50" />
     </main>
   );
 }
