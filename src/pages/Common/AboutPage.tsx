@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import type { IStatCard } from "@/components/modules/Shared/StatCard";
 import StatCard from "@/components/modules/Shared/StatCard";
+import FadeIn from "@/components/modules/Shared/FadeIn";
 
 const stats: IStatCard[] = [
   { value: "2.4M+", title: "Happy Customers", icon: <Users size={18} /> },
@@ -29,23 +30,20 @@ export default function AboutPage() {
   }, []);
 
   return (
-    <main
-      className="bg-background text-foreground overflow-x-hidden space-y-10"
-     
-    >
+    <main className="bg-background text-foreground overflow-x-hidden space-y-10">
       {/* Hero */}
       <section className="relative min-h-screen flex flex-col justify-center items-center overflow-hidden">
         <div
           className="absolute inset-0 pointer-events-none"
           style={{ transform: `translateY(${scrollY * 0.3}px)` }}
         >
-          <div className="absolute -top-[15%] -left-[8%] w-[60vw] h-[60vw] rounded-full bg-primary/10 blur-[120px] animate-pulse" />
-          <div className="absolute -bottom-[10%] -right-[10%] w-[50vw] h-[50vw] rounded-full bg-chart-2/12 blur-[100px] animate-pulse [animation-delay:2s]" />
-          <div className="absolute top-[45%] left-[55%] w-[25vw] h-[25vw] -translate-x-1/2 rounded-full bg-chart-1/8 blur-[80px] animate-pulse [animation-delay:4s]" />
+          <div className="absolute -top-[15%] -left-[8%] w-[60vw] h-[60vw] rounded-full bg-primary/10  animate-pulse" />
+          <div className="absolute -bottom-[10%] -right-[10%] w-[50vw] h-[50vw] rounded-full bg-chart-2/12  animate-pulse [animation-delay:2s]" />
+          <div className="absolute top-[45%] left-[55%] w-[25vw] h-[25vw] -translate-x-1/2 rounded-full bg-chart-1/8 animate-pulse [animation-delay:4s]" />
         </div>
 
         <div
-          className="absolute inset-0 pointer-events-none opacity-[0.035]"
+          className="absolute inset-0 pointer-events-none opacity-[0.3]"
           style={{
             backgroundImage:
               "radial-gradient(circle, var(--color-foreground) 1px, transparent 1px)",
@@ -71,10 +69,7 @@ export default function AboutPage() {
             <span className="text-primary">for every home.</span>
           </h1>
 
-          <p
-            className="max-w-2xl mx-auto text-muted-foreground text-lg leading-relaxed mb-10"
-           
-          >
+          <p className="max-w-2xl mx-auto text-muted-foreground text-lg leading-relaxed mb-10">
             Martizo started with one simple belief — great products should be
             easy to find, fairly priced, and delivered with joy. We've been
             proving it every day since 2017.
@@ -98,12 +93,7 @@ export default function AboutPage() {
         </div>
 
         <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-muted-foreground animate-bounce">
-          <span
-            className="text-[10px] tracking-[0.2em] uppercase"
-            style={{ fontFamily: "system-ui" }}
-          >
-            Scroll
-          </span>
+          <span className="text-[10px] tracking-[0.2em] uppercase">Scroll</span>
           <ChevronDown size={15} />
         </div>
       </section>
@@ -111,8 +101,10 @@ export default function AboutPage() {
       {/* Stats */}
       <section className="border-y border-border bg-muted/40">
         <div className="mx-auto px-6 py-14 grid grid-cols-2 md:grid-cols-4 gap-8">
-          {stats.map((item) => (
-            <StatCard key={item.title} item={item} />
+          {stats.map((item, index) => (
+            <FadeIn key={item.title} delay={index * 900} className="text-center">
+              <StatCard key={item.title} item={item} />
+            </FadeIn>
           ))}
         </div>
       </section>
