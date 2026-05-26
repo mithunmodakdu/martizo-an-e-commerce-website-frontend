@@ -21,6 +21,7 @@ const stats: IStatCard[] = [
 
 export default function AboutPage() {
   const [scrollY, setScrollY] = useState(0);
+
   useEffect(() => {
     const fn = () => setScrollY(window.scrollY);
     window.addEventListener("scroll", fn, { passive: true });
@@ -30,9 +31,7 @@ export default function AboutPage() {
   return (
     <main
       className="bg-background text-foreground overflow-x-hidden space-y-10"
-      style={{
-        fontFamily: "'Palatino Linotype', 'Book Antiqua', Palatino, serif",
-      }}
+     
     >
       {/* Hero */}
       <section className="relative min-h-screen flex flex-col justify-center items-center overflow-hidden">
@@ -66,15 +65,15 @@ export default function AboutPage() {
             Our Story
           </Badge>
 
-          <h1 className="text-[clamp(2.6rem,7.5vw,6rem)] font-black leading-[0.92] tracking-tight mb-8">
+          <h1 className="text-[clamp(2rem,7.5vw,4rem)] font-bold leading-[0.92] tracking-tight mb-8">
             Shopping reimagined
             <br />
             <span className="text-primary">for every home.</span>
           </h1>
 
           <p
-            className="max-w-2xl mx-auto text-muted-foreground text-lg md:text-xl leading-relaxed mb-10"
-            style={{ fontFamily: "system-ui, sans-serif" }}
+            className="max-w-2xl mx-auto text-muted-foreground text-lg leading-relaxed mb-10"
+           
           >
             Martizo started with one simple belief — great products should be
             easy to find, fairly priced, and delivered with joy. We've been
@@ -109,9 +108,9 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* STATS */}
+      {/* Stats */}
       <section className="border-y border-border bg-muted/40">
-        <div className="max-w-5xl mx-auto px-6 py-14 grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div className="mx-auto px-6 py-14 grid grid-cols-2 md:grid-cols-4 gap-8">
           {stats.map((item) => (
             <StatCard key={item.title} item={item} />
           ))}
