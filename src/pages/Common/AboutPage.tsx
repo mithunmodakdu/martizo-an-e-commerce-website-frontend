@@ -12,6 +12,8 @@ import {
   Globe2,
   Recycle,
   ShieldCheck,
+  Leaf,
+  HeartHandshake,
 } from "lucide-react";
 import type { IStatCard } from "@/components/modules/Shared/StatCard";
 import StatCard from "@/components/modules/Shared/StatCard";
@@ -19,12 +21,42 @@ import FadeIn from "@/components/modules/Shared/FadeIn";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
+interface IPillar { icon: React.ReactNode; title: string; description: string; accent: string; }
+
 const stats: IStatCard[] = [
   { value: "2.4M+", title: "Happy Customers", icon: <Users size={18} /> },
   { value: "180K+", title: "Products Listed", icon: <ShoppingBag size={18} /> },
   { value: "99.1%", title: "On-Time Delivery", icon: <Truck size={18} /> },
   { value: "4.9★", title: "Average Rating", icon: <Star size={18} /> },
 ];
+
+const pillars: IPillar[] = [
+  {
+    icon: <ShieldCheck size={22} />,
+    title: "Trusted Quality",
+    description: "Every product is vetted through a rigorous quality assurance process before it reaches your doorstep.",
+    accent: "bg-chart-2/15 text-chart-2",
+  },
+  {
+    icon: <Truck size={22} />,
+    title: "Lightning Delivery",
+    description: "Same-day dispatch, real-time tracking, and hassle-free returns — because your time matters.",
+    accent: "bg-chart-3/15 text-chart-3",
+  },
+  {
+    icon: <Leaf size={22} />,
+    title: "Eco Conscious",
+    description: "Carbon-neutral packaging and partnerships with sustainable suppliers make every order greener.",
+    accent: "bg-primary/10 text-primary",
+  },
+  {
+    icon: <HeartHandshake size={22} />,
+    title: "Human Support",
+    description: "Real people, not bots. Our care team is available 24/7 to make every experience seamless.",
+    accent: "bg-chart-4/15 text-chart-4",
+  },
+];
+
 
 export default function AboutPage() {
   const [scrollY, setScrollY] = useState(0);
@@ -197,6 +229,38 @@ export default function AboutPage() {
       </section>
 
       <Separator className="max-w-5xl mx-auto opacity-50" />
+
+      {/* Pillars*/}
+      <section>
+        <FadeIn className="text-center mb-14">
+          <Badge variant="outline" className="mb-5 text-primary border-primary/40 text-xs tracking-widest uppercase">
+            Our Pillars
+          </Badge>
+          <h2 className="text-4xl md:text-5xl font-bold">Why Martizo?</h2>
+          <p className="mt-4 max-w-xl mx-auto text-muted-foreground text-base" >
+            Four commitments that shape every decision we make.
+          </p>
+        </FadeIn>
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {pillars.map((p, i) => (
+            <FadeIn key={p.title} delay={i * 50}>
+              <Card className="h-full border border-border hover:border-primary/40 hover:shadow-lg hover:-translate-y-1.5 transition-all duration-300 group cursor-default">
+                <CardContent className="p-6 flex flex-col gap-4">
+                  <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${p.accent} group-hover:scale-110 transition-transform duration-300`}>
+                    {p.icon}
+                  </div>
+                  <h3 className="font-bold text-foreground">{p.title}</h3>
+                  <p className="text-muted-foreground text-sm leading-relaxed" >
+                    {p.description}
+                  </p>
+                </CardContent>
+              </Card>
+            </FadeIn>
+          ))}
+        </div>
+      </section>
+
     </main>
   );
 }
