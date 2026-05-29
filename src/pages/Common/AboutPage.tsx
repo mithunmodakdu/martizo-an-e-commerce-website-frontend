@@ -431,6 +431,73 @@ export default function AboutPage() {
           ))}
         </div>
       </section>
+
+        {/* Sustainability Band  */}
+      <section className="border-y border-border bg-primary/5">
+        <div className="max-w-5xl mx-auto px-6 py-14 flex flex-col md:flex-row items-center justify-between gap-8">
+          <FadeIn direction="left" className="flex items-center gap-5">
+            <div className="w-14 h-14 rounded-2xl bg-primary/15 flex items-center justify-center text-primary flex-shrink-0">
+              <Leaf size={28} />
+            </div>
+            <div>
+              <p className="font-black text-xl text-foreground">Green by Design</p>
+              <p className="text-muted-foreground text-sm mt-0.5 max-w-md" style={{ fontFamily: "system-ui, sans-serif" }}>
+                Martizo offsets 100% of delivery emissions and uses recyclable packaging across every order.
+              </p>
+            </div>
+          </FadeIn>
+          <FadeIn direction="right" delay={100}>
+            <Button variant="outline" className="gap-2 font-bold whitespace-nowrap border-primary/40 text-primary hover:bg-primary hover:text-primary-foreground">
+              Learn More <ArrowRight size={15} />
+            </Button>
+          </FadeIn>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section>
+        <FadeIn>
+          <div className="relative rounded-3xl overflow-hidden bg-primary px-8 py-16 md:py-20 text-center">
+            <div className="absolute -top-[30%] -left-[10%] w-[55%] h-[160%] bg-white/10 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute -bottom-[30%] -right-[10%] w-[45%] h-[130%] bg-black/10 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute right-8 bottom-4 text-white/5 pointer-events-none select-none hidden md:block">
+              <ShoppingBag size={200} strokeWidth={0.5} />
+            </div>
+
+            <div className="relative z-10">
+             
+              <p className="text-primary-foreground/70 text-xs tracking-[0.2em] uppercase font-bold mb-3" >
+                Start Shopping
+              </p>
+              <h2 className="text-3xl md:text-5xl font-black text-primary-foreground leading-tight mb-5">
+                Discover what
+                <br />
+                Martizo has for you.
+              </h2>
+              <p className="text-primary-foreground/80 max-w-md mx-auto mb-10 text-base">
+                180,000+ products. Free delivery on orders over ৳999. Returns made effortless.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button
+                  size="lg"
+                  variant="secondary"
+                  className="gap-2 px-10 font-bold text-base shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200 rounded-xl"
+                >
+                  Explore Products <ArrowRight size={16} />
+                </Button>
+                <Button
+                  size="lg"
+                  variant="ghost"
+                  className="px-8 font-bold text-base text-primary-foreground hover:bg-white/15 rounded-xl border border-white/20"
+                >
+                  Contact Us
+                </Button>
+              </div>
+            </div>
+          </div>
+        </FadeIn>
+      </section>
+
     </main>
   );
 }
