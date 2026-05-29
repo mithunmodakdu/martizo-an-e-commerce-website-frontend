@@ -21,8 +21,11 @@ import FadeIn from "@/components/modules/Shared/FadeIn";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
+// interfaces
 interface IPillar { icon: React.ReactNode; title: string; description: string; accent: string; }
+interface IMilestone { year: string; event: string; }
 
+// data
 const stats: IStatCard[] = [
   { value: "2.4M+", title: "Happy Customers", icon: <Users size={18} /> },
   { value: "180K+", title: "Products Listed", icon: <ShoppingBag size={18} /> },
@@ -57,6 +60,15 @@ const pillars: IPillar[] = [
   },
 ];
 
+const milestones: IMilestone[] = [
+  { year: "2017", event: "Martizo launched in Dhaka with 500 SKUs and a dream." },
+  { year: "2019", event: "Expanded to 8 cities and crossed 100K registered users." },
+  { year: "2021", event: "Introduced same-day delivery across Greater Dhaka." },
+  { year: "2023", event: "Hit 1 million orders and launched the Martizo app." },
+  { year: "2025", event: "Serving 2.4M+ customers nationally with 180K+ products." },
+];
+
+
 
 export default function AboutPage() {
   const [scrollY, setScrollY] = useState(0);
@@ -68,7 +80,7 @@ export default function AboutPage() {
   }, []);
 
   return (
-    <main className="bg-background text-foreground overflow-x-hidden space-y-18">
+    <main className="bg-background text-foreground space-y-18">
       {/* Hero */}
       <section className="relative min-h-screen flex flex-col justify-center items-center overflow-hidden">
         <div
@@ -228,8 +240,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <Separator className="max-w-5xl mx-auto opacity-50" />
-
       {/* Pillars*/}
       <section>
         <FadeIn className="text-center mb-14">
@@ -260,6 +270,47 @@ export default function AboutPage() {
           ))}
         </div>
       </section>
+
+      {/* Timeline */}
+      <section className="bg-muted/30 border-y border-border">
+        <div className="mx-auto px-6 py-24 md:py-32">
+          <FadeIn className="text-center mb-14">
+            <Badge variant="outline" className="mb-5 text-primary border-primary/40 text-xs tracking-widest uppercase">
+              Journey
+            </Badge>
+            <h2 className="text-4xl md:text-5xl font-black">How we got here</h2>
+          </FadeIn>
+
+          <div className="relative">
+            <div className="absolute left-[78px] md:left-1/2 top-0 bottom-0 w-px bg-border -translate-x-1/2" />
+            <div className="flex flex-col gap-10">
+              {milestones.map((m, i) => (
+                <FadeIn key={m.year} delay={i * 100}>
+                  <div className={`flex items-start gap-6 md:gap-8 ${i % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"}`}>
+                    <div className={`flex-1 ${i % 2 === 0 ? "md:text-right" : "md:text-left"} hidden md:block`}>
+                      <span className="inline-block bg-primary/10 text-primary font-black text-sm px-4 py-1.5 rounded-full border border-primary/20">
+                        {m.year}
+                      </span>
+                    </div>
+                    <div className="relative z-10 flex-shrink-0">
+                      <div className="w-4 h-4 rounded-full bg-primary ring-4 ring-background shadow-md mt-1.5" />
+                    </div>
+                    <div className="flex-1">
+                      <span className="inline-block mb-1.5 bg-primary/10 text-primary font-black text-sm px-3 py-1 rounded-full border border-primary/20 md:hidden">
+                        {m.year}
+                      </span>
+                      <p className="text-foreground font-semibold text-base leading-snug">
+                        {m.event}
+                      </p>
+                    </div>
+                  </div>
+                </FadeIn>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
 
     </main>
   );
