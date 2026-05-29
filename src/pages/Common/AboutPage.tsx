@@ -19,11 +19,25 @@ import type { IStatCard } from "@/components/modules/Shared/StatCard";
 import StatCard from "@/components/modules/Shared/StatCard";
 import FadeIn from "@/components/modules/Shared/FadeIn";
 import { Card, CardContent } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+import ContentHeader from "@/components/modules/Shared/ContentHeader/ContentHeader";
 
 // interfaces
-interface IPillar { icon: React.ReactNode; title: string; description: string; accent: string; }
-interface IMilestone { year: string; event: string; }
+interface IPillar {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+  accent: string;
+}
+interface IMilestone {
+  year: string;
+  event: string;
+}
+interface ITeamMember {
+  name: string;
+  role: string;
+  initials: string;
+  bg: string;
+}
 
 // data
 const stats: IStatCard[] = [
@@ -37,38 +51,88 @@ const pillars: IPillar[] = [
   {
     icon: <ShieldCheck size={22} />,
     title: "Trusted Quality",
-    description: "Every product is vetted through a rigorous quality assurance process before it reaches your doorstep.",
+    description:
+      "Every product is vetted through a rigorous quality assurance process before it reaches your doorstep.",
     accent: "bg-chart-2/15 text-chart-2",
   },
   {
     icon: <Truck size={22} />,
     title: "Lightning Delivery",
-    description: "Same-day dispatch, real-time tracking, and hassle-free returns — because your time matters.",
+    description:
+      "Same-day dispatch, real-time tracking, and hassle-free returns — because your time matters.",
     accent: "bg-chart-3/15 text-chart-3",
   },
   {
     icon: <Leaf size={22} />,
     title: "Eco Conscious",
-    description: "Carbon-neutral packaging and partnerships with sustainable suppliers make every order greener.",
+    description:
+      "Carbon-neutral packaging and partnerships with sustainable suppliers make every order greener.",
     accent: "bg-primary/10 text-primary",
   },
   {
     icon: <HeartHandshake size={22} />,
     title: "Human Support",
-    description: "Real people, not bots. Our care team is available 24/7 to make every experience seamless.",
+    description:
+      "Real people, not bots. Our care team is available 24/7 to make every experience seamless.",
     accent: "bg-chart-4/15 text-chart-4",
   },
 ];
 
 const milestones: IMilestone[] = [
-  { year: "2017", event: "Martizo launched in Dhaka with 500 SKUs and a dream." },
-  { year: "2019", event: "Expanded to 8 cities and crossed 100K registered users." },
+  {
+    year: "2017",
+    event: "Martizo launched in Dhaka with 500 SKUs and a dream.",
+  },
+  {
+    year: "2019",
+    event: "Expanded to 8 cities and crossed 100K registered users.",
+  },
   { year: "2021", event: "Introduced same-day delivery across Greater Dhaka." },
   { year: "2023", event: "Hit 1 million orders and launched the Martizo app." },
-  { year: "2025", event: "Serving 2.4M+ customers nationally with 180K+ products." },
+  {
+    year: "2025",
+    event: "Serving 2.4M+ customers nationally with 180K+ products.",
+  },
 ];
 
-
+const team: ITeamMember[] = [
+  {
+    name: "Nadia Hossain",
+    role: "Founder & CEO",
+    initials: "NH",
+    bg: "bg-chart-2",
+  },
+  {
+    name: "Rafiq Uddin",
+    role: "Chief Operating Officer",
+    initials: "RU",
+    bg: "bg-chart-3",
+  },
+  {
+    name: "Samira Islam",
+    role: "Head of Merchandising",
+    initials: "SI",
+    bg: "bg-primary",
+  },
+  {
+    name: "Tanvir Alam",
+    role: "VP of Technology",
+    initials: "TA",
+    bg: "bg-chart-4",
+  },
+  {
+    name: "Farhana Begum",
+    role: "Customer Experience Lead",
+    initials: "FB",
+    bg: "bg-chart-5",
+  },
+  {
+    name: "Arif Chowdhury",
+    role: "Growth & Partnerships",
+    initials: "AC",
+    bg: "bg-chart-1",
+  },
+];
 
 export default function AboutPage() {
   const [scrollY, setScrollY] = useState(0);
@@ -243,11 +307,14 @@ export default function AboutPage() {
       {/* Pillars*/}
       <section>
         <FadeIn className="text-center mb-14">
-          <Badge variant="outline" className="mb-5 text-primary border-primary/40 text-xs tracking-widest uppercase">
+          <Badge
+            variant="outline"
+            className="mb-5 text-primary border-primary/40 text-xs tracking-widest uppercase"
+          >
             Our Pillars
           </Badge>
           <h2 className="text-4xl md:text-5xl font-bold">Why Martizo?</h2>
-          <p className="mt-4 max-w-xl mx-auto text-muted-foreground text-base" >
+          <p className="mt-4 max-w-xl mx-auto text-muted-foreground text-base">
             Four commitments that shape every decision we make.
           </p>
         </FadeIn>
@@ -257,11 +324,13 @@ export default function AboutPage() {
             <FadeIn key={p.title} delay={i * 50}>
               <Card className="h-full border border-border hover:border-primary/40 hover:shadow-lg hover:-translate-y-1.5 transition-all duration-300 group cursor-default">
                 <CardContent className="p-6 flex flex-col gap-4">
-                  <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${p.accent} group-hover:scale-110 transition-transform duration-300`}>
+                  <div
+                    className={`w-12 h-12 rounded-2xl flex items-center justify-center ${p.accent} group-hover:scale-110 transition-transform duration-300`}
+                  >
                     {p.icon}
                   </div>
                   <h3 className="font-bold text-foreground">{p.title}</h3>
-                  <p className="text-muted-foreground text-sm leading-relaxed" >
+                  <p className="text-muted-foreground text-sm leading-relaxed">
                     {p.description}
                   </p>
                 </CardContent>
@@ -273,9 +342,12 @@ export default function AboutPage() {
 
       {/* Timeline */}
       <section className="bg-muted/30 border-y border-border">
-        <div className="mx-auto px-6 py-24 md:py-32">
+        <div className="mx-auto px-6 py-24">
           <FadeIn className="text-center mb-14">
-            <Badge variant="outline" className="mb-5 text-primary border-primary/40 text-xs tracking-widest uppercase">
+            <Badge
+              variant="outline"
+              className="mb-5 text-primary border-primary/40 text-xs tracking-widest uppercase"
+            >
               Journey
             </Badge>
             <h2 className="text-4xl md:text-5xl font-black">How we got here</h2>
@@ -286,8 +358,12 @@ export default function AboutPage() {
             <div className="flex flex-col gap-10">
               {milestones.map((m, i) => (
                 <FadeIn key={m.year} delay={i * 100}>
-                  <div className={`flex items-start gap-6 md:gap-8 ${i % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"}`}>
-                    <div className={`flex-1 ${i % 2 === 0 ? "md:text-right" : "md:text-left"} hidden md:block`}>
+                  <div
+                    className={`flex items-start gap-6 md:gap-8 ${i % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"}`}
+                  >
+                    <div
+                      className={`flex-1 ${i % 2 === 0 ? "md:text-right" : "md:text-left"} hidden md:block`}
+                    >
                       <span className="inline-block bg-primary/10 text-primary font-black text-sm px-4 py-1.5 rounded-full border border-primary/20">
                         {m.year}
                       </span>
@@ -311,7 +387,50 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* Team */}
+      <section>
+        <FadeIn className="text-center mb-14">
+          <Badge
+            variant="outline"
+            className="mb-3 text-primary border-primary/40 text-xs tracking-widest uppercase"
+          >
+            The People
+          </Badge>
+          <h2 className="text-4xl md:text-5xl font-black">Meet our team</h2>
+          <p
+            className="mt-4 max-w-xl mx-auto text-muted-foreground text-base"
+            style={{ fontFamily: "system-ui, sans-serif" }}
+          >
+            A passionate group of builders, dreamers, and doers determined to
+            make every shopping experience unforgettable.
+          </p>
+        </FadeIn>
 
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-5">
+          {team.map((t, i) => (
+            <FadeIn key={t.name} delay={i * 80}>
+              <Card className="group hover:-translate-y-1.5 hover:shadow-lg transition-all duration-300 border border-border hover:border-primary/40 cursor-pointer">
+                <CardContent className="p-6 flex flex-col items-center text-center gap-4">
+                  <div
+                    className={`w-[4.5rem] h-[4.5rem] rounded-2xl ${t.bg} flex items-center justify-center text-white font-black text-xl shadow-md group-hover:scale-105 group-hover:rotate-2 transition-transform duration-300`}
+                  >
+                    {t.initials}
+                  </div>
+                  <div>
+                    <p className="font-bold text-foreground">{t.name}</p>
+                    <p
+                      className="text-muted-foreground text-xs mt-0.5 tracking-wide"
+                      style={{ fontFamily: "system-ui, sans-serif" }}
+                    >
+                      {t.role}
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            </FadeIn>
+          ))}
+        </div>
+      </section>
     </main>
   );
 }
