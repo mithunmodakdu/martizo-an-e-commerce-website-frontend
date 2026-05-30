@@ -138,7 +138,7 @@ export default function Navbar() {
     },
     {
       label: "Track Order",
-      href: "/track-order",
+      href: "/dashboard/track-order",
       type: "link",
     },
     {
