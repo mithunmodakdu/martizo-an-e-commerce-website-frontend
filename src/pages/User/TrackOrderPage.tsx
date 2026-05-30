@@ -86,7 +86,7 @@ const TRACKING_DATA = {
 export default function TrackOrderPage() {
   const [query, setQuery] = useState("");
   const [data, setData] = useState(null);
-  console.log(data)
+  const [error, setError] = useState(false);
 
 
   function handleTrack() {
@@ -94,8 +94,10 @@ export default function TrackOrderPage() {
 
     if (TRACKING_DATA[trimmed]) {
       setData(TRACKING_DATA[trimmed]);
+      setError(false);
     } else {
       setData(null);
+      setError(true);
     }
   }
 
@@ -152,6 +154,27 @@ export default function TrackOrderPage() {
             </p>
           </CardContent>
         </Card>
+
+        {/* Error Card */}
+        {error && (
+          <Card className="border border-destructive/30 bg-destructive/5">
+            <CardContent className="p-5 flex gap-3 items-start">
+              <div className="w-8 h-8 rounded-full bg-destructive/10 flex items-center justify-center shrink-0 mt-0.5">
+                <Search className="w-4 h-4 text-destructive" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-foreground">
+                  Order not found
+                </p>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  Double-check your order ID or tracking number and try again.
+                  It may take a few hours after placing to appear.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
       </main>
     </div>
   );
