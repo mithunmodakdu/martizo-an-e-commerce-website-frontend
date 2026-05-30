@@ -1,3 +1,4 @@
+import TrackOrderPage from "@/pages/User/TrackOrderPage";
 import type { ISidebarItem } from "@/types";
 import { lazy } from "react";
 const UserProfilePage = lazy(() => import("@/pages/User/UserProfilePage"));
@@ -30,6 +31,11 @@ export const dashboardSidebarItems: ISidebarItem[] = [
         title: "My Orders",
         url: "/dashboard/orders",
         component: Orders,
+      },
+      {
+        title: "Track Order",
+        url: "/dashboard/track-order",
+        component: TrackOrderPage
       }
     ],
   },
