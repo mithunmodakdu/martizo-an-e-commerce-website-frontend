@@ -1,9 +1,12 @@
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
 import {
   ArrowRight,
   CheckCircle2,
+  Clock,
   MapPin,
   Package,
   Search,
@@ -12,7 +15,41 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 
-const TRACKING_DATA = {
+// types
+interface IOrderItem {
+  name: string;
+  variant: string;
+  qty: number;
+  price: string;
+  image: string;
+}
+
+type TStepStatus = "done" | "active" | "pending";
+
+interface ITrackingStep {
+  id: number;
+  label: string;
+  description: string;
+  timestamp: string | null;
+  status: TStepStatus;
+  icon: React.ReactNode;
+}
+
+interface ITrackingData {
+  orderId: string;
+  status: string;
+  statusColor: string;
+  estimatedDelivery: string;
+  carrier: string;
+  trackingNumber: string;
+  lastLocation: string;
+  steps: ITrackingStep[];
+  items: IOrderItem[];
+  shippingAddress: string;
+}
+
+// data
+const TRACKING_DATA: Record<string, ITrackingData> = {
   "ORD-2024-8821": {
     orderId: "ORD-2024-8821",
     status: "Out for Delivery",
@@ -83,11 +120,70 @@ const TRACKING_DATA = {
   },
 };
 
+// Step Indicator
+function StepNode({ step, isLast }: { step: ITrackingStep; isLast: boolean }) {
+  const isDone = step.status === "done";
+  const isActive = step.status === "active";
+
+  return (
+    <div className="flex gap-4">
+      {/* Line + Icon */}
+      <div className="flex flex-col items-center">
+        <div
+          className={`
+            flex items-center justify-center w-9 h-9 rounded-full border-2 transition-all duration-300 shrink-0
+            ${isDone ? "bg-primary border-primary text-primary-foreground shadow-md shadow-primary/30" : ""}
+            ${isActive ? "bg-white border-primary text-primary shadow-lg shadow-primary/20 ring-4 ring-primary/10" : ""}
+            ${step.status === "pending" ? "bg-muted border-border text-muted-foreground" : ""}
+          `}
+        >
+          {isDone ? <CheckCircle2 className="w-4 h-4" /> : step.icon}
+        </div>
+        {!isLast && (
+          <div
+            className={`w-0.5 flex-1 mt-1 mb-1 min-h-[2rem] rounded-full transition-colors duration-500 ${
+              isDone ? "bg-primary" : "bg-border"
+            }`}
+          />
+        )}
+      </div>
+
+      {/* Content */}
+      <div className={`pb-6 ${isLast ? "pb-0" : ""}`}>
+        <div className="flex items-center gap-2 mb-0.5">
+          <p
+            className={`text-sm font-semibold ${
+              step.status === "pending"
+                ? "text-muted-foreground"
+                : "text-foreground"
+            }`}
+          >
+            {step.label}
+          </p>
+          {isActive && (
+            <span className="flex items-center gap-1 text-[11px] font-medium text-primary bg-primary/10 px-2 py-0.5 rounded-full">
+              <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+              Live
+            </span>
+          )}
+        </div>
+        <p className="text-xs text-muted-foreground">{step.description}</p>
+        {step.timestamp && (
+          <p className="text-[11px] text-muted-foreground/70 mt-0.5 flex items-center gap-1">
+            <Clock className="w-3 h-3" />
+            {step.timestamp}
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// TrackOrderPage
 export default function TrackOrderPage() {
   const [query, setQuery] = useState("");
-  const [data, setData] = useState(null);
+  const [data, setData] = useState<ITrackingData | null>(null);
   const [error, setError] = useState(false);
-
 
   function handleTrack() {
     const trimmed = query.trim().toUpperCase();
@@ -175,6 +271,80 @@ export default function TrackOrderPage() {
           </Card>
         )}
 
+        {/* Order Tracking */}
+        {data && (
+          <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-1500">
+            {/* Order Tracking Status Banner */}
+            <Card className="border overflow-hidden">
+              <div className="h-1 bg-primary w-full" />
+              <CardContent className="p-5">
+                <div className="flex items-start justify-between gap-4 flex-wrap">
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-1">
+                      Order ID
+                    </p>
+                    <p className="font-bold text-foreground text-lg tracking-tight">
+                      {data.orderId}
+                    </p>
+                  </div>
+                  <Badge
+                    className={`text-xs font-semibold px-3 py-1 rounded-full border ${data.statusColor}`}
+                  >
+                    {data.status}
+                  </Badge>
+                </div>
+
+                <Separator className="my-4" />
+
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 text-sm">
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-0.5">
+                      Est. Delivery
+                    </p>
+                    <p className="font-semibold text-foreground text-sm">
+                      {data.estimatedDelivery}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-0.5">
+                      Carrier
+                    </p>
+                    <p className="font-semibold text-foreground text-sm">
+                      {data.carrier}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-0.5">
+                      Last Location
+                    </p>
+                    <p className="font-semibold text-foreground text-sm flex items-center gap-1">
+                      <MapPin className="w-3.5 h-3.5 text-primary" />
+                      {data.lastLocation}
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Step Indicator Timeline */}
+            <Card className="border">
+              <CardContent className="p-5 pb-6">
+                <h2 className="font-bold text-sm text-foreground mb-5">
+                  Shipment Progress
+                </h2>
+                <div>
+                  {data.steps.map((step, idx) => (
+                    <StepNode
+                      key={step.id}
+                      step={step}
+                      isLast={idx === data.steps.length - 1}
+                    />
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
       </main>
     </div>
   );
