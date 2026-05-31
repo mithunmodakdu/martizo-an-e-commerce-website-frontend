@@ -1,6 +1,8 @@
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
 import {
   ArrowRight,
   CheckCircle2,
@@ -175,6 +177,66 @@ export default function TrackOrderPage() {
           </Card>
         )}
 
+         {/* Order Tracking */}
+        {data && (
+          <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-1500">
+            {/* Order Tracking Status Banner */}
+            <Card className="border overflow-hidden">
+              <div className="h-1 bg-primary w-full" />
+              <CardContent className="p-5">
+                <div className="flex items-start justify-between gap-4 flex-wrap">
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-1">
+                      Order ID
+                    </p>
+                    <p className="font-bold text-foreground text-lg tracking-tight">
+                      {data.orderId}
+                    </p>
+                  </div>
+                  <Badge
+                    className={`text-xs font-semibold px-3 py-1 rounded-full border ${data.statusColor}`}
+                    
+                  >
+                    {data.status}
+                  </Badge>
+                </div>
+
+                <Separator className="my-4" />
+
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 text-sm">
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-0.5">
+                      Est. Delivery
+                    </p>
+                    <p className="font-semibold text-foreground text-sm">
+                      {data.estimatedDelivery}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-0.5">
+                      Carrier
+                    </p>
+                    <p className="font-semibold text-foreground text-sm">
+                      {data.carrier}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-0.5">
+                      Last Location
+                    </p>
+                    <p className="font-semibold text-foreground text-sm flex items-center gap-1">
+                      <MapPin className="w-3.5 h-3.5 text-primary" />
+                      {data.lastLocation}
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            </div>)
+        }
+
+
+      
       </main>
     </div>
   );
