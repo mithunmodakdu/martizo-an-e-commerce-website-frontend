@@ -11,6 +11,8 @@ import {
   Clock,
   MapPin,
   Package,
+  Phone,
+  RotateCcw,
   Search,
   ShoppingBag,
   Truck,
@@ -346,59 +348,87 @@ export default function TrackOrderPage() {
                 </div>
               </CardContent>
             </Card>
+
+            {/* Collapsible Order Items */}
+            <Card className="border">
+              <CardContent className="p-0">
+                <button
+                  className="w-full flex items-center justify-between px-5 py-4 text-left hover:bg-muted/40 transition-colors"
+                  onClick={() => setShowItems((v) => !v)}
+                >
+                  <span className="font-bold text-sm text-foreground">
+                    Order Items ({data?.items.length})
+                  </span>
+                  {showItems ? (
+                    <ChevronUp className="w-4 h-4 text-muted-foreground" />
+                  ) : (
+                    <ChevronDown className="w-4 h-4 text-muted-foreground" />
+                  )}
+                </button>
+
+                {showItems && (
+                  <div className="border-t divide-y">
+                    {data?.items.map((item, i) => (
+                      <div
+                        key={i}
+                        className="flex items-center gap-4 px-5 py-4"
+                      >
+                        <div className="w-12 h-12 rounded-xl bg-muted flex items-center justify-center text-2xl shrink-0">
+                          {item.image}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-semibold text-foreground truncate">
+                            {item.name}
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            {item.variant} · Qty: {item.qty}
+                          </p>
+                        </div>
+                        <p className="text-sm font-bold text-foreground shrink-0">
+                          {item.price}
+                        </p>
+                      </div>
+                    ))}
+                    <div className="px-5 py-3 bg-muted/30 flex items-center gap-2">
+                      <MapPin className="w-3.5 h-3.5 text-muted-foreground" />
+                      <span className="text-xs text-muted-foreground">
+                        Delivering to:{" "}
+                        <span className="text-foreground font-medium">
+                          {data?.shippingAddress}
+                        </span>
+                      </span>
+                    </div>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Actions */}
+            <div className="flex gap-3 flex-wrap">
+              <Button variant="outline" size="sm" className="gap-2 text-xs">
+                <RotateCcw className="w-3.5 h-3.5" />
+                Request Return
+              </Button>
+              <Button variant="outline" size="sm" className="gap-2 text-xs">
+                <Phone className="w-3.5 h-3.5" />
+                Contact Support
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="gap-2 text-xs text-muted-foreground ml-auto"
+                onClick={() => {
+                  setData(null);
+                  setQuery("");
+                  setError(false);
+                }}
+              >
+                Track another order
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Button>
+            </div>
           </div>
         )}
-
-        {/* Collapsible Order Items */}
-        <Card className="border">
-          <CardContent className="p-0">
-            <button
-              className="w-full flex items-center justify-between px-5 py-4 text-left hover:bg-muted/40 transition-colors"
-              onClick={() => setShowItems((v) => !v)}
-            >
-              <span className="font-bold text-sm text-foreground">
-                Order Items ({data?.items.length})
-              </span>
-              {showItems ? (
-                <ChevronUp className="w-4 h-4 text-muted-foreground" />
-              ) : (
-                <ChevronDown className="w-4 h-4 text-muted-foreground" />
-              )}
-            </button>
-
-            {showItems && (
-              <div className="border-t divide-y">
-                {data?.items.map((item, i) => (
-                  <div key={i} className="flex items-center gap-4 px-5 py-4">
-                    <div className="w-12 h-12 rounded-xl bg-muted flex items-center justify-center text-2xl shrink-0">
-                      {item.image}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold text-foreground truncate">
-                        {item.name}
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        {item.variant} · Qty: {item.qty}
-                      </p>
-                    </div>
-                    <p className="text-sm font-bold text-foreground shrink-0">
-                      {item.price}
-                    </p>
-                  </div>
-                ))}
-                <div className="px-5 py-3 bg-muted/30 flex items-center gap-2">
-                  <MapPin className="w-3.5 h-3.5 text-muted-foreground" />
-                  <span className="text-xs text-muted-foreground">
-                    Delivering to:{" "}
-                    <span className="text-foreground font-medium">
-                      {data?.shippingAddress}
-                    </span>
-                  </span>
-                </div>
-              </div>
-            )}
-          </CardContent>
-        </Card>
       </main>
     </div>
   );
