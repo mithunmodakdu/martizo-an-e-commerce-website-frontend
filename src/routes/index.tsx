@@ -1,6 +1,5 @@
 import App from "@/App";
 import DashboardLayout from "@/components/layout/DashboardLayout";
-import About from "@/pages/Common/AboutPage";
 import LoginPage from "@/pages/Common/Login";
 import SignupPage from "@/pages/Common/SignupPage";
 import Verify from "@/pages/Common/Verify";
