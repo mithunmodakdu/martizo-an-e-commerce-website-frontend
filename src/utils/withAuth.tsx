@@ -1,20 +1,27 @@
 import { useGetMeQuery } from "@/redux/features/users/users.api";
 import type { ComponentType } from "react";
 import { Navigate } from "react-router";
+import Loading from "@/utils/Loading";
 
 export const withAuth = (Component: ComponentType, authRoles: string[]) => {
   return function AuthWrapper() {
-    const {data, isLoading} = useGetMeQuery(undefined);
+    const { data, isLoading, isFetching } = useGetMeQuery(undefined);
 
-    if(!isLoading && !data?.data?.email ){
-      return <Navigate to="/login"/>;
+    // while fetching user info, show loader to avoid rendering protected UI
+    if (isLoading || isFetching) {
+      return <Loading />;
     }
 
-    if(!isLoading && !authRoles.includes(data?.data?.role)){
-      return <Navigate to="/unauthorized"/>;
+    // not authenticated
+    if (!data?.data?.email) {
+      return <Navigate to="/login" replace />;
     }
 
-    // console.log("inside withAuth", data)
-    return <Component/>;
+    // not authorized
+    if (!authRoles.includes(data?.data?.role)) {
+      return <Navigate to="/unauthorized" replace />;
+    }
+
+    return <Component />;
   };
 };

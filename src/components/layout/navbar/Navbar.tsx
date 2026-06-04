@@ -259,7 +259,7 @@ export default function Navbar() {
           {/* wishlist */}
           {!wishlistLoading && (
             <Button variant="outline" asChild>
-              <Link to="/wishlist">
+              <Link to="/dashboard/wishlist">
                 <span>
                   <Heart />
                 </span>
@@ -269,7 +269,7 @@ export default function Navbar() {
           }
 
           {/* cart */}
-          <Link className="asChild" to={"/cart"}>
+          <Link className="asChild" to={"/dashboard/cart"}>
             <Button className="cursor-pointer" variant="outline">
               <span>
                 <ShoppingCart />

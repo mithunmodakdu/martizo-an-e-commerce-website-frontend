@@ -29,7 +29,9 @@ const DashboardHeader = () => {
           <Separator orientation="vertical" className="h-6" />
           <div className="flex items-center gap-2 cursor-pointer">
             <Avatar className="h-10 w-10">
-              <AvatarImage src={userData?.data?.avatar} alt="Profile image" />
+              <AvatarImage 
+              src={userData?.data?.avatar} 
+              alt="Profile image" />
               <AvatarFallback>
                 <User />
               </AvatarFallback>
