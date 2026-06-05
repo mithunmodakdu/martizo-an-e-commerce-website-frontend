@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import { useGetOrderByTransactionIdQuery } from "@/redux/features/order/order.api";
 import {
   ArrowRight,
   CheckCircle2,
@@ -54,7 +55,7 @@ interface ITrackingData {
 
 // data
 const TRACKING_DATA: Record<string, ITrackingData> = {
-  "ORD-2024-8821": {
+  "tran_id_1774417367854_755": {
     orderId: "ORD-2024-8821",
     status: "Out for Delivery",
     statusColor: "bg-amber-100 text-amber-700 border-amber-200",
@@ -186,12 +187,14 @@ function StepNode({ step, isLast }: { step: ITrackingStep; isLast: boolean }) {
 // TrackOrderPage
 export default function TrackOrderPage() {
   const [query, setQuery] = useState("");
+  const {data: orderData} = useGetOrderByTransactionIdQuery(query);
+  console.log(orderData)
   const [data, setData] = useState<ITrackingData | null>(null);
   const [error, setError] = useState(false);
   const [showItems, setShowItems] = useState(false);
 
   function handleTrack() {
-    const trimmed = query.trim().toUpperCase();
+    const trimmed = query.trim();
 
     if (TRACKING_DATA[trimmed]) {
       setData(TRACKING_DATA[trimmed]);
@@ -228,7 +231,7 @@ export default function TrackOrderPage() {
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input
                   className="pl-9 h-11 text-sm"
-                  placeholder="e.g. ORD-2024-8821"
+                  placeholder="Write your transaction Id e.g. tran_id_1774417367854_755"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleTrack()}
@@ -247,10 +250,10 @@ export default function TrackOrderPage() {
               <button
                 className="text-primary underline-offset-2 hover:underline"
                 onClick={() => {
-                  setQuery("ORD-2024-8821");
+                  setQuery("tran_id_1774417367854_755");
                 }}
               >
-                ORD-2024-8821
+                tran_id_1774417367854_755
               </button>
             </p>
           </CardContent>
@@ -268,7 +271,7 @@ export default function TrackOrderPage() {
                   Order not found
                 </p>
                 <p className="text-xs text-muted-foreground mt-0.5">
-                  Double-check your order ID or tracking number and try again.
+                  Double-check your transaction ID and try again.
                   It may take a few hours after placing to appear.
                 </p>
               </div>
