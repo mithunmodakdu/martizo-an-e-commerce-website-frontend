@@ -7,6 +7,7 @@ export const ordersApi = baseApi.injectEndpoints({
         url: `/orders/${transactionId}`,
         method: "GET",
       }),
+      transformResponse: res => res.data,
       providesTags: ["ORDERS"]
     }),
 
