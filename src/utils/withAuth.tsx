@@ -22,6 +22,10 @@ export const withAuth = (Component: ComponentType, authRoles: string[]) => {
       return <Navigate to="/unauthorized" replace />;
     }
 
+    console.log("user:", data?.data?.email);
+console.log("loading:", isLoading);
+console.log("path:", location.pathname);
+
     return <Component />;
   };
 };

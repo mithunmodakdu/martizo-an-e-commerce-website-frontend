@@ -23,9 +23,7 @@ const SearchBox = () => {
   const handleSearch = (value: string) => {
     if (value) {
       navigate(`/products?searchTerm=${value}`);
-    } else {
-      navigate("/");
-    }
+    } 
   };
 
   

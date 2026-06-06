@@ -188,7 +188,6 @@ function StepNode({ step, isLast }: { step: ITrackingStep; isLast: boolean }) {
 export default function TrackOrderPage() {
   const [query, setQuery] = useState("");
   const {data: orderData} = useGetOrderByTransactionIdQuery(query);
-  console.log(orderData)
   const [data, setData] = useState<ITrackingData | null>(null);
   const [error, setError] = useState(false);
   const [showItems, setShowItems] = useState(false);
