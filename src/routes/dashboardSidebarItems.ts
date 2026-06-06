@@ -12,10 +12,16 @@ export const dashboardSidebarItems: ISidebarItem[] = [
     title: "Dashboard",
     url: "#",
     items: [
+      
       {
         title: "My Profile",
         url: "/dashboard/profile",
         component: UserProfilePage,
+      },
+       {
+        title: "Track Order",
+        url: "/dashboard/track-order",
+        component: TrackOrderPage
       },
       {
         title: "My Wishlist",
@@ -31,12 +37,8 @@ export const dashboardSidebarItems: ISidebarItem[] = [
         title: "My Orders",
         url: "/dashboard/orders",
         component: Orders,
-      },
-      {
-        title: "Track Order",
-        url: "/dashboard/track-order",
-        component: TrackOrderPage
       }
+     
     ],
   },
 ];
