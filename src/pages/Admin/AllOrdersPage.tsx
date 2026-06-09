@@ -63,6 +63,7 @@ import {
   TrendingUp,
 } from "lucide-react";
 import { useMemo, useState } from "react";
+import { Link } from "react-router";
 
 const AllOrdersPage = () => {
   const [search, setSearch] = useState("");
@@ -561,10 +562,13 @@ const AllOrdersPage = () => {
                                 <Eye className="h-3.5 w-3.5" />
                                 View
                               </DropdownMenuItem>
-                              <DropdownMenuItem className="gap-2 text-sm cursor-pointer">
-                                <Pencil className="h-3.5 w-3.5" />
-                                Edit
-                              </DropdownMenuItem>
+                              <Link to={`/admin/update-order/${order.id}`}>
+                                <DropdownMenuItem className="gap-2 text-sm cursor-pointer">
+                                  <Pencil className="h-3.5 w-3.5" />
+                                  Edit
+                                </DropdownMenuItem>
+                              </Link>
+
                               <DropdownMenuSeparator />
                               <DropdownMenuItem className="gap-2 text-sm cursor-pointer text-destructive focus:text-destructive">
                                 <Trash2 className="h-3.5 w-3.5" />
