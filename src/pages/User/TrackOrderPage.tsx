@@ -40,21 +40,60 @@ interface ITrackingStep {
   icon: React.ReactNode;
 }
 
+
+
+
 interface ITrackingData {
-  orderId: string;
-  status: string;
+
   statusColor: string;
-  estimatedDelivery: string;
-  carrier: string;
-  trackingNumber: string;
-  lastLocation: string;
+
   steps: ITrackingStep[];
   items: IOrderItem[];
   shippingAddress: string;
 }
 
+interface DBOrder {
+  _id: string;
+  orderNo: string;
+  invoiceNo: string;
+  status: "PENDING" | "PAID" | "PROCESSING" | "SHIPPED" | "OUT_FOR_DELIVERY" | "DELIVERED" | "CANCELLED";
+  createdAt: string;
+  updatedAt: string;
+  estimatedDelivery?: string;   
+  carrier?: string;             
+  trackingNumber?: string;      
+  lastLocation?: string;        
+  shippingAddress: {
+    name: string;
+    phone: string;
+    address: string;
+    city: string;
+    postalCode: string;
+    country: string;
+  };
+  items: Array<{
+    productId: string;
+    name: string;
+    categoryName: string;
+    quantity: number;
+    price: { regular: number; sale: number | null; currency: string };
+    variant: string | null;
+  }>;
+  itemsPrice: number;
+  taxPrice: number;
+  shippingPrice: number;
+  totalPrice: number;
+  paymentMethod: string;
+  payment?: {
+    transactionId: string;
+    status: string;
+    invoiceUrl?: string;
+  };
+}
+
+
 // data
-const TRACKING_DATA: Record<string, ITrackingData> = {
+const TRACKING_DATA = {
   "tran_id_1774417367854_755": {
     orderId: "ORD-2024-8821",
     status: "Out for Delivery",
@@ -186,17 +225,17 @@ function StepNode({ step, isLast }: { step: ITrackingStep; isLast: boolean }) {
 
 // TrackOrderPage
 export default function TrackOrderPage() {
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState(null);
   const {data: orderData} = useGetOrderByTransactionIdQuery(query);
-  const [data, setData] = useState<ITrackingData | null>(null);
+  console.log(orderData)
+  const [data, setData] = useState(null);
   const [error, setError] = useState(false);
   const [showItems, setShowItems] = useState(false);
 
   function handleTrack() {
-    const trimmed = query.trim();
 
-    if (TRACKING_DATA[trimmed]) {
-      setData(TRACKING_DATA[trimmed]);
+    if (data) {
+      setData(data);
       setError(false);
     } else {
       setData(null);

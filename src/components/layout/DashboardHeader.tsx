@@ -8,7 +8,6 @@ import { useGetMeQuery } from "@/redux/features/users/users.api";
 
 const DashboardHeader = () => {
   const { data: userData } = useGetMeQuery(undefined);
-  console.log("user from dashboard header", userData)
 
   return (
     <header className="sticky top-0 z-30 bg-background/80 backdrop-blur-md border-b border-border/60 px-6 py-3">

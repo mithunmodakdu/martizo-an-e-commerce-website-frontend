@@ -12,6 +12,7 @@ const AddProduct = lazy(() => import("@/pages/Admin/AddProduct"));
 const UpdateProduct = lazy(() => import("@/pages/Admin/UpdateProduct"));
 const ProductCategories = lazy(() => import("@/pages/Admin/ProductCategories"));
 const ProductBrands = lazy(() => import("@/pages/Admin/ProductBrands"));
+const UpdateOrderPage = lazy(() => import("@/pages/Admin/UpdateOrderPage"))
 
 
 export const adminPanelSidebarItems: ISidebarItem[] = [
@@ -86,6 +87,10 @@ export const adminPanelSidebarItems: ISidebarItem[] = [
           title: "All Orders",
           url: "/admin/all-orders",
           component: AllOrdersPage
+        },
+        {
+          url: "/admin/update-order/:orderId",
+          component: UpdateOrderPage
         }
       ]
     }
