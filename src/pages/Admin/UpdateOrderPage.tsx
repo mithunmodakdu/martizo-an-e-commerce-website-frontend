@@ -1,5 +1,6 @@
 import type { TOrderStatus } from "@/components/modules/Order/order.interface";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -154,6 +155,26 @@ const UpdateOrderPage = () => {
                     )}
                   />
                 </div>
+
+                {/* Actions buttons */}
+                <div className="flex items-center justify-between pt-1">
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => reset()}
+                  >
+                    Reset
+                  </Button>
+                  <Button
+                    type="submit"
+                    disabled={formState.isSubmitting}
+                    className="bg-primary text-primary-foreground hover:bg-primary/90 min-w-[120px]"
+                  >
+                    {formState.isSubmitting ? "Saving…" : "Save changes"}
+                  </Button>
+                </div>
+
 
               </CardContent>
             </Card>
