@@ -11,7 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import loginImage from "../../../assets/images/login_page.png";
-import { Link, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -49,6 +49,9 @@ export function LoginForm({
 }: React.ComponentProps<"div">) {
   const [login] = useLoginMutation();
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location?.state?.from?.pathname + location?.state?.from?.search || "/";
+
 
   const form = useForm<z.infer<typeof LoginZodSchema>>({
     resolver: zodResolver(LoginZodSchema),
@@ -59,7 +62,7 @@ export function LoginForm({
   });
 
   const onSubmit = async (data: z.infer<typeof LoginZodSchema>) => {
-    // console.log(data);
+    
     const loginInfo = {
       email: data.email,
       password: data.password,
@@ -68,7 +71,7 @@ export function LoginForm({
     try {
       const res = await login(loginInfo).unwrap();
       toast.success(res.message);
-      navigate("/")
+      navigate(from, {replace: true})
       
     } catch (error: any) {
       if (!error.data.success) {
