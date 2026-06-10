@@ -50,9 +50,8 @@ export function LoginForm({
   const [login] = useLoginMutation();
   const navigate = useNavigate();
   const location = useLocation();
-  console.log(location)
   const from = location?.state?.from?.pathname + location?.state?.from?.search || "/";
-  console.log(from)
+
 
   const form = useForm<z.infer<typeof LoginZodSchema>>({
     resolver: zodResolver(LoginZodSchema),
