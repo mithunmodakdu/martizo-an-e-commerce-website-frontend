@@ -68,6 +68,22 @@ export interface IOrder {
   invoiceNo: string;
 }
 
+export type TOrderUpdateFormValues = {
+  status: TOrderStatus | "";
+  carrier?: string;
+  trackingNumber?: string;
+  lastLocation?: string;
+  paidAt?: string;
+  processedAt?: string;
+  shippedAt?: string;
+  outForDeliveryAt?: string;
+  deliveredAt?: string;
+  estimatedDelivery?: string;
+  cancelledAt?: string;
+  refundedAt?: string;
+};
+
+
 export interface IOrderTableRow {
   id: string;
   orderId: string;
