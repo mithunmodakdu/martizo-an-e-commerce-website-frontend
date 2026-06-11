@@ -1,4 +1,7 @@
-import type { TOrderStatus } from "@/components/modules/Order/order.interface";
+import type {
+  TOrderStatus,
+  TOrderUpdateFormValues,
+} from "@/components/modules/Order/order.interface";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -18,6 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
 import { useGetOrderByIdQuery } from "@/redux/features/order/order.api";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router";
@@ -62,6 +66,45 @@ const TRACKING_STATUSES = new Set<TOrderStatus>([
   "DELIVERED",
 ]);
 
+// Timestamp fields which are relevant per status
+const TIMESTAMP_FIELDS: {
+  key: keyof TOrderUpdateFormValues;
+  label: string;
+  statuses: TOrderStatus[];
+}[] = [
+  {
+    key: "paidAt",
+    label: "Paid at",
+    statuses: [
+      "PAID",
+      "PROCESSING",
+      "SHIPPED",
+      "OUT_FOR_DELIVERY",
+      "DELIVERED",
+    ],
+  },
+  {
+    key: "processedAt",
+    label: "Processed at",
+    statuses: ["PROCESSING", "SHIPPED", "OUT_FOR_DELIVERY", "DELIVERED"],
+  },
+  {
+    key: "shippedAt",
+    label: "Shipped at",
+    statuses: ["SHIPPED", "OUT_FOR_DELIVERY", "DELIVERED"],
+  },
+  {
+    key: "outForDeliveryAt",
+    label: "Out for delivery at",
+    statuses: ["OUT_FOR_DELIVERY", "DELIVERED"],
+  },
+  {
+    key: "deliveredAt",
+    label: "Delivered at",
+    statuses: ["DELIVERED"],
+  },
+];
+
 // Sub-components
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
@@ -79,6 +122,7 @@ function OptionalTag() {
   );
 }
 
+//:::: UpdateOrderPage ::::
 const UpdateOrderPage = () => {
   const params = useParams();
   const { data: orderData, isLoading } = useGetOrderByIdQuery(params.orderId);
@@ -106,6 +150,12 @@ const UpdateOrderPage = () => {
   const showTracking = status
     ? TRACKING_STATUSES.has(status as TOrderStatus)
     : false;
+  const showCancelledAt = status === "CANCELLED";
+  const showRefundedAt = status === "REFUNDED";
+
+  const activeTimestamps = TIMESTAMP_FIELDS.filter(
+    ({ statuses }) => status && statuses.includes(status as TOrderStatus),
+  );
 
   const handleSubmit = (data) => {
     console.log(data);
@@ -246,6 +296,77 @@ const UpdateOrderPage = () => {
                     />
                   </div>
                 )}
+
+                {/*  Timestamps  */}
+                {activeTimestamps.length > 0 && (
+                  <div className="bg-muted/50 rounded-lg p-4">
+                    <SectionLabel>Timestamps</SectionLabel>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      {activeTimestamps.map(({ key, label }) => (
+                        <FormField
+                          key={key}
+                          control={form.control}
+                          name={key}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>
+                                {label} <OptionalTag />
+                              </FormLabel>
+                              <FormControl>
+                                <Input type="datetime-local" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Cancellation / Refund */}
+                {(showCancelledAt || showRefundedAt) && (
+                  <div className="bg-muted/50 rounded-lg p-4">
+                    <SectionLabel>
+                      {showCancelledAt ? "Cancellation" : "Refund"}
+                    </SectionLabel>
+                    <FormField
+                      control={form.control}
+                      name={showCancelledAt ? "cancelledAt" : "refundedAt"}
+                      render={({ field }) => (
+                        <FormItem className="max-w-xs">
+                          <FormLabel>
+                            {showCancelledAt ? "Cancelled at" : "Refunded at"}{" "}
+                            <OptionalTag />
+                          </FormLabel>
+                          <FormControl>
+                            <Input type="datetime-local" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                )}
+
+                {/* Estimated delivery - always visible */}
+                <FormField
+                  control={form.control}
+                  name="estimatedDelivery"
+                  render={({ field }) => (
+                    <FormItem className="max-w-xs">
+                      <FormLabel>
+                        Estimated delivery <OptionalTag />
+                      </FormLabel>
+                      <FormControl>
+                        <Input type="datetime-local" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <Separator />
 
                 {/* Actions buttons */}
                 <div className="flex items-center justify-between pt-1">
