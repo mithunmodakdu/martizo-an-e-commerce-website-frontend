@@ -2,13 +2,27 @@ import type { TOrderStatus } from "@/components/modules/Order/order.interface";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useGetOrderByIdQuery } from "@/redux/features/order/order.api";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router";
 
-// Constants 
+// Constants
 const STATUS_OPTIONS: { value: TOrderStatus; label: string }[] = [
   { value: "PENDING", label: "Pending" },
   { value: "PAID", label: "Paid" },
@@ -24,8 +38,7 @@ const STATUS_OPTIONS: { value: TOrderStatus; label: string }[] = [
 const STATUS_BADGE_CLASSES: Record<TOrderStatus, string> = {
   PENDING:
     "bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-800",
-  PAID:
-    "bg-green-100 text-green-800 border-green-200 dark:bg-green-900/30 dark:text-green-400 dark:border-green-800",
+  PAID: "bg-green-100 text-green-800 border-green-200 dark:bg-green-900/30 dark:text-green-400 dark:border-green-800",
   PROCESSING:
     "bg-teal-100 text-teal-800 border-teal-200 dark:bg-teal-900/30 dark:text-teal-400 dark:border-teal-800",
   SHIPPED:
@@ -42,7 +55,14 @@ const STATUS_BADGE_CLASSES: Record<TOrderStatus, string> = {
     "bg-pink-100 text-pink-800 border-pink-200 dark:bg-pink-900/30 dark:text-pink-400 dark:border-pink-800",
 };
 
-// Sub-components 
+// Statuses which reveal tracking fields
+const TRACKING_STATUSES = new Set<TOrderStatus>([
+  "SHIPPED",
+  "OUT_FOR_DELIVERY",
+  "DELIVERED",
+]);
+
+// Sub-components
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
     <p className="text-[11px] font-medium uppercase tracking-widest text-muted-foreground mb-3">
@@ -51,14 +71,20 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
   );
 }
 
-
+function OptionalTag() {
+  return (
+    <span className="text-[11px] italic text-muted-foreground/70 ml-1">
+      optional
+    </span>
+  );
+}
 
 const UpdateOrderPage = () => {
-  const params = useParams()
-  const {data: orderData, isLoading} = useGetOrderByIdQuery(params.orderId);
+  const params = useParams();
+  const { data: orderData, isLoading } = useGetOrderByIdQuery(params.orderId);
 
   const form = useForm({
-     defaultValues: {
+    defaultValues: {
       status: "",
       carrier: "",
       trackingNumber: "",
@@ -72,16 +98,18 @@ const UpdateOrderPage = () => {
       cancelledAt: "",
       refundedAt: "",
     },
-
   });
 
-  const {watch, reset, formState} = form;
-  const status = watch("status") as TOrderStatus || "";
+  const { watch, reset, formState } = form;
+  const status = (watch("status") as TOrderStatus) || "";
+
+  const showTracking = status
+    ? TRACKING_STATUSES.has(status as TOrderStatus)
+    : false;
 
   const handleSubmit = (data) => {
-    console.log(data)
-  }
-
+    console.log(data);
+  };
 
   return (
     <div className="min-h-screen bg-background flex items-start justify-center p-6">
@@ -93,7 +121,9 @@ const UpdateOrderPage = () => {
           </h1>
           <p className="text-sm text-muted-foreground mt-0.5">
             Order No:{" "}
-            <span className="font-mono text-foreground/80">{orderData?.orderNo}</span>
+            <span className="font-mono text-foreground/80">
+              {orderData?.orderNo}
+            </span>
           </p>
         </div>
 
@@ -111,9 +141,7 @@ const UpdateOrderPage = () => {
                       variant="outline"
                       className={`text-xs font-medium ${STATUS_BADGE_CLASSES[status as TOrderStatus]}`}
                     >
-                      {
-                        STATUS_OPTIONS.find((o) => o.value === status)?.label
-                      }
+                      {STATUS_OPTIONS.find((o) => o.value === status)?.label}
                     </Badge>
                   )}
                 </div>
@@ -156,6 +184,69 @@ const UpdateOrderPage = () => {
                   />
                 </div>
 
+                {/* Tracking info */}
+                {showTracking && (
+                  <div className="bg-muted/50 rounded-lg p-4 space-y-4">
+                    <SectionLabel>Tracking info</SectionLabel>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <FormField
+                        control={form.control}
+                        name="carrier"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>
+                              Carrier <OptionalTag />
+                            </FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder="e.g. Sundarban Courier"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="trackingNumber"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>
+                              Tracking number <OptionalTag />
+                            </FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder="e.g. BD9283747201"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    <FormField
+                      control={form.control}
+                      name="lastLocation"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>
+                            Last known location <OptionalTag />
+                          </FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="e.g. Chittagong sorting centre"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                )}
+
                 {/* Actions buttons */}
                 <div className="flex items-center justify-between pt-1">
                   <Button
@@ -174,14 +265,10 @@ const UpdateOrderPage = () => {
                     {formState.isSubmitting ? "Saving…" : "Save changes"}
                   </Button>
                 </div>
-
-
               </CardContent>
             </Card>
           </form>
         </Form>
-
-
       </div>
     </div>
   );
