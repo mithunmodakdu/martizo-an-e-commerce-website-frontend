@@ -7,24 +7,38 @@ export const ordersApi = baseApi.injectEndpoints({
         url: `/orders/transaction/${transactionId}`,
         method: "GET",
       }),
-      providesTags: ["ORDER"]
+      providesTags: ["ORDER"],
     }),
 
     getOrderById: builder.query({
       query: (orderId) => ({
         url: `/orders/${orderId}`,
-        method: "GET"
+        method: "GET",
       }),
-      transformResponse: res => res.data,
-      providesTags: ["ORDER"]
+      transformResponse: (res) => res.data,
+      providesTags: ["ORDER"],
     }),
 
     getAllOrders: builder.query({
       query: () => ({
         url: "/orders",
-        method: "GET"
+        method: "GET",
       }),
-      providesTags: ["ORDERS"]
+      providesTags: ["ORDERS"],
+    }),
+
+    updateOrder: builder.mutation({
+      query: (dataToUpdate) => {
+        const { orderId, data } = dataToUpdate;
+
+        return {
+          url: `/orders/update/${orderId}`,
+          method: "PATCH",
+          data
+        };
+      },
+
+      invalidatesTags: ["ORDERS"]
     }),
 
     createOrder: builder.mutation({
@@ -33,14 +47,15 @@ export const ordersApi = baseApi.injectEndpoints({
         method: "POST",
         data: checkoutData,
       }),
-      invalidatesTags: ["ORDERS", "CART"]
+      invalidatesTags: ["ORDERS", "CART"],
     }),
   }),
 });
 
-export const { 
+export const {
   useGetOrderByTransactionIdQuery,
   useGetOrderByIdQuery,
   useGetAllOrdersQuery,
-  useCreateOrderMutation
- } = ordersApi;
+  useUpdateOrderMutation,
+  useCreateOrderMutation,
+} = ordersApi;
