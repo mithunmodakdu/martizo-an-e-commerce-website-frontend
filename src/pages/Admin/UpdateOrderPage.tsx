@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { useGetOrderByIdQuery } from "@/redux/features/order/order.api";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router";
 
@@ -156,6 +157,45 @@ const UpdateOrderPage = () => {
   const activeTimestamps = TIMESTAMP_FIELDS.filter(
     ({ statuses }) => status && statuses.includes(status as TOrderStatus),
   );
+
+  const formatDateTimeLocal = (date: string | Date) => {
+  return new Date(date).toISOString().slice(0, 16);
+};
+
+  useEffect(()=>{
+     if (orderData) {
+    reset({
+      status: orderData.status || "",
+      carrier: orderData.carrier || "",
+      trackingNumber: orderData.trackingNumber || "",
+      lastLocation: orderData.lastLocation || "",
+      paidAt: orderData.paidAt
+        ? formatDateTimeLocal(orderData.paidAt)
+        : "",
+      processedAt: orderData.processedAt
+        ? formatDateTimeLocal(orderData.processedAt)
+        : "",
+      shippedAt: orderData.shippedAt
+        ? formatDateTimeLocal(orderData.shippedAt)
+        : "",
+      outForDeliveryAt: orderData.outForDeliveryAt
+        ? formatDateTimeLocal(orderData.outForDeliveryAt)
+        : "",
+      deliveredAt: orderData.deliveredAt
+        ? formatDateTimeLocal(orderData.deliveredAt)
+        : "",
+      estimatedDelivery: orderData.estimatedDelivery
+        ? formatDateTimeLocal(orderData.estimatedDelivery)
+        : "",
+      cancelledAt: orderData.cancelledAt
+        ? formatDateTimeLocal(orderData.cancelledAt)
+        : "",
+      refundedAt: orderData.refundedAt
+        ? formatDateTimeLocal(orderData.refundedAt)
+        : "",
+    });
+  }
+  }, [reset, orderData])
 
   const handleSubmit = (data) => {
     console.log(data);
