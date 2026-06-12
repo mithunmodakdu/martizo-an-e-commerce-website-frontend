@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type {
   TOrderStatus,
   TOrderUpdateFormValues,
@@ -22,10 +23,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { useGetOrderByIdQuery } from "@/redux/features/order/order.api";
+import { useGetOrderByIdQuery, useUpdateOrderMutation } from "@/redux/features/order/order.api";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
+import { toast } from "sonner";
 
 // Constants
 const STATUS_OPTIONS: { value: TOrderStatus; label: string }[] = [
@@ -126,7 +128,9 @@ function OptionalTag() {
 //:::: UpdateOrderPage ::::
 const UpdateOrderPage = () => {
   const params = useParams();
-  const { data: orderData, isLoading } = useGetOrderByIdQuery(params.orderId);
+  const navigate = useNavigate();
+  const { data: orderData} = useGetOrderByIdQuery(params.orderId);
+  const [updateOrder] = useUpdateOrderMutation();
 
   const form = useForm({
     defaultValues: {
@@ -139,7 +143,7 @@ const UpdateOrderPage = () => {
       shippedAt: "",
       outForDeliveryAt: "",
       deliveredAt: "",
-      estimatedDelivery: "",
+      estimatedDeliveryAt: "",
       cancelledAt: "",
       refundedAt: "",
     },
@@ -159,46 +163,57 @@ const UpdateOrderPage = () => {
   );
 
   const formatDateTimeLocal = (date: string | Date) => {
-  return new Date(date).toISOString().slice(0, 16);
-};
+    return new Date(date).toISOString().slice(0, 16);
+  };
 
-  useEffect(()=>{
-     if (orderData) {
-    reset({
-      status: orderData.status || "",
-      carrier: orderData.carrier || "",
-      trackingNumber: orderData.trackingNumber || "",
-      lastLocation: orderData.lastLocation || "",
-      paidAt: orderData.paidAt
-        ? formatDateTimeLocal(orderData.paidAt)
-        : "",
-      processedAt: orderData.processedAt
-        ? formatDateTimeLocal(orderData.processedAt)
-        : "",
-      shippedAt: orderData.shippedAt
-        ? formatDateTimeLocal(orderData.shippedAt)
-        : "",
-      outForDeliveryAt: orderData.outForDeliveryAt
-        ? formatDateTimeLocal(orderData.outForDeliveryAt)
-        : "",
-      deliveredAt: orderData.deliveredAt
-        ? formatDateTimeLocal(orderData.deliveredAt)
-        : "",
-      estimatedDelivery: orderData.estimatedDelivery
-        ? formatDateTimeLocal(orderData.estimatedDelivery)
-        : "",
-      cancelledAt: orderData.cancelledAt
-        ? formatDateTimeLocal(orderData.cancelledAt)
-        : "",
-      refundedAt: orderData.refundedAt
-        ? formatDateTimeLocal(orderData.refundedAt)
-        : "",
-    });
-  }
-  }, [reset, orderData])
+  useEffect(() => {
+    if (orderData) {
+      reset({
+        status: orderData.status || "",
+        carrier: orderData.carrier || "",
+        trackingNumber: orderData.trackingNumber || "",
+        lastLocation: orderData.lastLocation || "",
+        paidAt: orderData.paidAt ? formatDateTimeLocal(orderData.paidAt) : "",
+        processedAt: orderData.processedAt
+          ? formatDateTimeLocal(orderData.processedAt)
+          : "",
+        shippedAt: orderData.shippedAt
+          ? formatDateTimeLocal(orderData.shippedAt)
+          : "",
+        outForDeliveryAt: orderData.outForDeliveryAt
+          ? formatDateTimeLocal(orderData.outForDeliveryAt)
+          : "",
+        deliveredAt: orderData.deliveredAt
+          ? formatDateTimeLocal(orderData.deliveredAt)
+          : "",
+        estimatedDeliveryAt: orderData.estimatedDeliveryAt
+          ? formatDateTimeLocal(orderData.estimatedDeliveryAt)
+          : "",
+        cancelledAt: orderData.cancelledAt
+          ? formatDateTimeLocal(orderData.cancelledAt)
+          : "",
+        refundedAt: orderData.refundedAt
+          ? formatDateTimeLocal(orderData.refundedAt)
+          : "",
+      });
+    }
+  }, [reset, orderData]);
 
-  const handleSubmit = (data) => {
-    console.log(data);
+  const handleSubmit = async(data: TOrderUpdateFormValues) => {
+    
+    const dataToUpdate = { orderId: orderData._id, data };
+    const toastId = toast.loading("Updating order...")
+
+    try {
+      const res = await updateOrder(dataToUpdate).unwrap();
+
+      if(res.success){
+        toast.success(res.message, {id: toastId})
+        navigate("/admin/all-orders")
+      }
+    } catch (error: any) {
+      toast.error(error?.data?.message, {id: toastId})
+    }
   };
 
   return (
@@ -392,7 +407,7 @@ const UpdateOrderPage = () => {
                 {/* Estimated delivery - always visible */}
                 <FormField
                   control={form.control}
-                  name="estimatedDelivery"
+                  name="estimatedDeliveryAt"
                   render={({ field }) => (
                     <FormItem className="max-w-xs">
                       <FormLabel>

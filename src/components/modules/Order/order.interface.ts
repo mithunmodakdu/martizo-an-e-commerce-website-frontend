@@ -60,7 +60,7 @@ export interface IOrder {
   shippedAt?: Date | null;
   outForDeliveryAt?: Date | null;
   deliveredAt?: Date | null;
-  estimatedDelivery?: Date | null;
+  estimatedDeliveryAt?: Date | null;
   cancelledAt?: Date | null;
   refundedAt?: Date | null;
 
@@ -78,7 +78,7 @@ export type TOrderUpdateFormValues = {
   shippedAt?: string;
   outForDeliveryAt?: string;
   deliveredAt?: string;
-  estimatedDelivery?: string;
+  estimatedDeliveryAt?: string;
   cancelledAt?: string;
   refundedAt?: string;
 };
