@@ -50,8 +50,8 @@ export function LoginForm({
   const [login] = useLoginMutation();
   const navigate = useNavigate();
   const location = useLocation();
-  const from = location?.state?.from?.pathname + location?.state?.from?.search || "/";
-
+  const from =
+    location?.state?.from?.pathname + location?.state?.from?.search || "/";
 
   const form = useForm<z.infer<typeof LoginZodSchema>>({
     resolver: zodResolver(LoginZodSchema),
@@ -62,7 +62,6 @@ export function LoginForm({
   });
 
   const onSubmit = async (data: z.infer<typeof LoginZodSchema>) => {
-    
     const loginInfo = {
       email: data.email,
       password: data.password,
@@ -70,9 +69,10 @@ export function LoginForm({
 
     try {
       const res = await login(loginInfo).unwrap();
-      toast.success(res.message);
-      navigate(from, {replace: true})
-      
+      if (res.success) {
+        toast.success(res.message);
+        navigate(from, { replace: true });
+      }
     } catch (error: any) {
       if (!error.data.success) {
         toast.error(error.data.message);
@@ -160,7 +160,9 @@ export function LoginForm({
                 className="cursor-pointer"
                 variant="outline"
                 type="button"
-                onClick={() => window.location.href =`${config.baseUrl}/auth/google`}
+                onClick={() =>
+                  (window.location.href = `${config.baseUrl}/auth/google`)
+                }
               >
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                   <path
