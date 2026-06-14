@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-const getFormattedDate = (unformattedDate: any) => {
+const getFormattedDate = (unformattedDate: string | Date, showTime = false) => {
   const date = new Date(unformattedDate);
 
   const day = date.toLocaleDateString("en-GB", {
@@ -12,9 +11,18 @@ const getFormattedDate = (unformattedDate: any) => {
 
   const year = date.getFullYear();
 
-  const formattedDate = `${day} ${month}, ${year}`;
+  const time = date.toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  });
 
-  return formattedDate;
+  if(showTime){
+    return `${day} ${month} ${year}, ${time}`;
+  }
+
+  return `${day} ${month} ${year}`;
+  
 };
 
 export default getFormattedDate;

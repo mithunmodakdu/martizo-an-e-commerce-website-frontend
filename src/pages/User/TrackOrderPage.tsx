@@ -3,8 +3,10 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
 import { useGetOrderByOrderNoQuery } from "@/redux/features/order/order.api";
-import { ArrowRight, Search, Truck } from "lucide-react";
+import getFormattedDate from "@/utils/getFormattedDate";
+import { ArrowRight, MapPin, Search, Truck } from "lucide-react";
 import { useState } from "react";
 
 const TrackOrderPage = () => {
@@ -161,6 +163,54 @@ const TrackOrderPage = () => {
                   {statusInfo.label}
                 </Badge>
               </div>
+
+                <Separator className="my-4" />
+
+               
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 text-sm">
+                  {/* Show estimated delivery only when available */}
+                  {order.estimatedDeliveryAt && (
+                    <div>
+                      <p className="text-xs text-muted-foreground mb-0.5">Est. Delivery</p>
+                      <p className="font-semibold text-foreground text-sm">{getFormattedDate(order.estimatedDeliveryAt, true)}</p>
+                    </div>
+                  )}
+
+                  {/* Payment method - always available */}
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-0.5">Payment</p>
+                    <p className="font-semibold text-foreground text-sm">
+                      {order.paymentMethod.replace("_", " ")}
+                    </p>
+                  </div>
+
+                  {/* Carrier - only when shipped */}
+                  {order.carrier ? (
+                    <div>
+                      <p className="text-xs text-muted-foreground mb-0.5">Carrier</p>
+                      <p className="font-semibold text-foreground text-sm">{order.carrier}</p>
+                    </div>
+                  ) : null}
+
+                  {/* Last location - only when shipped */}
+                  {order.lastLocation ? (
+                    <div>
+                      <p className="text-xs text-muted-foreground mb-0.5">Last Location</p>
+                      <p className="font-semibold text-foreground text-sm flex items-center gap-1">
+                        <MapPin className="w-3.5 h-3.5 text-primary" />
+                        {order.lastLocation}
+                      </p>
+                    </div>
+                  ) : (
+                    <div>
+                      <p className="text-xs text-muted-foreground mb-0.5">Shipping to</p>
+                      <p className="font-semibold text-foreground text-sm flex items-center gap-1">
+                        <MapPin className="w-3.5 h-3.5 text-primary" />
+                        {order.shippingAddress.city}
+                      </p>
+                    </div>
+                  )}
+                </div>        
             </CardContent>
           </Card>
         </div>
