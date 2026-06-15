@@ -39,6 +39,7 @@ export type TSortDirection = "asc" | "desc";
 export interface IOrder {
   _id: string;
   orderNo: string;
+  invoiceNo: string;
   userId: { _id: string; name: string; email: string };
   shippingAddress: IShippingAddress;
 
@@ -65,7 +66,7 @@ export interface IOrder {
   refundedAt?: Date | null;
 
   createdAt?: Date;
-  invoiceNo: string;
+  updatedAt?:  Date;
 }
 
 export type TOrderUpdateFormValues = {

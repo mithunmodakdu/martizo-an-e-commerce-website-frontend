@@ -6,14 +6,94 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { useGetOrderByOrderNoQuery } from "@/redux/features/order/order.api";
 import getFormattedDate from "@/utils/getFormattedDate";
-import { ArrowRight, MapPin, Search, Truck } from "lucide-react";
+import {
+  ArrowRight,
+  CheckCircle2,
+  MapPin,
+  Package,
+  Search,
+  ShoppingBag,
+  Truck,
+} from "lucide-react";
 import { useState } from "react";
+
+// Types
+type TStepStatus = "done" | "active" | "pending";
+
+interface ITrackingStep {
+  id: number;
+  label: string;
+  description: string;
+  timestamp: string | null;
+  status: TStepStatus;
+  icon: React.ReactNode;
+}
+
+
+// Build timeline steps from order status
+function buildSteps(order: IOrder): ITrackingStep[] {
+  const createdAt = getFormattedDate(order.createdAt, true);
+  const updatedAt = getFormattedDate(order.updatedAt, true);
+
+  const STAGES: IOrder["status"][] = [
+    "PENDING",
+    "PAID",
+    "PROCESSING",
+    "SHIPPED",
+    "OUT_FOR_DELIVERY",
+    "DELIVERED",
+  ];
+  const currentIdx = STAGES.indexOf(order.status);
+
+  const definitions = [
+    {
+      label: "Order Placed",
+      description: "Your order has been confirmed.",
+      icon: <ShoppingBag className="w-4 h-4" />,
+    },
+    {
+      label: "Payment Confirmed",
+      description: "Payment received successfully.",
+      icon: <Package className="w-4 h-4" />,
+    },
+    {
+      label: "Processing",
+      description: "Items being packed and prepared.",
+      icon: <Package className="w-4 h-4" />,
+    },
+    {
+      label: "Shipped",
+      description: "Your order is on its way.",
+      icon: <Truck className="w-4 h-4" />,
+    },
+    {
+      label: "Out for Delivery",
+      description: "Your package is out for delivery today.",
+      icon: <MapPin className="w-4 h-4" />,
+    },
+    {
+      label: "Delivered",
+      description: "Package delivered successfully.",
+      icon: <CheckCircle2 className="w-4 h-4" />,
+    },
+  ];
+
+  return definitions.map((def, idx) => ({
+    id: idx + 1,
+    ...def,
+    status:
+      idx < currentIdx ? "done" : idx === currentIdx ? "active" : "pending",
+
+    // Show timestamp only for done/active — use createdAt for first step, updatedAt for current
+    timestamp: idx === 0 ? createdAt : idx === currentIdx ? updatedAt : null,
+  }));
+}
 
 const TrackOrderPage = () => {
   const [query, setQuery] = useState("");
   const [order, setOrder] = useState<IOrder | null>(null);
   const [error, setError] = useState(false);
-  console.log(order)
+  console.log(order);
   const { data: orderData } = useGetOrderByOrderNoQuery(query);
 
   const handleTrack = () => {
@@ -164,53 +244,66 @@ const TrackOrderPage = () => {
                 </Badge>
               </div>
 
-                <Separator className="my-4" />
+              <Separator className="my-4" />
 
-               
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 text-sm">
-                  {/* Show estimated delivery only when available */}
-                  {order.estimatedDeliveryAt && (
-                    <div>
-                      <p className="text-xs text-muted-foreground mb-0.5">Est. Delivery</p>
-                      <p className="font-semibold text-foreground text-sm">{getFormattedDate(order.estimatedDeliveryAt, true)}</p>
-                    </div>
-                  )}
-
-                  {/* Payment method - always available */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 text-sm">
+                {/* Show estimated delivery only when available */}
+                {order.estimatedDeliveryAt && (
                   <div>
-                    <p className="text-xs text-muted-foreground mb-0.5">Payment</p>
+                    <p className="text-xs text-muted-foreground mb-0.5">
+                      Est. Delivery
+                    </p>
                     <p className="font-semibold text-foreground text-sm">
-                      {order.paymentMethod.replace("_", " ")}
+                      {getFormattedDate(order.estimatedDeliveryAt, true)}
                     </p>
                   </div>
+                )}
 
-                  {/* Carrier - only when shipped */}
-                  {order.carrier ? (
-                    <div>
-                      <p className="text-xs text-muted-foreground mb-0.5">Carrier</p>
-                      <p className="font-semibold text-foreground text-sm">{order.carrier}</p>
-                    </div>
-                  ) : null}
+                {/* Payment method - always available */}
+                <div>
+                  <p className="text-xs text-muted-foreground mb-0.5">
+                    Payment
+                  </p>
+                  <p className="font-semibold text-foreground text-sm">
+                    {order.paymentMethod.replace("_", " ")}
+                  </p>
+                </div>
 
-                  {/* Last location - only when shipped */}
-                  {order.lastLocation ? (
-                    <div>
-                      <p className="text-xs text-muted-foreground mb-0.5">Last Location</p>
-                      <p className="font-semibold text-foreground text-sm flex items-center gap-1">
-                        <MapPin className="w-3.5 h-3.5 text-primary" />
-                        {order.lastLocation}
-                      </p>
-                    </div>
-                  ) : (
-                    <div>
-                      <p className="text-xs text-muted-foreground mb-0.5">Shipping to</p>
-                      <p className="font-semibold text-foreground text-sm flex items-center gap-1">
-                        <MapPin className="w-3.5 h-3.5 text-primary" />
-                        {order.shippingAddress.city}
-                      </p>
-                    </div>
-                  )}
-                </div>        
+                {/* Carrier - only when shipped */}
+                {order.carrier ? (
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-0.5">
+                      Carrier
+                    </p>
+                    <p className="font-semibold text-foreground text-sm">
+                      {order.carrier}
+                    </p>
+                  </div>
+                ) : null}
+
+                {/* Last location - only when shipped */}
+                {order.lastLocation ? (
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-0.5">
+                      Last Location
+                    </p>
+                    <p className="font-semibold text-foreground text-sm flex items-center gap-1">
+                      <MapPin className="w-3.5 h-3.5 text-primary" />
+                      {order.lastLocation}
+                    </p>
+                  </div>
+                ) : (
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-0.5">
+                      Shipping to
+                    </p>
+                    <p className="font-semibold text-foreground text-sm flex items-center gap-1">
+                      <MapPin className="w-3.5 h-3.5 text-primary" />
+                      {order.shippingAddress.city}
+                    </p>
+                  </div>
+                )}
+              </div>
             </CardContent>
           </Card>
         </div>
