@@ -9,6 +9,7 @@ import getFormattedDate from "@/utils/getFormattedDate";
 import {
   ArrowRight,
   CheckCircle2,
+  Clock,
   MapPin,
   Package,
   Search,
@@ -28,7 +29,6 @@ interface ITrackingStep {
   status: TStepStatus;
   icon: React.ReactNode;
 }
-
 
 // Build timeline steps from order status
 function buildSteps(order: IOrder): ITrackingStep[] {
@@ -89,11 +89,62 @@ function buildSteps(order: IOrder): ITrackingStep[] {
   }));
 }
 
+// StepNode
+function StepNode({ step, isLast }: { step: ITrackingStep; isLast: boolean }) {
+  const isDone = step.status === "done";
+  const isActive = step.status === "active";
+
+  return (
+    <div className="flex gap-4">
+      <div className="flex flex-col items-center">
+        <div
+          className={`
+          flex items-center justify-center w-9 h-9 rounded-full border-2 transition-all duration-300 shrink-0
+          ${isDone ? "bg-primary border-primary text-primary-foreground shadow-md shadow-primary/30" : ""}
+          ${isActive ? "bg-white border-primary text-primary shadow-lg shadow-primary/20 ring-4 ring-primary/10" : ""}
+          ${step.status === "pending" ? "bg-muted border-border text-muted-foreground" : ""}
+        `}
+        >
+          {isDone ? <CheckCircle2 className="w-4 h-4" /> : step.icon}
+        </div>
+        {!isLast && (
+          <div
+            className={`w-0.5 flex-1 mt-1 mb-1 min-h-[2rem] rounded-full transition-colors duration-500 ${isDone ? "bg-primary" : "bg-border"}`}
+          />
+        )}
+      </div>
+
+      <div className={`pb-6 ${isLast ? "pb-0" : ""}`}>
+        <div className="flex items-center gap-2 mb-0.5">
+          <p
+            className={`text-sm font-semibold ${step.status === "pending" ? "text-muted-foreground" : "text-foreground"}`}
+          >
+            {step.label}
+          </p>
+          {isActive && (
+            <span className="flex items-center gap-1 text-[11px] font-medium text-primary bg-primary/10 px-2 py-0.5 rounded-full">
+              <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+              Live
+            </span>
+          )}
+        </div>
+        <p className="text-xs text-muted-foreground">{step.description}</p>
+        {step.timestamp && (
+          <p className="text-[11px] text-muted-foreground/70 mt-0.5 flex items-center gap-1">
+            <Clock className="w-3 h-3" />
+            {step.timestamp}
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// :::: TrackOrderPage ::::
 const TrackOrderPage = () => {
   const [query, setQuery] = useState("");
   const [order, setOrder] = useState<IOrder | null>(null);
   const [error, setError] = useState(false);
-  console.log(order);
   const { data: orderData } = useGetOrderByOrderNoQuery(query);
 
   const handleTrack = () => {
@@ -147,6 +198,7 @@ const TrackOrderPage = () => {
     };
 
   const statusInfo = order ? STATUS_MAP[order.status] : null;
+  const steps = order ? buildSteps(order) : [];
 
   return (
     <div className="w-3xl mx-auto px-4 py-10 space-y-8">
@@ -303,6 +355,24 @@ const TrackOrderPage = () => {
                     </p>
                   </div>
                 )}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Timeline */}
+          <Card className="border">
+            <CardContent className="p-5 pb-6">
+              <h2 className="font-bold text-sm text-foreground mb-5">
+                Shipment Progress
+              </h2>
+              <div>
+                {steps.map((step, idx) => (
+                  <StepNode
+                    key={step.id}
+                    step={step}
+                    isLast={idx === steps.length - 1}
+                  />
+                ))}
               </div>
             </CardContent>
           </Card>
