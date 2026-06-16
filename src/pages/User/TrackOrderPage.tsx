@@ -14,6 +14,8 @@ import {
   Clock,
   MapPin,
   Package,
+  Phone,
+  RotateCcw,
   Search,
   ShoppingBag,
   Truck,
@@ -202,12 +204,11 @@ const TrackOrderPage = () => {
 
   const statusInfo = order ? STATUS_MAP[order.status] : null;
   const steps = order ? buildSteps(order) : [];
-    
+
   // Flatten shipping address to one string
   const addressStr = order
     ? `${order.shippingAddress.address}, ${order.shippingAddress.city}-${order.shippingAddress.postalCode}`
     : "";
-
 
   return (
     <div className="w-3xl mx-auto px-4 py-10 space-y-8">
@@ -468,6 +469,31 @@ const TrackOrderPage = () => {
               )}
             </CardContent>
           </Card>
+
+          {/* Actions Buttons */}
+          <div className="flex gap-3 flex-wrap">
+            <Button variant="outline" size="sm" className="gap-2 text-xs">
+              <RotateCcw className="w-3.5 h-3.5" />
+              Request Return
+            </Button>
+            <Button variant="outline" size="sm" className="gap-2 text-xs">
+              <Phone className="w-3.5 h-3.5" />
+              Contact Support
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="gap-2 text-xs text-muted-foreground ml-auto"
+              onClick={() => {
+                setOrder(null);
+                setQuery("");
+                setError(false);
+              }}
+            >
+              Track another order
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Button>
+          </div>
         </div>
       )}
     </div>
