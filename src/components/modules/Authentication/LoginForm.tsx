@@ -70,8 +70,8 @@ export function LoginForm({
     try {
       const res = await login(loginInfo).unwrap();
       if (res.success) {
-        navigate(from, { replace: true });
         toast.success(res.message);
+        navigate(from, { replace: true });
       }
     } catch (error: any) {
       if (!error.data.success) {

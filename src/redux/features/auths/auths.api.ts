@@ -9,7 +9,8 @@ export const authApi = baseApi.injectEndpoints({
         url: "/auth/login",
         method: "POST",
         data: loginInfo
-      })
+      }),
+      invalidatesTags: ["USER"]
     }),
 
     logout: builder.mutation({
