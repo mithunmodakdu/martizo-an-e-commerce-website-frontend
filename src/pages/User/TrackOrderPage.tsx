@@ -9,6 +9,8 @@ import getFormattedDate from "@/utils/getFormattedDate";
 import {
   ArrowRight,
   CheckCircle2,
+  ChevronDown,
+  ChevronUp,
   Clock,
   MapPin,
   Package,
@@ -145,6 +147,7 @@ const TrackOrderPage = () => {
   const [query, setQuery] = useState("");
   const [order, setOrder] = useState<IOrder | null>(null);
   const [error, setError] = useState(false);
+  const [showItems, setShowItems] = useState(false);
   const { data: orderData } = useGetOrderByOrderNoQuery(query);
 
   const handleTrack = () => {
@@ -199,6 +202,12 @@ const TrackOrderPage = () => {
 
   const statusInfo = order ? STATUS_MAP[order.status] : null;
   const steps = order ? buildSteps(order) : [];
+    
+  // Flatten shipping address to one string
+  const addressStr = order
+    ? `${order.shippingAddress.address}, ${order.shippingAddress.city}-${order.shippingAddress.postalCode}`
+    : "";
+
 
   return (
     <div className="w-3xl mx-auto px-4 py-10 space-y-8">
@@ -374,6 +383,89 @@ const TrackOrderPage = () => {
                   />
                 ))}
               </div>
+            </CardContent>
+          </Card>
+
+          {/* Collapsible Order Items */}
+          <Card className="border">
+            <CardContent className="p-0">
+              <button
+                className="w-full flex items-center justify-between px-5 py-4 text-left hover:bg-muted/40 transition-colors"
+                onClick={() => setShowItems((v) => !v)}
+              >
+                <span className="font-bold text-sm text-foreground">
+                  Order Items ({order.items.length})
+                </span>
+                {showItems ? (
+                  <ChevronUp className="w-4 h-4 text-muted-foreground" />
+                ) : (
+                  <ChevronDown className="w-4 h-4 text-muted-foreground" />
+                )}
+              </button>
+
+              {showItems && (
+                <div className="border-t divide-y">
+                  {order.items.map((item, i) => (
+                    <div key={i} className="flex items-center gap-4 px-5 py-4">
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-semibold text-foreground truncate">
+                          {item.name}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {item.variant ? `${item.variant} · ` : ""}Qty:{" "}
+                          {item.quantity}
+                          {item.price.sale && (
+                            <span className="ml-2 line-through text-muted-foreground/60">
+                              ৳{item.price.regular}
+                            </span>
+                          )}
+                        </p>
+                      </div>
+                      <p className="text-sm font-bold text-foreground shrink-0">
+                        {/* {formatPrice(item.price)} */}
+                      </p>
+                    </div>
+                  ))}
+
+                  {/* Order total breakdown */}
+                  <div className="px-5 py-3 space-y-1 bg-muted/20">
+                    <div className="flex justify-between text-xs text-muted-foreground">
+                      <span>Items subtotal</span>
+                      <span>৳{order.itemsPrice}</span>
+                    </div>
+                    <div className="flex justify-between text-xs text-muted-foreground">
+                      <span>Shipping</span>
+                      <span>৳{order.shippingPrice}</span>
+                    </div>
+                    <div className="flex justify-between text-xs text-muted-foreground">
+                      <span>Tax</span>
+                      <span>৳{order.taxPrice.toFixed(2)}</span>
+                    </div>
+                    <Separator className="my-1" />
+                    <div className="flex justify-between text-sm font-bold text-foreground">
+                      <span>Total</span>
+                      <span>৳{order.totalPrice.toFixed(2)}</span>
+                    </div>
+                  </div>
+
+                  {/* Full shipping address */}
+                  <div className="px-5 py-3 bg-muted/30 space-y-0.5">
+                    <div className="flex items-center gap-2">
+                      <MapPin className="w-3.5 h-3.5 text-muted-foreground" />
+                      <span className="text-xs font-medium text-foreground">
+                        {order.shippingAddress.name}
+                      </span>
+                      <span className="text-xs text-muted-foreground">·</span>
+                      <span className="text-xs text-muted-foreground">
+                        {order.shippingAddress.phone}
+                      </span>
+                    </div>
+                    <p className="text-xs text-muted-foreground ml-5">
+                      {addressStr}
+                    </p>
+                  </div>
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>
