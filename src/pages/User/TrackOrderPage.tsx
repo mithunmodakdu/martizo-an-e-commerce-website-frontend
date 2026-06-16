@@ -109,7 +109,7 @@ function StepNode({ step, isLast }: { step: ITrackingStep; isLast: boolean }) {
         </div>
         {!isLast && (
           <div
-            className={`w-0.5 flex-1 mt-1 mb-1 min-h-[2rem] rounded-full transition-colors duration-500 ${isDone ? "bg-primary" : "bg-border"}`}
+            className={`w-0.5 flex-1 mt-1 mb-1 min-h-8 rounded-full transition-colors duration-500 ${isDone ? "bg-primary" : "bg-border"}`}
           />
         )}
       </div>
