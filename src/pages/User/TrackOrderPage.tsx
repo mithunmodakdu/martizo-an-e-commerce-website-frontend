@@ -37,7 +37,11 @@ interface ITrackingStep {
 // Build timeline steps from order status
 function buildSteps(order: IOrder): ITrackingStep[] {
   const createdAt = getFormattedDate(order.createdAt, true);
-  const updatedAt = getFormattedDate(order.updatedAt, true);
+  const paidAt = getFormattedDate(order.paidAt, true);
+  const processedAt = getFormattedDate(order.processedAt, true);
+  const shippedAt = getFormattedDate(order.shippedAt, true);
+  const outForDeliveryAt = getFormattedDate(order.outForDeliveryAt, true);
+  const deliveredAt = getFormattedDate(order.deliveredAt, true);
 
   const STAGES: IOrder["status"][] = [
     "PENDING",
@@ -54,31 +58,37 @@ function buildSteps(order: IOrder): ITrackingStep[] {
       label: "Order Placed",
       description: "Your order has been confirmed.",
       icon: <ShoppingBag className="w-4 h-4" />,
+      timestamp: createdAt
     },
     {
       label: "Payment Confirmed",
       description: "Payment received successfully.",
       icon: <Package className="w-4 h-4" />,
+      timestamp: paidAt
     },
     {
       label: "Processing",
       description: "Items being packed and prepared.",
       icon: <Package className="w-4 h-4" />,
+      timestamp: processedAt
     },
     {
       label: "Shipped",
       description: "Your order is on its way.",
       icon: <Truck className="w-4 h-4" />,
+      timestamp: shippedAt
     },
     {
       label: "Out for Delivery",
       description: "Your package is out for delivery today.",
       icon: <MapPin className="w-4 h-4" />,
+      timestamp: outForDeliveryAt
     },
     {
       label: "Delivered",
       description: "Package delivered successfully.",
       icon: <CheckCircle2 className="w-4 h-4" />,
+      timestamp: deliveredAt
     },
   ];
 
@@ -88,8 +98,6 @@ function buildSteps(order: IOrder): ITrackingStep[] {
     status:
       idx < currentIdx ? "done" : idx === currentIdx ? "active" : "pending",
 
-    // Show timestamp only for done/active — use createdAt for first step, updatedAt for current
-    timestamp: idx === 0 ? createdAt : idx === currentIdx ? updatedAt : null,
   }));
 }
 
@@ -148,6 +156,7 @@ function StepNode({ step, isLast }: { step: ITrackingStep; isLast: boolean }) {
 const TrackOrderPage = () => {
   const [query, setQuery] = useState("");
   const [order, setOrder] = useState<IOrder | null>(null);
+  console.log(order)
   const [error, setError] = useState(false);
   const [showItems, setShowItems] = useState(false);
   const { data: orderData } = useGetOrderByOrderNoQuery(query);
