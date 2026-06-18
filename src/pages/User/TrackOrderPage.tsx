@@ -36,12 +36,12 @@ interface ITrackingStep {
 
 // Build timeline steps from order status
 function buildSteps(order: IOrder): ITrackingStep[] {
-  const createdAt = getFormattedDate(order.createdAt, true);
-  const paidAt = getFormattedDate(order.paidAt, true);
-  const processedAt = getFormattedDate(order.processedAt, true);
-  const shippedAt = getFormattedDate(order.shippedAt, true);
-  const outForDeliveryAt = getFormattedDate(order.outForDeliveryAt, true);
-  const deliveredAt = getFormattedDate(order.deliveredAt, true);
+  const createdAt = getFormattedDate(order.createdAt ?? null, true);
+  const paidAt = getFormattedDate(order.paidAt ?? null, true);
+  const processedAt = getFormattedDate(order.processedAt ?? null, true);
+  const shippedAt = getFormattedDate(order.shippedAt ?? null, true);
+  const outForDeliveryAt = getFormattedDate(order.outForDeliveryAt ?? null, true);
+  const deliveredAt = getFormattedDate(order.deliveredAt ?? null, true);
 
   const STAGES: IOrder["status"][] = [
     "PENDING",
@@ -451,8 +451,7 @@ const TrackOrderPage = () => {
                             <span className="ml-2 text-muted-foreground/60">
                               ৳{item.price.sale}
                             </span>
-                            </>
-                            
+                            </>                           
                           )}
                           {!item.price.sale && (
                             <span className="ml-2 text-muted-foreground/60">
@@ -461,9 +460,6 @@ const TrackOrderPage = () => {
                           )}
                         </p>
                       </div>
-                      <p className="text-sm font-bold text-foreground shrink-0">
-                        {/* {formatPrice(item.price)} */}
-                      </p>
                     </div>
                   ))}
 
