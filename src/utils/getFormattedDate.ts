@@ -1,4 +1,7 @@
-const getFormattedDate = (unformattedDate: string | Date, showTime = false) => {
+const getFormattedDate = (unformattedDate: string | Date | null, showTime = false) => {
+  if(!unformattedDate){
+    return null;
+  }
   const date = new Date(unformattedDate);
 
   const day = date.toLocaleDateString("en-GB", {
