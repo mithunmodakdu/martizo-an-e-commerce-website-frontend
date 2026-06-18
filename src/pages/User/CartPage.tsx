@@ -4,7 +4,7 @@ import { Link } from "react-router";
 
 export default function CartPage() {
   return (
-    <div className="max-w-xl mx-auto">
+    <div className="max-w-4xl mx-auto px-4 py-8 space-y-6">
       <div className="border-b pt-7 pb-4">
         <h2 className="text-4xl leading-relaxed font-semibold">Your Cart</h2>
       </div>

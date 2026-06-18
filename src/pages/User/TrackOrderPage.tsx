@@ -58,37 +58,37 @@ function buildSteps(order: IOrder): ITrackingStep[] {
       label: "Order Placed",
       description: "Your order has been confirmed.",
       icon: <ShoppingBag className="w-4 h-4" />,
-      timestamp: createdAt
+      timestamp: createdAt,
     },
     {
       label: "Payment Confirmed",
       description: "Payment received successfully.",
       icon: <Package className="w-4 h-4" />,
-      timestamp: paidAt
+      timestamp: paidAt,
     },
     {
       label: "Processing",
       description: "Items being packed and prepared.",
       icon: <Package className="w-4 h-4" />,
-      timestamp: processedAt
+      timestamp: processedAt,
     },
     {
       label: "Shipped",
       description: "Your order is on its way.",
       icon: <Truck className="w-4 h-4" />,
-      timestamp: shippedAt
+      timestamp: shippedAt,
     },
     {
       label: "Out for Delivery",
       description: "Your package is out for delivery today.",
       icon: <MapPin className="w-4 h-4" />,
-      timestamp: outForDeliveryAt
+      timestamp: outForDeliveryAt,
     },
     {
       label: "Delivered",
       description: "Package delivered successfully.",
       icon: <CheckCircle2 className="w-4 h-4" />,
-      timestamp: deliveredAt
+      timestamp: deliveredAt,
     },
   ];
 
@@ -97,7 +97,6 @@ function buildSteps(order: IOrder): ITrackingStep[] {
     ...def,
     status:
       idx < currentIdx ? "done" : idx === currentIdx ? "active" : "pending",
-
   }));
 }
 
@@ -156,7 +155,7 @@ function StepNode({ step, isLast }: { step: ITrackingStep; isLast: boolean }) {
 const TrackOrderPage = () => {
   const [query, setQuery] = useState("");
   const [order, setOrder] = useState<IOrder | null>(null);
-  console.log(order)
+  console.log(order);
   const [error, setError] = useState(false);
   const [showItems, setShowItems] = useState(false);
   const { data: orderData } = useGetOrderByOrderNoQuery(query);
@@ -380,7 +379,7 @@ const TrackOrderPage = () => {
 
           {/* Timeline */}
           <Card className="border">
-            <CardContent className="p-5 pb-6">
+            <CardContent className="p-5 ">
               <h2 className="font-bold text-sm text-foreground mb-5">
                 Shipment Progress
               </h2>
@@ -392,6 +391,26 @@ const TrackOrderPage = () => {
                     isLast={idx === steps.length - 1}
                   />
                 ))}
+              </div>
+              <Separator />
+              {/* Full shipping address */}
+              <div className="px-5 py-3 bg-muted/30 space-y-0.5">
+                <h2 className="font-bold text-sm text-foreground ">
+                  Shipping Address
+                </h2>
+                <div className="flex items-center gap-2">
+                  <MapPin className="w-3.5 h-3.5 text-muted-foreground" />
+                  <span className="text-xs font-medium text-foreground">
+                    {order.shippingAddress.name}
+                  </span>
+                  <span className="text-xs text-muted-foreground">·</span>
+                  <span className="text-xs text-muted-foreground">
+                    {order.shippingAddress.phone}
+                  </span>
+                </div>
+                <p className="text-xs text-muted-foreground ml-5">
+                  {addressStr}
+                </p>
               </div>
             </CardContent>
           </Card>
@@ -422,10 +441,21 @@ const TrackOrderPage = () => {
                           {item.name}
                         </p>
                         <p className="text-xs text-muted-foreground">
-                          {item.variant ? `${item.variant} · ` : ""}Qty:{" "}
+                          Qty:{" "}
                           {item.quantity}
                           {item.price.sale && (
+                            <>
                             <span className="ml-2 line-through text-muted-foreground/60">
+                              ৳{item.price.regular}
+                            </span>
+                            <span className="ml-2 text-muted-foreground/60">
+                              ৳{item.price.sale}
+                            </span>
+                            </>
+                            
+                          )}
+                          {!item.price.sale && (
+                            <span className="ml-2 text-muted-foreground/60">
                               ৳{item.price.regular}
                             </span>
                           )}
@@ -456,23 +486,6 @@ const TrackOrderPage = () => {
                       <span>Total</span>
                       <span>৳{order.totalPrice.toFixed(2)}</span>
                     </div>
-                  </div>
-
-                  {/* Full shipping address */}
-                  <div className="px-5 py-3 bg-muted/30 space-y-0.5">
-                    <div className="flex items-center gap-2">
-                      <MapPin className="w-3.5 h-3.5 text-muted-foreground" />
-                      <span className="text-xs font-medium text-foreground">
-                        {order.shippingAddress.name}
-                      </span>
-                      <span className="text-xs text-muted-foreground">·</span>
-                      <span className="text-xs text-muted-foreground">
-                        {order.shippingAddress.phone}
-                      </span>
-                    </div>
-                    <p className="text-xs text-muted-foreground ml-5">
-                      {addressStr}
-                    </p>
                   </div>
                 </div>
               )}
