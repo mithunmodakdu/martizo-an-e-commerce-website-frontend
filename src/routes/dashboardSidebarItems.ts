@@ -4,7 +4,7 @@ import { lazy } from "react";
 const UserProfilePage = lazy(() => import("@/pages/User/UserProfilePage"));
 const WishlistPage = lazy(() => import("@/pages/User/WishlistPage"));
 const CartPage = lazy(() => import("@/pages/User/CartPage"));
-const Orders = lazy(() => import("@/pages/User/Orders"));
+const Orders = lazy(() => import("@/pages/User/MyOrdersPage"));
 
 
 export const dashboardSidebarItems: ISidebarItem[] = [
@@ -35,7 +35,7 @@ export const dashboardSidebarItems: ISidebarItem[] = [
       },
       {
         title: "My Orders",
-        url: "/dashboard/orders",
+        url: "/dashboard/my-orders",
         component: Orders,
       }
      

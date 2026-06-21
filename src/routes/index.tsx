@@ -74,6 +74,7 @@ export const router = createBrowserRouter([
     path: "/dashboard",
     children: [
       { index: true, element: <Navigate to={"/dashboard/profile"} /> },
+      { path: "orders", element: <Navigate to={"/dashboard/my-orders"} replace /> },
       ...generateRoutes(dashboardSidebarItems),
     ],
   },

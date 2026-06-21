@@ -152,7 +152,7 @@ export default function UserMenu() {
           <DropdownMenuItem className="cursor-pointer">
             <Layers2Icon size={16} className="opacity-60" aria-hidden="true" />
             <span>
-              <Link to={"/dashboard/orders"}>My Orders</Link>
+              <Link to={"/dashboard/my-orders"}>My Orders</Link>
             </span>
           </DropdownMenuItem>
         </DropdownMenuGroup>
