@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { AddressFields } from "./AddressFields";
 import { Cart } from "../Cart/Cart";
 import { PaymentMethodFields } from "./PaymentMethodFields";
-import { useCreateOrderMutation } from "@/redux/features/order/order.api";
+import { useCreateOrderMutation } from "@/redux/features/order.api";
 import { toast } from "sonner";
 
 export const Checkout = ({ className }: ICheckoutProps) => {

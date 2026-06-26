@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { useGetOrderByTransactionIdQuery } from "@/redux/features/order/order.api";
+import { useGetOrderByTransactionIdQuery } from "@/redux/features/order.api";
 import { useParams } from "react-router";
 
 export default function OrderInfoBar() {

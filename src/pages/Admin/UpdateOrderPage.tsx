@@ -23,7 +23,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { useGetOrderByIdQuery, useUpdateOrderMutation } from "@/redux/features/order/order.api";
+import { useGetOrderByIdQuery, useUpdateOrderMutation } from "@/redux/features/order.api";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router";

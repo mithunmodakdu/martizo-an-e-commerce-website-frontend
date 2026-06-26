@@ -1,6 +1,6 @@
 import { columns } from "@/components/modules/Product/ProductsTable/columns";
 import { DataTable } from "@/components/modules/Product/ProductsTable/DataTable";
-import { useGetAllProductsQuery } from "@/redux/features/products/products.api";
+import { useGetAllProductsQuery } from "@/redux/features/products.api";
 import Loading from "@/utils/Loading";
 
 export default function ProductsTablePage() {

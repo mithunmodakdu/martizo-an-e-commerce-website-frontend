@@ -28,7 +28,7 @@ import {
   InputGroupText,
   InputGroupTextarea,
 } from "@/components/ui/input-group";
-import { useGetProductCategoriesQuery } from "@/redux/features/productCategories/productCategories.api";
+import { useGetProductCategoriesQuery } from "@/redux/features/productCategories.api";
 import {
   Select,
   SelectContent,
@@ -36,14 +36,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useGetProductBrandsQuery } from "@/redux/features/productBrands/productBrands.api";
+import { useGetProductBrandsQuery } from "@/redux/features/productBrands.api";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import SingleImageUploader from "@/components/ui/singleImageUploader";
 import { useState } from "react";
 import MultipleImagesUploader from "@/components/ui/MultipleImagesUploader";
 import type { FileMetadata } from "@/hooks/use-file-upload";
-import { useCreateProductMutation } from "@/redux/features/products/products.api";
+import { useCreateProductMutation } from "@/redux/features/products.api";
 import { PlusCircleIcon } from "lucide-react";
 import { ProductCreationZodSchema } from "./product.types";
 

@@ -8,8 +8,8 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { useGetAllProductsQuery } from "@/redux/features/products/products.api";
-import { useAddToCartMutation } from "@/redux/features/cart/cart.api";
+import { useGetAllProductsQuery } from "@/redux/features/products.api";
+import { useAddToCartMutation } from "@/redux/features/cart.api";
 import { toast } from "sonner";
 import { Price, PriceValue } from "../Product/Price";
 import Autoplay from "embla-carousel-autoplay";

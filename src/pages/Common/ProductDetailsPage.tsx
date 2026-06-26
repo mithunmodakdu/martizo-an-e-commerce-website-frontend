@@ -1,5 +1,5 @@
 import { ProductDetails } from "@/components/modules/Product/ProductDetails";
-import { useGetProductBySlugQuery } from "@/redux/features/products/products.api";
+import { useGetProductBySlugQuery } from "@/redux/features/products.api";
 import Loading from "@/utils/Loading";
 import { useParams } from "react-router";
 

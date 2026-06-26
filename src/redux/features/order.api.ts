@@ -30,9 +30,10 @@ export const ordersApi = baseApi.injectEndpoints({
     }),
 
     getAllOrders: builder.query({
-      query: () => ({
+      query: (params) => ({
         url: "/orders",
         method: "GET",
+        params
       }),
       providesTags: ["ORDERS"],
     }),

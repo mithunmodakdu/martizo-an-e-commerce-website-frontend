@@ -27,8 +27,8 @@ import { toast } from "sonner";
 import StarRating from "../Shared/StarRating";
 import type { IWishListCardItem } from "./wishlist.interface";
 import { Price, PriceValue } from "../Product/Price";
-import { useRemoveFromWishlistMutation } from "@/redux/features/wishlist/wishlist.api";
-import { useAddToCartMutation } from "@/redux/features/cart/cart.api";
+import { useRemoveFromWishlistMutation } from "@/redux/features/wishlist.api";
+import { useAddToCartMutation } from "@/redux/features/cart.api";
 import type { ICartItem } from "../Cart/cart.types";
 
 export default function WishlistItemCard({

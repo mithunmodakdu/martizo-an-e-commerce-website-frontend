@@ -2,8 +2,8 @@ import type { IOrder } from "@/components/modules/Order/order.interface";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { useGetAllOrdersQuery } from "@/redux/features/order/order.api";
-import { useGetMeQuery } from "@/redux/features/users/users.api";
+import { useGetAllOrdersQuery } from "@/redux/features/order.api";
+import { useGetMeQuery } from "@/redux/features/users.api";
 import Loading from "@/utils/Loading";
 import getFormattedDate from "@/utils/getFormattedDate";
 import {

@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { useGetAllProductsQuery } from "@/redux/features/products/products.api";
+import { useGetAllProductsQuery } from "@/redux/features/products.api";
 import { Link } from "react-router";
 import {
   Carousel,

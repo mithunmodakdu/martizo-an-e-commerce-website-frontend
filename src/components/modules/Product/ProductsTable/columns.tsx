@@ -12,7 +12,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { productsApi } from "@/redux/features/products/products.api";
+import { productsApi } from "@/redux/features/products.api";
 import { store } from "@/redux/store";
 import { type ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, Edit2, Trash2 } from "lucide-react";

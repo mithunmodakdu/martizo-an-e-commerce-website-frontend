@@ -19,10 +19,10 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useGetCartQuery } from "@/redux/features/cart/cart.api";
-import { useGetProductCategoriesQuery } from "@/redux/features/productCategories/productCategories.api";
-import { useGetAllBrandsQuery } from "@/redux/features/brands/brands.api";
-import { useGetWishlistQuery } from "@/redux/features/wishlist/wishlist.api";
+import { useGetCartQuery } from "@/redux/features/cart.api";
+import { useGetProductCategoriesQuery } from "@/redux/features/productCategories.api";
+import { useGetAllBrandsQuery } from "@/redux/features/brands.api";
+import { useGetWishlistQuery } from "@/redux/features/wishlist.api";
 import SearchBox from "../SearchBox";
 
 

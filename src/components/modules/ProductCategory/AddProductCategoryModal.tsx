@@ -28,7 +28,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import SingleImageUploader from "@/components/ui/singleImageUploader";
-import { useCreateProductCategoryMutation, useGetProductCategoriesQuery } from "@/redux/features/productCategories/productCategories.api";
+import { useCreateProductCategoryMutation, useGetProductCategoriesQuery } from "@/redux/features/productCategories.api";
 import { useId, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";

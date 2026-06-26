@@ -1,4 +1,4 @@
-import { useGetMeQuery } from "@/redux/features/users/users.api";
+import { useGetMeQuery } from "@/redux/features/users.api";
 import type { ComponentType } from "react";
 import { Navigate, useLocation } from "react-router";
 import Loading from "@/utils/Loading";

@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/sidebar"
 import { Link, useLocation } from "react-router"
 import { getSidebarItems } from "@/utils/getSidebarItems"
-import { useGetMeQuery } from "@/redux/features/users/users.api"
+import { useGetMeQuery } from "@/redux/features/users.api"
 
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {

@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import {
   useGetPaymentByTransactionIdQuery,
   useInitSslPaymentMutation,
-} from "@/redux/features/payments/payments.api";
+} from "@/redux/features/payments.api";
 
 export default function PaymentCancelled({ search }: ISearchProps) {
   const { transactionId, message } = search;

@@ -26,7 +26,7 @@ import {
   InputGroupText,
   InputGroupTextarea,
 } from "@/components/ui/input-group";
-import { useGetProductCategoriesQuery } from "@/redux/features/productCategories/productCategories.api";
+import { useGetProductCategoriesQuery } from "@/redux/features/productCategories.api";
 import {
   Select,
   SelectContent,
@@ -35,7 +35,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useGetProductBrandsQuery } from "@/redux/features/productBrands/productBrands.api";
+import { useGetProductBrandsQuery } from "@/redux/features/productBrands.api";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import SingleImageUploader from "@/components/ui/singleImageUploader";
@@ -46,7 +46,7 @@ import { useNavigate, useParams } from "react-router";
 import {
   useGetProductBySlugQuery,
   useUpdateProductMutation,
-} from "@/redux/features/products/products.api";
+} from "@/redux/features/products.api";
 import { toast } from "sonner";
 import { PlusCircleIcon } from "lucide-react";
 import { ProductUpdateZodSchema } from "./product.types";

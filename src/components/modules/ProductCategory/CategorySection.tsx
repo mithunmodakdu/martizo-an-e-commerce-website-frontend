@@ -1,4 +1,4 @@
-import { useGetProductCategoriesQuery } from "@/redux/features/productCategories/productCategories.api";
+import { useGetProductCategoriesQuery } from "@/redux/features/productCategories.api";
 import CategoryCard from "./CategoryCard";
 import ContentHeader from "../Shared/ContentHeader/ContentHeader";
 
