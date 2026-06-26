@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { useGetOrderByOrderNoQuery } from "@/redux/features/order/order.api";
+import { useGetOrderByOrderNoQuery } from "@/redux/features/order.api";
 import getFormattedDate from "@/utils/getFormattedDate";
 import {
   ArrowRight,

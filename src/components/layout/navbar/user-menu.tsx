@@ -20,9 +20,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useGetMeQuery, userApi } from "@/redux/features/users/users.api";
+import { useGetMeQuery, userApi } from "@/redux/features/users.api";
 import { Link } from "react-router";
-import { useLogoutMutation } from "@/redux/features/auths/auths.api";
+import { useLogoutMutation } from "@/redux/features/auths.api";
 import { useAppDispatch } from "@/redux/hooks";
 import { role } from "@/constants/role";
 

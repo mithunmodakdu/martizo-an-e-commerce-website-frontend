@@ -5,7 +5,7 @@ import type { ISearchProps } from "./payment.interfaces";
 import {
   useGetPaymentByTransactionIdQuery,
   useInitSslPaymentMutation,
-} from "@/redux/features/payments/payments.api";
+} from "@/redux/features/payments.api";
 import { toast } from "sonner";
 
 export default function PaymentFailed({ search }: ISearchProps) {

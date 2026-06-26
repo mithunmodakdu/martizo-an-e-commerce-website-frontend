@@ -4,8 +4,8 @@ import ShippingAddress from "@/components/modules/Order/ShippingAddress";
 import SuccessHeader from "@/components/modules/Order/SuccessHeader";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { useGetOrderByTransactionIdQuery } from "@/redux/features/order/order.api";
-import { useGetInvoiceDownloadUrlQuery } from "@/redux/features/payments/payments.api";
+import { useGetOrderByTransactionIdQuery } from "@/redux/features/order.api";
+import { useGetInvoiceDownloadUrlQuery } from "@/redux/features/payments.api";
 import { Download, Package, Printer } from "lucide-react";
 import { useParams } from "react-router";
 

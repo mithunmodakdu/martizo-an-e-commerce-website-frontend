@@ -45,7 +45,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useGetAllOrdersQuery } from "@/redux/features/order/order.api";
+import { useGetAllOrdersQuery } from "@/redux/features/order.api";
 import Loading from "@/utils/Loading";
 import {
   CheckCircle2,
@@ -78,7 +78,7 @@ const AllOrdersPage = () => {
 
   const ORDERS_DATA: IOrderTableRow[] = useMemo(
     () =>
-      allOrders?.data?.map((order: IOrder) => ({
+      allOrders?.data?.data?.map((order: IOrder) => ({
         id: order?._id,
         orderId: order?.orderNo,
         customer: order?.userId?.name,

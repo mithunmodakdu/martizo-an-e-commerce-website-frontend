@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useGetMeQuery } from "@/redux/features/users/users.api";
+import { useGetMeQuery } from "@/redux/features/users.api";
 import getFormattedDate from "@/utils/getFormattedDate";
 
 const PersonalInfoCard = () => {

@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import FeaturedBrandCard from "./FeaturedBrandCard";
 import RegularBrandCard from "./RegularBrandCard";
-import { useGetAllBrandsQuery } from "@/redux/features/brands/brands.api";
+import { useGetAllBrandsQuery } from "@/redux/features/brands.api";
 import type { IBrand } from "@/types";
 import ContentHeader from "../Shared/ContentHeader/ContentHeader";
 

@@ -10,7 +10,7 @@ import {
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { useGetAllProductsQuery } from "@/redux/features/products/products.api";
+import { useGetAllProductsQuery } from "@/redux/features/products.api";
 import { ProductCard } from "../Product/ProductCard";
 import type { IProduct } from "../Product/product.types";
 import ContentHeader from "../Shared/ContentHeader/ContentHeader";

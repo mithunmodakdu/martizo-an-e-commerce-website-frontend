@@ -10,7 +10,7 @@ import { Price, PriceValue } from "./Price";
 import { Link } from "react-router";
 import { Button } from "@/components/ui/button";
 import type { ICartItem } from "../Cart/cart.types";
-import { useAddToCartMutation } from "@/redux/features/cart/cart.api";
+import { useAddToCartMutation } from "@/redux/features/cart.api";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
@@ -19,7 +19,7 @@ import { Progress } from "@/components/ui/progress";
 import {
   useAddToWishlistMutation,
   useRemoveFromWishlistMutation,
-} from "@/redux/features/wishlist/wishlist.api";
+} from "@/redux/features/wishlist.api";
 import { pad } from "../Shared/pad";
 import type { IProduct} from "./product.types";
 import StarRating from "../Shared/StarRating";

@@ -22,7 +22,7 @@ import {
 import {
   useDeleteProductBrandMutation,
   useGetProductBrandsQuery,
-} from "@/redux/features/productBrands/productBrands.api";
+} from "@/redux/features/productBrands.api";
 import type { IBrand } from "@/types";
 import { Edit2, Trash2 } from "lucide-react";
 import { Link } from "react-router";

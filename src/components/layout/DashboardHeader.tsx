@@ -4,7 +4,7 @@ import { Separator } from "@/components/ui/separator";
 import { Bell, Settings, User } from "lucide-react";
 import { SidebarTrigger } from "../ui/sidebar";
 import SearchBox from "./SearchBox";
-import { useGetMeQuery } from "@/redux/features/users/users.api";
+import { useGetMeQuery } from "@/redux/features/users.api";
 
 const DashboardHeader = () => {
   const { data: userData } = useGetMeQuery(undefined);

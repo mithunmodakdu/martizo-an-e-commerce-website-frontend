@@ -1,4 +1,4 @@
-import { useGetAllProductsQuery } from "@/redux/features/products/products.api";
+import { useGetAllProductsQuery } from "@/redux/features/products.api";
 import ContentHeader from "../Shared/ContentHeader/ContentHeader";
 import type { IProduct } from "../Product/product.types";
 import { ProductCard } from "../Product/ProductCard";

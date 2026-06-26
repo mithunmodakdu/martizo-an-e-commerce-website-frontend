@@ -1,4 +1,4 @@
-import { useGetAllProductsQuery } from "@/redux/features/products/products.api";
+import { useGetAllProductsQuery } from "@/redux/features/products.api";
 import { ProductCard } from "../Product/ProductCard";
 import type { IProduct } from "../Product/product.types";
 import { CouponCountdownStrip } from "./CouponCountdownStrip";

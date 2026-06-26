@@ -7,7 +7,7 @@ import { useState } from "react";
 import {
   useAddToWishlistMutation,
   useRemoveFromWishlistMutation,
-} from "@/redux/features/wishlist/wishlist.api";
+} from "@/redux/features/wishlist.api";
 import { pad } from "../Shared/pad";
 import { toast } from "sonner";
 import { Heart } from "lucide-react";

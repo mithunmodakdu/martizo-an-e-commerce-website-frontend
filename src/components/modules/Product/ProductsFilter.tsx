@@ -10,8 +10,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useGetAllBrandsQuery } from "@/redux/features/brands/brands.api";
-import { useGetProductCategoriesQuery } from "@/redux/features/productCategories/productCategories.api";
+import { useGetAllBrandsQuery } from "@/redux/features/brands.api";
+import { useGetProductCategoriesQuery } from "@/redux/features/productCategories.api";
 import { useSearchParams } from "react-router";
 
 export default function ProductsFilter() {

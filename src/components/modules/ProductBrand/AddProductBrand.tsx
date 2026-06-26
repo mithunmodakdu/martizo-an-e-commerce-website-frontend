@@ -29,7 +29,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useCreateProductBrandMutation } from "@/redux/features/productBrands/productBrands.api";
+import { useCreateProductBrandMutation } from "@/redux/features/productBrands.api";
 import { CreateBrandZodSchema, type IBrand } from "./brand.types";
 
 export function AddProductBrand() {

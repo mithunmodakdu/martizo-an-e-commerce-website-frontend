@@ -1,7 +1,7 @@
 import ContentHeader from "@/components/modules/Shared/ContentHeader/ContentHeader";
 import type { IWishListCardItem } from "@/components/modules/Wishlist/wishlist.interface";
 import WishlistItemCard from "@/components/modules/Wishlist/WishlistItemCard";
-import { useGetWishlistQuery } from "@/redux/features/wishlist/wishlist.api";
+import { useGetWishlistQuery } from "@/redux/features/wishlist.api";
 
 export default function WishlistPage() {
   const { data: wishlistData } = useGetWishlistQuery(undefined);

@@ -31,7 +31,7 @@ import SingleImageUploader from "@/components/ui/singleImageUploader";
 import {
   useGetProductCategoriesQuery,
   useUpdateProductCategoryMutation,
-} from "@/redux/features/productCategories/productCategories.api";
+} from "@/redux/features/productCategories.api";
 import { Edit2 } from "lucide-react";
 import { useId, useState } from "react";
 import { useForm } from "react-hook-form";

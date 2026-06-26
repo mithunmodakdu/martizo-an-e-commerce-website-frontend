@@ -1,4 +1,4 @@
-import { useGetAllProductsQuery } from "@/redux/features/products/products.api";
+import { useGetAllProductsQuery } from "@/redux/features/products.api";
 import Loading from "@/utils/Loading";
 import {
   Pagination,

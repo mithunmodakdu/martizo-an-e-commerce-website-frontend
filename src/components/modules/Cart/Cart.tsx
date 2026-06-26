@@ -4,7 +4,7 @@ import { Price, PriceValue } from "../Product/Price";
 import {
   useDeleteCartItemMutation,
   useGetCartQuery,
-} from "@/redux/features/cart/cart.api";
+} from "@/redux/features/cart.api";
 import Loading from "@/utils/Loading";
 import { toast } from "sonner";
 import { useLocation } from "react-router";

@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useGetOrderByTransactionIdQuery } from "@/redux/features/order/order.api";
+import { useGetOrderByTransactionIdQuery } from "@/redux/features/order.api";
 import { MapPin } from "lucide-react";
 import { useParams } from "react-router";
 

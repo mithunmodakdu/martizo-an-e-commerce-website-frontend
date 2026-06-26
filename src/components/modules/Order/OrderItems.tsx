@@ -1,7 +1,7 @@
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { useGetOrderByTransactionIdQuery } from "@/redux/features/order/order.api";
+import { useGetOrderByTransactionIdQuery } from "@/redux/features/order.api";
 import { ShoppingBag } from "lucide-react";
 import { useParams } from "react-router";
 import type { IOrderItem } from "./order.interface";

@@ -1,4 +1,4 @@
-import { useGetMeQuery } from "@/redux/features/users/users.api";
+import { useGetMeQuery } from "@/redux/features/users.api";
 import { CheckCircle } from "lucide-react";
 
 export default function SuccessHeader() {

@@ -3,7 +3,7 @@ import { Minus, Plus } from "lucide-react";
 import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useUpdateCartMutation } from "@/redux/features/cart/cart.api";
+import { useUpdateCartMutation } from "@/redux/features/cart.api";
 import { toast } from "sonner";
 
 export interface QuantityProps {

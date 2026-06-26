@@ -22,7 +22,7 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { cn } from "@/lib/utils";
-import { useSendOtpMutation, useVerifyOtpMutation } from "@/redux/features/otp/otp.api";
+import { useSendOtpMutation, useVerifyOtpMutation } from "@/redux/features/otp.api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";

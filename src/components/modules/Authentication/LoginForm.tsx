@@ -25,7 +25,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import PasswordInput from "@/components/ui/PasswordInput";
-import { useLoginMutation } from "@/redux/features/auths/auths.api";
+import { useLoginMutation } from "@/redux/features/auths.api";
 import { toast } from "sonner";
 import config from "@/config";
 

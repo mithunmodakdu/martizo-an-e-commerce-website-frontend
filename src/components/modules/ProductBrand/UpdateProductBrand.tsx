@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import SingleImageUploader from "@/components/ui/singleImageUploader";
-import { useUpdateProductBrandMutation } from "@/redux/features/productBrands/productBrands.api";
+import { useUpdateProductBrandMutation } from "@/redux/features/productBrands.api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useId, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -30,7 +30,7 @@ import {
 } from "@/components/ui/card";
 import { Field } from "@/components/ui/field";
 import { useParams } from "react-router";
-import { useGetBrandByIdQuery } from "@/redux/features/brands/brands.api";
+import { useGetBrandByIdQuery } from "@/redux/features/brands.api";
 
 export function UpdateProductBrand() {
   const params = useParams();

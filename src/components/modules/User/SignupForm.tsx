@@ -19,7 +19,7 @@ import {
 import { z } from "zod";
 import {zodResolver} from "@hookform/resolvers/zod";
 import PasswordInput from "@/components/ui/PasswordInput";
-import { useRegisterMutation } from "@/redux/features/users/users.api";
+import { useRegisterMutation } from "@/redux/features/users.api";
 import { toast } from "sonner";
 import { SignupUserZodSchema } from "@/types";
 
