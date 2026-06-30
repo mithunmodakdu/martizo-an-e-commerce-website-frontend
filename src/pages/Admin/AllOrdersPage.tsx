@@ -62,11 +62,13 @@ import {
   Trash2,
   TrendingUp,
 } from "lucide-react";
-import { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router";
 
 const AllOrdersPage = () => {
-  const [search, setSearch] = useState("");
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [debouncedSearchQuery, setDebouncedSearchQuery ] = useState<string>("");
+  console.log(debouncedSearchQuery)
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [sortField, setSortField] = useState<TOrderSortField>("date");
   const [sortDir, setSortDir] = useState<TSortDirection>("desc");
@@ -74,7 +76,22 @@ const AllOrdersPage = () => {
   const [pageSize, setPageSize] = useState(10);
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const { data: allOrders, isLoading: ordersLoading } =
-    useGetAllOrdersQuery(undefined);
+    useGetAllOrdersQuery({searchTerm: debouncedSearchQuery});
+    console.log(allOrders)
+
+  useEffect(() => {
+    const timer = setTimeout(() =>{
+      setDebouncedSearchQuery(searchQuery)
+    }, 300)
+
+    return () => clearTimeout(timer)
+  }, [searchQuery])
+
+  const handleEnterKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if(e.key === "Enter"){
+      setDebouncedSearchQuery(searchQuery)
+    }
+  }
 
   const ORDERS_DATA: IOrderTableRow[] = useMemo(
     () =>
@@ -143,15 +160,15 @@ const AllOrdersPage = () => {
   const filteredOrders = useMemo(() => {
     let data = [...(ORDERS_DATA ?? [])];
 
-    if (search.trim()) {
-      const q = search.toLowerCase();
-      data = data.filter(
-        (o) =>
-          o.orderId.toLowerCase().includes(q) ||
-          o.customer.toLowerCase().includes(q) ||
-          o.email.toLowerCase().includes(q),
-      );
-    }
+    // if (search.trim()) {
+    //   const q = search.toLowerCase();
+    //   data = data.filter(
+    //     (o) =>
+    //       o.orderId.toLowerCase().includes(q) ||
+    //       o.customer.toLowerCase().includes(q) ||
+    //       o.email.toLowerCase().includes(q),
+    //   );
+    // }
 
     if (statusFilter !== "all") {
       data = data.filter((o) => o.status === statusFilter);
@@ -200,7 +217,7 @@ const AllOrdersPage = () => {
     }
 
     return data;
-  }, [ORDERS_DATA, search, statusFilter, sortField, sortDir]);
+  }, [ORDERS_DATA, statusFilter, sortField, sortDir]);
 
   // ── Pagination ──
   const totalPages = Math.ceil(filteredOrders.length / pageSize);
@@ -219,10 +236,7 @@ const AllOrdersPage = () => {
     setPage(1);
   };
 
-  const handleSearchChange = (v: string) => {
-    setSearch(v);
-    setPage(1);
-  };
+
 
   const handleStatusFilter = (v: string) => {
     setStatusFilter(v);
@@ -321,8 +335,9 @@ const AllOrdersPage = () => {
                   <Input
                     type="search"
                     placeholder="Search orders…"
-                    value={search}
-                    onChange={(e) => handleSearchChange(e.target.value)}
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyDown={handleEnterKeyDown}
                     className="pl-9 h-9 text-sm"
                     aria-label="Search orders"
                   />
