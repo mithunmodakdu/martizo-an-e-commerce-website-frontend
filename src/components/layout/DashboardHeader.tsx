@@ -14,9 +14,6 @@ const DashboardHeader = () => {
       <div className="flex items-center justify-between max-w-screen-2xl mx-auto">
         <SidebarTrigger />
 
-        {/* Search */}
-        <SearchBox />
-
         {/* Right */}
         <div className="flex items-center gap-3">
           <Button variant="ghost" size="icon" className="relative">
