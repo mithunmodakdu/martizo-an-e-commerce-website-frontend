@@ -26,11 +26,11 @@ export type TOrderStatus =
   | "REFUNDED";
 
 export type TOrderSortField =
-  | "orderId"
-  | "customer"
-  | "date"
-  | "total"
-  | "items"
+  | "orderNo"
+  | "userId.name"
+  | "createdAt"
+  | "itemsPrice"
+  | "items.length"
   | "status"
   | null;
 

@@ -66,18 +66,25 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router";
 
 const AllOrdersPage = () => {
-  const [searchQuery, setSearchQuery] = useState<string>("");
-  const [debouncedSearchQuery, setDebouncedSearchQuery ] = useState<string>("");
-  console.log(debouncedSearchQuery)
-  const [statusFilter, setStatusFilter] = useState<string>("all");
-  const [sortField, setSortField] = useState<TOrderSortField>("date");
+  const [searchQuery, setSearchQuery] = useState<string | undefined>(undefined);
+  const [debouncedSearchQuery, setDebouncedSearchQuery ] = useState<string | undefined>(undefined);
+  const [statusFilter, setStatusFilter] = useState<string | undefined>(undefined);
+  const [sortField, setSortField] = useState<TOrderSortField>("createdAt");
   const [sortDir, setSortDir] = useState<TSortDirection>("desc");
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const { data: allOrders, isLoading: ordersLoading } =
-    useGetAllOrdersQuery({searchTerm: debouncedSearchQuery});
-    console.log(allOrders)
+    useGetAllOrdersQuery({
+      status: statusFilter,
+      searchTerm: debouncedSearchQuery,
+      page: page,
+      limit: pageSize,
+      sort: sortField,
+      sortDirection: sortDir
+    });
+  
+    const totalPages = allOrders?.meta?.totalPage;
 
   useEffect(() => {
     const timer = setTimeout(() =>{
@@ -93,35 +100,23 @@ const AllOrdersPage = () => {
     }
   }
 
-  const ORDERS_DATA: IOrderTableRow[] = useMemo(
-    () =>
-      allOrders?.data?.data?.map((order: IOrder) => ({
-        id: order?._id,
-        orderId: order?.orderNo,
-        customer: order?.userId?.name,
-        email: order?.userId?.email,
-        date: order?.createdAt,
-        items: order.items.length,
-        total: order?.itemsPrice,
-        status: order?.status?.toLowerCase(),
-        paymentMethod: order?.paymentMethod,
-      })) ?? [],
-    [allOrders],
-  );
+  console.log("allOrders", allOrders)
+
+
 
   // ── stats ──
   const stats = useMemo(() => {
-    if (!ORDERS_DATA.length)
+    if (!allOrders?.data?.length)
       return { total: 0, revenue: 0, pending: 0, delivered: 0 };
 
-    const total = ORDERS_DATA?.length;
-    const revenue = ORDERS_DATA.reduce((s, o) => s + o.total, 0);
-    const pending = ORDERS_DATA?.filter((o) => o.status === "pending").length;
-    const delivered = ORDERS_DATA?.filter(
+    const total = allOrders?.data?.length;
+    const revenue = allOrders?.data?.reduce((s, o) => s + o.total, 0);
+    const pending = allOrders?.data?.filter((o) => o.status === "pending").length;
+    const delivered = allOrders?.data?.filter(
       (o) => o.status === "delivered",
     ).length;
     return { total, revenue, pending, delivered };
-  }, [ORDERS_DATA]);
+  }, [allOrders]);
 
   const statCardItems = [
     {
@@ -156,75 +151,6 @@ const AllOrdersPage = () => {
     },
   ];
 
-  // ── Filtering ──
-  const filteredOrders = useMemo(() => {
-    let data = [...(ORDERS_DATA ?? [])];
-
-    // if (search.trim()) {
-    //   const q = search.toLowerCase();
-    //   data = data.filter(
-    //     (o) =>
-    //       o.orderId.toLowerCase().includes(q) ||
-    //       o.customer.toLowerCase().includes(q) ||
-    //       o.email.toLowerCase().includes(q),
-    //   );
-    // }
-
-    if (statusFilter !== "all") {
-      data = data.filter((o) => o.status === statusFilter);
-    }
-
-    if (sortField) {
-      data.sort((a, b) => {
-        let aVal: string | number = "";
-        let bVal: string | number = "";
-
-        switch (sortField) {
-          case "orderId":
-            aVal = a.orderId;
-            bVal = b.orderId;
-            break;
-          case "customer":
-            aVal = a.customer;
-            bVal = b.customer;
-            break;
-          case "date":
-            aVal = a.date;
-            bVal = b.date;
-            break;
-          case "total":
-            aVal = a.total;
-            bVal = b.total;
-            break;
-          case "items":
-            aVal = a.items;
-            bVal = b.items;
-            break;
-          case "status":
-            aVal = a.status;
-            bVal = b.status;
-            break;
-        }
-
-        if (typeof aVal === "number" && typeof bVal === "number") {
-          return sortDir === "asc" ? aVal - bVal : bVal - aVal;
-        }
-
-        return sortDir === "asc"
-          ? String(aVal).localeCompare(String(bVal))
-          : String(bVal).localeCompare(String(aVal));
-      });
-    }
-
-    return data;
-  }, [ORDERS_DATA, statusFilter, sortField, sortDir]);
-
-  // ── Pagination ──
-  const totalPages = Math.ceil(filteredOrders.length / pageSize);
-  const paginated = filteredOrders.slice(
-    (page - 1) * pageSize,
-    page * pageSize,
-  );
 
   const handleSort = (field: TOrderSortField) => {
     if (sortField === field) {
@@ -238,15 +164,15 @@ const AllOrdersPage = () => {
 
 
 
-  const handleStatusFilter = (v: string) => {
-    setStatusFilter(v);
+  const handleStatusFilter = (value: string) => {
+    setStatusFilter(value);
     setPage(1);
   };
 
   // ── Selection ──
-  const allOnPageSelected = paginated.every((o) => selected.has(o.id));
+  const allOnPageSelected = allOrders?.data?.every((order) => selected.has(order._id));
   const someOnPageSelected =
-    paginated.some((o) => selected.has(o.id)) && !allOnPageSelected;
+    allOrders?.data?.some((order) => selected.has(order._id)) && !allOnPageSelected;
 
   const toggleAll = () => {
     if (allOnPageSelected) {
@@ -344,7 +270,7 @@ const AllOrdersPage = () => {
                 </div>
 
                 {/* Status Filter */}
-                <Select value={statusFilter} onValueChange={handleStatusFilter}>
+                <Select value={statusFilter} onValueChange={(value) => handleStatusFilter(value)}>
                   <SelectTrigger
                     className="h-9 w-38 text-sm"
                     aria-label="Filter by status"
@@ -355,9 +281,9 @@ const AllOrdersPage = () => {
                   <SelectContent>
                     <SelectItem value="all">All Statuses</SelectItem>
                     {(Object.keys(ORDER_STATUS_CONFIG) as TOrderStatus[]).map(
-                      (s) => (
-                        <SelectItem key={s} value={s}>
-                          {ORDER_STATUS_CONFIG[s].label}
+                      (status) => (
+                        <SelectItem key={status} value={status}>
+                          {ORDER_STATUS_CONFIG[status].label}
                         </SelectItem>
                       ),
                     )}
@@ -422,7 +348,7 @@ const AllOrdersPage = () => {
                       />
                     </TableHead>
                     <OrderSortableHeader
-                      field="orderId"
+                      field="orderNo"
                       label="Order"
                       sortField={sortField}
                       sortDir={sortDir}
@@ -430,7 +356,7 @@ const AllOrdersPage = () => {
                       className="min-w-[110px]"
                     />
                     <OrderSortableHeader
-                      field="customer"
+                      field="userId.name"
                       label="Customer"
                       sortField={sortField}
                       sortDir={sortDir}
@@ -438,7 +364,7 @@ const AllOrdersPage = () => {
                       className="min-w-[160px]"
                     />
                     <OrderSortableHeader
-                      field="date"
+                      field="createdAt"
                       label="Date"
                       sortField={sortField}
                       sortDir={sortDir}
@@ -446,7 +372,7 @@ const AllOrdersPage = () => {
                       className="min-w-[110px]"
                     />
                     <OrderSortableHeader
-                      field="items"
+                      field="items.length"
                       label="Items"
                       sortField={sortField}
                       sortDir={sortDir}
@@ -454,7 +380,7 @@ const AllOrdersPage = () => {
                       className="w-16 text-center"
                     />
                     <OrderSortableHeader
-                      field="total"
+                      field="itemsPrice"
                       label="Total"
                       sortField={sortField}
                       sortDir={sortDir}
@@ -482,7 +408,7 @@ const AllOrdersPage = () => {
 
                 {/* table body */}
                 <TableBody>
-                  {paginated.length === 0 ? (
+                  {allOrders?.data?.length === 0 ? (
                     <TableRow>
                       <TableCell
                         colSpan={9}
@@ -492,45 +418,45 @@ const AllOrdersPage = () => {
                       </TableCell>
                     </TableRow>
                   ) : (
-                    paginated.map((order) => (
+                    allOrders?.data?.map((order) => (
                       <TableRow
-                        key={order.id}
+                        key={order?._id}
                         data-state={
-                          selected.has(order.id) ? "selected" : undefined
+                          selected.has(order?._id) ? "selected" : undefined
                         }
                         className="group hover:bg-muted/30 transition-colors data-[state=selected]:bg-primary/5"
                       >
                         <TableCell className="pl-4">
                           <Checkbox
-                            checked={selected.has(order.id)}
-                            onCheckedChange={() => toggleRow(order.id)}
-                            aria-label={`Select order ${order.orderId}`}
+                            checked={selected.has(order?._id)}
+                            onCheckedChange={() => toggleRow(order?._id)}
+                            aria-label={`Select order ${order?.orderNo}`}
                           />
                         </TableCell>
 
                         <TableCell>
                           <span className="font-mono text-sm font-semibold text-primary">
-                            {order.orderId}
+                            {order?.orderNo}
                           </span>
                         </TableCell>
 
                         <TableCell>
                           <div>
                             <p className="text-sm font-medium text-foreground leading-none">
-                              {order.customer}
+                              {order?.userId?.name}
                             </p>
                             <p className="mt-0.5 text-xs text-muted-foreground">
-                              {order.email}
+                              {order?.userId?.email}
                             </p>
                           </div>
                         </TableCell>
 
                         <TableCell>
                           <time
-                            dateTime={order.date}
+                            dateTime={order?.createdAt}
                             className="text-sm text-muted-foreground"
                           >
-                            {new Date(order.date).toLocaleDateString("en-US", {
+                            {new Date(order?.createdAt).toLocaleDateString("en-US", {
                               month: "short",
                               day: "numeric",
                               year: "numeric",
@@ -540,24 +466,24 @@ const AllOrdersPage = () => {
 
                         <TableCell className="text-center">
                           <span className="text-sm tabular-nums">
-                            {order.items}
+                            {order.items.length}
                           </span>
                         </TableCell>
 
                         <TableCell>
                           <span className="text-sm font-semibold tabular-nums">
-                            ${order.total.toFixed(2)}
+                            ${order?.itemsPrice.toFixed(2)}
                           </span>
                         </TableCell>
 
                         <TableCell>
                           <span className="text-sm text-muted-foreground">
-                            {order.paymentMethod}
+                            {order?.paymentMethod}
                           </span>
                         </TableCell>
 
                         <TableCell>
-                          <OrderStatusBadge status={order.status} />
+                          <OrderStatusBadge status={order?.status} />
                         </TableCell>
 
                         <TableCell className="pr-4">
@@ -567,7 +493,7 @@ const AllOrdersPage = () => {
                                 variant="ghost"
                                 size="icon"
                                 className="h-8 w-8 opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity"
-                                aria-label={`Actions for ${order.orderId}`}
+                                aria-label={`Actions for ${order?.orderNo}`}
                               >
                                 <MoreHorizontal className="h-4 w-4" />
                               </Button>
@@ -577,7 +503,7 @@ const AllOrdersPage = () => {
                                 <Eye className="h-3.5 w-3.5" />
                                 View
                               </DropdownMenuItem>
-                              <Link to={`/admin/update-order/${order.id}`}>
+                              <Link to={`/admin/update-order/${order?._id}`}>
                                 <DropdownMenuItem className="gap-2 text-sm cursor-pointer">
                                   <Pencil className="h-3.5 w-3.5" />
                                   Edit
@@ -605,14 +531,14 @@ const AllOrdersPage = () => {
                 <span>
                   Showing{" "}
                   <strong className="text-foreground">
-                    {filteredOrders.length === 0
+                    {allOrders?.data?.length === 0
                       ? 0
                       : (page - 1) * pageSize + 1}
-                    –{Math.min(page * pageSize, filteredOrders.length)}
+                    –{Math.min(page * pageSize, allOrders?.meta?.total)}
                   </strong>{" "}
                   of{" "}
                   <strong className="text-foreground">
-                    {filteredOrders.length}
+                    {allOrders?.meta?.total}
                   </strong>{" "}
                   orders
                 </span>
