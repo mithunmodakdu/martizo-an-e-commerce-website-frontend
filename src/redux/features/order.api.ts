@@ -35,6 +35,7 @@ export const ordersApi = baseApi.injectEndpoints({
         method: "GET",
         params
       }),
+      transformResponse: res => res.data,
       providesTags: ["ORDERS"],
     }),
 

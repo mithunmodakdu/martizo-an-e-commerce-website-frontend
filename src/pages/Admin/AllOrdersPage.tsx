@@ -66,18 +66,20 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router";
 
 const AllOrdersPage = () => {
-  const [searchQuery, setSearchQuery] = useState<string>("");
-  const [debouncedSearchQuery, setDebouncedSearchQuery ] = useState<string>("");
-  console.log(debouncedSearchQuery)
-  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [searchQuery, setSearchQuery] = useState<string | undefined>(undefined);
+  const [debouncedSearchQuery, setDebouncedSearchQuery ] = useState<string | undefined>(undefined);
+  const [statusFilter, setStatusFilter] = useState<string | undefined>(undefined);
   const [sortField, setSortField] = useState<TOrderSortField>("date");
   const [sortDir, setSortDir] = useState<TSortDirection>("desc");
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const { data: allOrders, isLoading: ordersLoading } =
-    useGetAllOrdersQuery({searchTerm: debouncedSearchQuery});
-    console.log(allOrders)
+    useGetAllOrdersQuery({
+      status: statusFilter,
+      searchTerm: debouncedSearchQuery
+    });
+
 
   useEffect(() => {
     const timer = setTimeout(() =>{
@@ -93,9 +95,10 @@ const AllOrdersPage = () => {
     }
   }
 
+  console.log("allOrders", allOrders)
   const ORDERS_DATA: IOrderTableRow[] = useMemo(
     () =>
-      allOrders?.data?.data?.map((order: IOrder) => ({
+      allOrders?.data?.map((order: IOrder) => ({
         id: order?._id,
         orderId: order?.orderNo,
         customer: order?.userId?.name,
@@ -103,11 +106,12 @@ const AllOrdersPage = () => {
         date: order?.createdAt,
         items: order.items.length,
         total: order?.itemsPrice,
-        status: order?.status?.toLowerCase(),
+        status: order?.status,
         paymentMethod: order?.paymentMethod,
       })) ?? [],
     [allOrders],
   );
+
 
   // ── stats ──
   const stats = useMemo(() => {
@@ -170,9 +174,9 @@ const AllOrdersPage = () => {
     //   );
     // }
 
-    if (statusFilter !== "all") {
-      data = data.filter((o) => o.status === statusFilter);
-    }
+    // if (statusFilter !== "all") {
+    //   data = data.filter((o) => o.status === statusFilter);
+    // }
 
     if (sortField) {
       data.sort((a, b) => {
@@ -217,7 +221,7 @@ const AllOrdersPage = () => {
     }
 
     return data;
-  }, [ORDERS_DATA, statusFilter, sortField, sortDir]);
+  }, [ORDERS_DATA, sortField, sortDir]);
 
   // ── Pagination ──
   const totalPages = Math.ceil(filteredOrders.length / pageSize);
@@ -238,8 +242,8 @@ const AllOrdersPage = () => {
 
 
 
-  const handleStatusFilter = (v: string) => {
-    setStatusFilter(v);
+  const handleStatusFilter = (value: string) => {
+    setStatusFilter(value);
     setPage(1);
   };
 
@@ -344,7 +348,7 @@ const AllOrdersPage = () => {
                 </div>
 
                 {/* Status Filter */}
-                <Select value={statusFilter} onValueChange={handleStatusFilter}>
+                <Select value={statusFilter} onValueChange={(value) => handleStatusFilter(value)}>
                   <SelectTrigger
                     className="h-9 w-38 text-sm"
                     aria-label="Filter by status"
@@ -355,9 +359,9 @@ const AllOrdersPage = () => {
                   <SelectContent>
                     <SelectItem value="all">All Statuses</SelectItem>
                     {(Object.keys(ORDER_STATUS_CONFIG) as TOrderStatus[]).map(
-                      (s) => (
-                        <SelectItem key={s} value={s}>
-                          {ORDER_STATUS_CONFIG[s].label}
+                      (status) => (
+                        <SelectItem key={status} value={status}>
+                          {ORDER_STATUS_CONFIG[status].label}
                         </SelectItem>
                       ),
                     )}
@@ -482,7 +486,7 @@ const AllOrdersPage = () => {
 
                 {/* table body */}
                 <TableBody>
-                  {paginated.length === 0 ? (
+                  {ORDERS_DATA.length === 0 ? (
                     <TableRow>
                       <TableCell
                         colSpan={9}
@@ -492,7 +496,7 @@ const AllOrdersPage = () => {
                       </TableCell>
                     </TableRow>
                   ) : (
-                    paginated.map((order) => (
+                    ORDERS_DATA.map((order) => (
                       <TableRow
                         key={order.id}
                         data-state={
