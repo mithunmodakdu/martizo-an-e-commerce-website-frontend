@@ -77,9 +77,12 @@ const AllOrdersPage = () => {
   const { data: allOrders, isLoading: ordersLoading } =
     useGetAllOrdersQuery({
       status: statusFilter,
-      searchTerm: debouncedSearchQuery
+      searchTerm: debouncedSearchQuery,
+      page: page,
+      limit: pageSize
     });
-
+  
+    const totalPages = allOrders?.meta?.totalPage;
 
   useEffect(() => {
     const timer = setTimeout(() =>{
@@ -223,12 +226,9 @@ const AllOrdersPage = () => {
     return data;
   }, [ORDERS_DATA, sortField, sortDir]);
 
-  // ── Pagination ──
-  const totalPages = Math.ceil(filteredOrders.length / pageSize);
-  const paginated = filteredOrders.slice(
-    (page - 1) * pageSize,
-    page * pageSize,
-  );
+
+  
+
 
   const handleSort = (field: TOrderSortField) => {
     if (sortField === field) {
@@ -248,9 +248,9 @@ const AllOrdersPage = () => {
   };
 
   // ── Selection ──
-  const allOnPageSelected = paginated.every((o) => selected.has(o.id));
+  const allOnPageSelected = ORDERS_DATA.every((o) => selected.has(o.id));
   const someOnPageSelected =
-    paginated.some((o) => selected.has(o.id)) && !allOnPageSelected;
+    ORDERS_DATA .some((o) => selected.has(o.id)) && !allOnPageSelected;
 
   const toggleAll = () => {
     if (allOnPageSelected) {
@@ -609,14 +609,14 @@ const AllOrdersPage = () => {
                 <span>
                   Showing{" "}
                   <strong className="text-foreground">
-                    {filteredOrders.length === 0
+                    {ORDERS_DATA.length === 0
                       ? 0
                       : (page - 1) * pageSize + 1}
-                    –{Math.min(page * pageSize, filteredOrders.length)}
+                    –{Math.min(page * pageSize, ORDERS_DATA.length)}
                   </strong>{" "}
                   of{" "}
                   <strong className="text-foreground">
-                    {filteredOrders.length}
+                    {ORDERS_DATA.length}
                   </strong>{" "}
                   orders
                 </span>
