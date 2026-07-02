@@ -78,10 +78,10 @@ const AllOrdersPage = () => {
     useGetAllOrdersQuery({
       status: statusFilter,
       searchTerm: debouncedSearchQuery,
+      sortField,
+      sortDir,
       page: page,
       limit: pageSize,
-      sort: sortField,
-      sortDirection: sortDir
     });
   
     const totalPages = allOrders?.meta?.totalPage;
@@ -355,14 +355,11 @@ const AllOrdersPage = () => {
                       onSort={handleSort}
                       className="min-w-[110px]"
                     />
-                    <OrderSortableHeader
-                      field="userId.name"
-                      label="Customer"
-                      sortField={sortField}
-                      sortDir={sortDir}
-                      onSort={handleSort}
-                      className="min-w-[160px]"
-                    />
+                    <TableHead className="min-w-[120px]">
+                      <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                        Customer
+                      </span>
+                    </TableHead>
                     <OrderSortableHeader
                       field="createdAt"
                       label="Date"
@@ -371,21 +368,18 @@ const AllOrdersPage = () => {
                       onSort={handleSort}
                       className="min-w-[110px]"
                     />
-                    <OrderSortableHeader
-                      field="items.length"
-                      label="Items"
-                      sortField={sortField}
-                      sortDir={sortDir}
-                      onSort={handleSort}
-                      className="w-16 text-center"
-                    />
+                    <TableHead className="min-w-[50px]">
+                      <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                        Total Items
+                      </span>
+                    </TableHead>
                     <OrderSortableHeader
                       field="itemsPrice"
-                      label="Total"
+                      label="Total Price"
                       sortField={sortField}
                       sortDir={sortDir}
                       onSort={handleSort}
-                      className="min-w-[100px]"
+                      className="min-w-[120px]"
                     />
                     <TableHead className="min-w-[120px]">
                       <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
