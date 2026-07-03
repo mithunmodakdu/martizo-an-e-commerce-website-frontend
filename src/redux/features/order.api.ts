@@ -29,6 +29,15 @@ export const ordersApi = baseApi.injectEndpoints({
       providesTags: ["ORDER"],
     }),
 
+    deleteSelectedOrders: builder.mutation({
+      query: (selectedOrderIds) => ({
+        url: "/orders/delete-selected-orders",
+        method: "DELETE",
+        data: selectedOrderIds
+      }),
+      invalidatesTags: ["ORDERS"]
+    }),
+
     deleteOrderById: builder.mutation({
       query: (orderId) => ({
         url: `/orders/${orderId}`,
@@ -76,6 +85,7 @@ export const {
   useGetOrderByTransactionIdQuery,
   useGetOrderByOrderNoQuery,
   useGetOrderByIdQuery,
+  useDeleteSelectedOrdersMutation,
   useDeleteOrderByIdMutation,
   useGetAllOrdersQuery,
   useUpdateOrderMutation,
