@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   ORDER_STATUS_CONFIG,
   PAGE_SIZE_OPTIONS,
@@ -43,7 +44,10 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useGetAllOrdersQuery } from "@/redux/features/order.api";
+import {
+  useDeleteOrderByIdMutation,
+  useGetAllOrdersQuery,
+} from "@/redux/features/order.api";
 import Loading from "@/utils/Loading";
 import {
   CheckCircle2,
@@ -62,46 +66,83 @@ import {
 } from "lucide-react";
 import React, { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router";
+import Swal from "sweetalert2";
 
 const AllOrdersPage = () => {
   const [searchQuery, setSearchQuery] = useState<string | undefined>(undefined);
-  const [debouncedSearchQuery, setDebouncedSearchQuery ] = useState<string | undefined>(undefined);
-  const [statusFilter, setStatusFilter] = useState<string | undefined>(undefined);
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState<
+    string | undefined
+  >(undefined);
+  const [statusFilter, setStatusFilter] = useState<string | undefined>(
+    undefined,
+  );
   const [sortField, setSortField] = useState<TOrderSortField>("createdAt");
   const [sortDir, setSortDir] = useState<TSortDirection>("desc");
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [selected, setSelected] = useState<Set<string>>(new Set());
+  console.log(selected);
 
-  const { data: allOrders, isLoading: ordersLoading } =
-    useGetAllOrdersQuery({
-      status: statusFilter,
-      searchTerm: debouncedSearchQuery,
-      sortField,
-      sortDir,
-      page: page,
-      limit: pageSize,
-    });
-  
-    const totalPages = allOrders?.meta?.totalPage;
+  const { data: allOrders, isLoading: ordersLoading } = useGetAllOrdersQuery({
+    status: statusFilter,
+    searchTerm: debouncedSearchQuery,
+    sortField,
+    sortDir,
+    page: page,
+    limit: pageSize,
+  });
+
+  const [deleteOrderById] = useDeleteOrderByIdMutation();
+
+  const totalPages = allOrders?.meta?.totalPage;
 
   useEffect(() => {
-    const timer = setTimeout(() =>{
-      setDebouncedSearchQuery(searchQuery)
-    }, 300)
+    const timer = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery);
+    }, 300);
 
-    return () => clearTimeout(timer)
-  }, [searchQuery])
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
 
   const handleEnterKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if(e.key === "Enter"){
-      setDebouncedSearchQuery(searchQuery)
+    if (e.key === "Enter") {
+      setDebouncedSearchQuery(searchQuery);
     }
-  }
+  };
 
-  console.log("allOrders", allOrders)
+  console.log("allOrders", allOrders);
 
+  const handleDeleteById = async (orderId: string) => {
+    const alertResult = await Swal.fire({
+      title: "Are you sure?",
+      text: "This will be permanently deleted. You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    });
 
+    if (!alertResult.isConfirmed) return;
+
+    try {
+      const res = await deleteOrderById(orderId).unwrap();
+      console.log(res);
+      if (res.success) {
+        Swal.fire({
+          title: "Deleted!",
+          text: res?.message || "Order has been deleted successfully.",
+          icon: "success",
+        });
+      }
+    } catch (error: any) {
+      Swal.fire({
+        title: "Error!",
+        text: error?.data?.message || "Failed to delete the order.",
+        icon: "error",
+      });
+    }
+  };
 
   // ── stats ──
   const stats = useMemo(() => {
@@ -110,7 +151,9 @@ const AllOrdersPage = () => {
 
     const total = allOrders?.data?.length;
     const revenue = allOrders?.data?.reduce((s, o) => s + o.total, 0);
-    const pending = allOrders?.data?.filter((o) => o.status === "pending").length;
+    const pending = allOrders?.data?.filter(
+      (o) => o.status === "pending",
+    ).length;
     const delivered = allOrders?.data?.filter(
       (o) => o.status === "delivered",
     ).length;
@@ -150,7 +193,6 @@ const AllOrdersPage = () => {
     },
   ];
 
-
   const handleSort = (field: TOrderSortField) => {
     if (sortField === field) {
       setSortDir((d) => (d === "asc" ? "desc" : "asc"));
@@ -167,30 +209,32 @@ const AllOrdersPage = () => {
   };
 
   // ── Selection ──
-  const allOnPageSelected = allOrders?.data?.every((order: IOrder) => selected.has(order._id));
+  const allOnPageSelected = allOrders?.data?.every((order: IOrder) =>
+    selected.has(order._id),
+  );
   const someOnPageSelected =
-    allOrders?.data?.some((order: IOrder) => selected.has(order._id)) && !allOnPageSelected;
-
+    allOrders?.data?.some((order: IOrder) => selected.has(order._id)) &&
+    !allOnPageSelected;
 
   const toggleAll = () => {
     if (allOnPageSelected) {
       const newSelected = new Set(selected);
-       allOrders?.data?.forEach((order: IOrder) => newSelected.delete(order._id));
+      allOrders?.data?.forEach((order: IOrder) =>
+        newSelected.delete(order._id),
+      );
       setSelected(newSelected);
     } else {
       const newSelected = new Set(selected);
-       allOrders?.data?.forEach((order: IOrder) => newSelected.add(order._id));
+      allOrders?.data?.forEach((order: IOrder) => newSelected.add(order._id));
       setSelected(newSelected);
     }
   };
-
 
   const toggleRow = (id: string) => {
     const newSelected = new Set(selected);
     newSelected.has(id) ? newSelected.delete(id) : newSelected.add(id);
     setSelected(newSelected);
   };
-
 
   const handleExport = () => {
     const headers = [
@@ -270,7 +314,10 @@ const AllOrdersPage = () => {
                 </div>
 
                 {/* Status Filter */}
-                <Select value={statusFilter} onValueChange={(value) => handleStatusFilter(value)}>
+                <Select
+                  value={statusFilter}
+                  onValueChange={(value) => handleStatusFilter(value)}
+                >
                   <SelectTrigger
                     className="h-9 w-38 text-sm"
                     aria-label="Filter by status"
@@ -450,11 +497,14 @@ const AllOrdersPage = () => {
                             dateTime={order?.createdAt}
                             className="text-sm text-muted-foreground"
                           >
-                            {new Date(order?.createdAt).toLocaleDateString("en-US", {
-                              month: "short",
-                              day: "numeric",
-                              year: "numeric",
-                            })}
+                            {new Date(order?.createdAt).toLocaleDateString(
+                              "en-US",
+                              {
+                                month: "short",
+                                day: "numeric",
+                                year: "numeric",
+                              },
+                            )}
                           </time>
                         </TableCell>
 
@@ -505,7 +555,10 @@ const AllOrdersPage = () => {
                               </Link>
 
                               <DropdownMenuSeparator />
-                              <DropdownMenuItem className="gap-2 text-sm cursor-pointer text-destructive focus:text-destructive">
+                              <DropdownMenuItem
+                                onClick={() => handleDeleteById(order._id)}
+                                className="gap-2 text-sm cursor-pointer text-destructive focus:text-destructive"
+                              >
                                 <Trash2 className="h-3.5 w-3.5" />
                                 Delete
                               </DropdownMenuItem>
