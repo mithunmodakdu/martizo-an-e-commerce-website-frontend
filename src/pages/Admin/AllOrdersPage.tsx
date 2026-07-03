@@ -4,8 +4,6 @@ import {
 } from "@/components/modules/Order/order.constants";
 import type {
   IOrder,
-  IOrderItem,
-  IOrderTableRow,
   TOrderSortField,
   TOrderStatus,
   TSortDirection,
@@ -74,6 +72,7 @@ const AllOrdersPage = () => {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [selected, setSelected] = useState<Set<string>>(new Set());
+
   const { data: allOrders, isLoading: ordersLoading } =
     useGetAllOrdersQuery({
       status: statusFilter,
@@ -162,35 +161,36 @@ const AllOrdersPage = () => {
     setPage(1);
   };
 
-
-
   const handleStatusFilter = (value: string) => {
     setStatusFilter(value);
     setPage(1);
   };
 
   // ── Selection ──
-  const allOnPageSelected = allOrders?.data?.every((order) => selected.has(order._id));
+  const allOnPageSelected = allOrders?.data?.every((order: IOrder) => selected.has(order._id));
   const someOnPageSelected =
-    allOrders?.data?.some((order) => selected.has(order._id)) && !allOnPageSelected;
+    allOrders?.data?.some((order: IOrder) => selected.has(order._id)) && !allOnPageSelected;
+
 
   const toggleAll = () => {
     if (allOnPageSelected) {
-      const next = new Set(selected);
-      paginated.forEach((o) => next.delete(o.id));
-      setSelected(next);
+      const newSelected = new Set(selected);
+       allOrders?.data?.forEach((order: IOrder) => newSelected.delete(order._id));
+      setSelected(newSelected);
     } else {
-      const next = new Set(selected);
-      paginated.forEach((o) => next.add(o.id));
-      setSelected(next);
+      const newSelected = new Set(selected);
+       allOrders?.data?.forEach((order: IOrder) => newSelected.add(order._id));
+      setSelected(newSelected);
     }
   };
 
+
   const toggleRow = (id: string) => {
-    const next = new Set(selected);
-    next.has(id) ? next.delete(id) : next.add(id);
-    setSelected(next);
+    const newSelected = new Set(selected);
+    newSelected.has(id) ? newSelected.delete(id) : newSelected.add(id);
+    setSelected(newSelected);
   };
+
 
   const handleExport = () => {
     const headers = [
