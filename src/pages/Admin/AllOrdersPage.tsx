@@ -46,6 +46,7 @@ import {
 } from "@/components/ui/tooltip";
 import {
   useDeleteOrderByIdMutation,
+  useDeleteSelectedOrdersMutation,
   useGetAllOrdersQuery,
 } from "@/redux/features/order.api";
 import Loading from "@/utils/Loading";
@@ -81,7 +82,6 @@ const AllOrdersPage = () => {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [selected, setSelected] = useState<Set<string>>(new Set());
-  console.log(selected);
 
   const { data: allOrders, isLoading: ordersLoading } = useGetAllOrdersQuery({
     status: statusFilter,
@@ -93,6 +93,7 @@ const AllOrdersPage = () => {
   });
 
   const [deleteOrderById] = useDeleteOrderByIdMutation();
+  const [deleteSelectedOrders] = useDeleteSelectedOrdersMutation();
 
   const totalPages = allOrders?.meta?.totalPage;
 
@@ -110,7 +111,50 @@ const AllOrdersPage = () => {
     }
   };
 
-  console.log("allOrders", allOrders);
+  const handleDeleteSelectedOrders = async (selected: Set<string>) => {
+    if (selected.size === 0) {
+      return Swal.fire({
+        icon: "warning",
+        title: "No orders selected",
+        text: "Please select at least one order.",
+      });
+    }
+
+    const alertResult = await Swal.fire({
+      title: "Are you sure?",
+      text: `You are about to delete ${selected.size} order(s).`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete them!",
+    });
+
+    if (!alertResult.isConfirmed) return;
+
+    try {
+      const selectedOrderIds = [...selected]; // Convert Set to Array
+      console.log(selectedOrderIds);
+      const res = await deleteSelectedOrders(selectedOrderIds).unwrap();
+
+      if (res.success) {
+        Swal.fire({
+          icon: "success",
+          title: "Deleted!",
+          text: res?.message || "Orders deleted successfully.",
+        });
+      }
+
+      // Optional: Clear selected orders
+      setSelected(new Set());
+    } catch (error: any) {
+      Swal.fire({
+        icon: "error",
+        title: "Error!",
+        text: error?.data?.message || "Failed to delete orders.",
+      });
+    }
+  };
 
   const handleDeleteById = async (orderId: string) => {
     const alertResult = await Swal.fire({
@@ -238,25 +282,26 @@ const AllOrdersPage = () => {
 
   const handleExport = () => {
     const headers = [
-      "Order ID",
+      "Order No",
       "Customer",
       "Email",
-      "Date",
-      "Items",
-      "Total",
+      "Order Date",
+      "Total Items",
+      "Total Price",
       "Status",
       "Payment",
     ];
-    const rows = filteredOrders.map((o) =>
+
+    const rows = allOrders?.data?.map((order: IOrder) =>
       [
-        o.orderId,
-        o.customer,
-        o.email,
-        o.date,
-        o.items,
-        `$${o.total.toFixed(2)}`,
-        o.status,
-        o.paymentMethod,
+        order.orderNo,
+        order.userId.name,
+        order.userId.email,
+        order.createdAt,
+        order.items.length,
+        `$${order.totalPrice.toFixed(2)}`,
+        order.status,
+        order.paymentMethod,
       ].join(","),
     );
     const csv = [headers.join(","), ...rows].join("\n");
@@ -349,7 +394,8 @@ const AllOrdersPage = () => {
                     <Button
                       variant="destructive"
                       size="sm"
-                      className="h-8 text-xs gap-1.5"
+                      onClick={() => handleDeleteSelectedOrders(selected)}
+                      className="h-8 text-xs gap-1.5 cursor-pointer"
                     >
                       <Trash2 className="h-3.5 w-3.5" />
                       Delete
@@ -361,7 +407,7 @@ const AllOrdersPage = () => {
                     <Button
                       variant="outline"
                       size="sm"
-                      className="h-9 gap-1.5 text-sm"
+                      className="h-9 gap-1.5 text-sm cursor-pointer"
                       onClick={handleExport}
                       aria-label="Export orders as CSV"
                     >
@@ -516,7 +562,7 @@ const AllOrdersPage = () => {
 
                         <TableCell>
                           <span className="text-sm font-semibold tabular-nums">
-                            ${order?.itemsPrice.toFixed(2)}
+                            BDT {order?.itemsPrice.toFixed(2)}
                           </span>
                         </TableCell>
 
