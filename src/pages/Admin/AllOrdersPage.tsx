@@ -562,7 +562,7 @@ const AllOrdersPage = () => {
 
                         <TableCell>
                           <span className="text-sm font-semibold tabular-nums">
-                            ${order?.itemsPrice.toFixed(2)}
+                            BDT {order?.itemsPrice.toFixed(2)}
                           </span>
                         </TableCell>
 
