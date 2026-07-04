@@ -282,25 +282,26 @@ const AllOrdersPage = () => {
 
   const handleExport = () => {
     const headers = [
-      "Order ID",
+      "Order No",
       "Customer",
       "Email",
-      "Date",
-      "Items",
-      "Total",
+      "Order Date",
+      "Total Items",
+      "Total Price",
       "Status",
       "Payment",
     ];
-    const rows = filteredOrders.map((o) =>
+
+    const rows = allOrders?.data?.map((order: IOrder) =>
       [
-        o.orderId,
-        o.customer,
-        o.email,
-        o.date,
-        o.items,
-        `$${o.total.toFixed(2)}`,
-        o.status,
-        o.paymentMethod,
+        order.orderNo,
+        order.userId.name,
+        order.userId.email,
+        order.createdAt,
+        order.items.length,
+        `$${order.totalPrice.toFixed(2)}`,
+        order.status,
+        order.paymentMethod,
       ].join(","),
     );
     const csv = [headers.join(","), ...rows].join("\n");
@@ -406,7 +407,7 @@ const AllOrdersPage = () => {
                     <Button
                       variant="outline"
                       size="sm"
-                      className="h-9 gap-1.5 text-sm"
+                      className="h-9 gap-1.5 text-sm cursor-pointer"
                       onClick={handleExport}
                       aria-label="Export orders as CSV"
                     >
