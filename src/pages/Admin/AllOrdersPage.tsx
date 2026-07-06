@@ -91,6 +91,7 @@ const AllOrdersPage = () => {
     page: page,
     limit: pageSize,
   });
+  console.log(allOrders)
 
   const [deleteOrderById] = useDeleteOrderByIdMutation();
   const [deleteSelectedOrders] = useDeleteSelectedOrdersMutation();

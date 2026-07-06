@@ -4,8 +4,8 @@ import { cn } from "@/lib/utils";
 import { useGetAllOrdersQuery } from "@/redux/features/order.api";
 import { ArrowUpRight } from "lucide-react";
 import { Link } from "react-router";
-import type { IOrder } from "../Order/order.interface";
-import OrderStatusBadge from "../Order/OrderStatusBadge";
+import type { IOrder } from "./order.interface";
+import OrderStatusBadge from "./OrderStatusBadge";
 import getFormattedDate from "@/utils/getFormattedDate";
 import Loading from "@/utils/Loading";
 
@@ -15,6 +15,7 @@ const RecentOrders = () => {
     sortDir: "desc",
     limit: 5,
   });
+  console.log(ordersData)
 
   return (
     <>
@@ -66,7 +67,7 @@ const RecentOrders = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {ordersData?.data.map((order: IOrder, i: number) => (
+                  {ordersData?.data?.map((order: IOrder, i: number) => (
                     <tr
                       key={order._id}
                       className={cn(
