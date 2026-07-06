@@ -48,7 +48,7 @@ export const ordersApi = baseApi.injectEndpoints({
 
     getOrderByUserId: builder.query({
       query: () => ({
-        url: "/orders",
+        url: "/orders/user-orders",
         method: "GET"
       }),
       transformResponse: res => res.data
