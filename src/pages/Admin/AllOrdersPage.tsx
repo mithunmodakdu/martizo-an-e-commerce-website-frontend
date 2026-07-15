@@ -49,6 +49,7 @@ import {
   useDeleteSelectedOrdersMutation,
   useGetAllOrdersQuery,
 } from "@/redux/features/order.api";
+import { useGetOrderStatsQuery } from "@/redux/features/stats.api";
 import Loading from "@/utils/Loading";
 import {
   CheckCircle2,
@@ -91,7 +92,9 @@ const AllOrdersPage = () => {
     page: page,
     limit: pageSize,
   });
-  console.log(allOrders)
+
+  const {data: orderStatsData} = useGetOrderStatsQuery(undefined);
+  console.log(orderStatsData)
 
   const [deleteOrderById] = useDeleteOrderByIdMutation();
   const [deleteSelectedOrders] = useDeleteSelectedOrdersMutation();
