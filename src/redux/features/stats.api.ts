@@ -6,7 +6,8 @@ const statsApi = baseApi.injectEndpoints({
       query: () => ({
         url: "/stats/orders",
         method: "GET"
-      })
+      }),
+      transformResponse: res => res.data
     })
   })
 })
