@@ -49,6 +49,7 @@ import {
   useDeleteSelectedOrdersMutation,
   useGetAllOrdersQuery,
 } from "@/redux/features/order.api";
+import { useGetOrderStatsQuery } from "@/redux/features/stats.api";
 import Loading from "@/utils/Loading";
 import {
   CheckCircle2,
@@ -91,7 +92,17 @@ const AllOrdersPage = () => {
     page: page,
     limit: pageSize,
   });
-  console.log(allOrders)
+
+  const {data: orderStatsData} = useGetOrderStatsQuery(undefined);
+  console.log(orderStatsData)
+
+  const totalOrders = orderStatsData?.totalOrders || 0;
+  const totalItemsPrice = orderStatsData?.totalItemsPrice || 0;
+  const totalOrdersByStatus = orderStatsData?.totalOrdersByStatus || [];
+  const totalPendingOrders = totalOrdersByStatus?.filter((orderStatus: {_id: string, count: number}) => orderStatus._id === "PENDING")[0]?.count || 0;
+  const totalDeliveredOrders = totalOrdersByStatus?.filter((orderStatus: {_id: string, count: number}) => orderStatus._id === "DELIVERED")[0]?.count || 0;
+
+  console.log(totalDeliveredOrders)
 
   const [deleteOrderById] = useDeleteOrderByIdMutation();
   const [deleteSelectedOrders] = useDeleteSelectedOrdersMutation();
@@ -189,33 +200,18 @@ const AllOrdersPage = () => {
     }
   };
 
-  // ── stats ──
-  const stats = useMemo(() => {
-    if (!allOrders?.data?.length)
-      return { total: 0, revenue: 0, pending: 0, delivered: 0 };
-
-    const total = allOrders?.data?.length;
-    const revenue = allOrders?.data?.reduce((s, o) => s + o.total, 0);
-    const pending = allOrders?.data?.filter(
-      (o) => o.status === "pending",
-    ).length;
-    const delivered = allOrders?.data?.filter(
-      (o) => o.status === "delivered",
-    ).length;
-    return { total, revenue, pending, delivered };
-  }, [allOrders]);
 
   const statCardItems = [
     {
       title: "Total Orders",
-      value: stats?.total,
+      value: totalOrders,
       sub: "All time",
       icon: <Package className="h-5 w-5 text-primary" />,
       accent: "bg-primary/10",
     },
     {
       title: "Total Revenue",
-      value: `$${stats?.revenue?.toLocaleString("en-US", {
+      value: `BDT ${totalItemsPrice?.toLocaleString("en-US", {
         minimumFractionDigits: 2,
       })}`,
       sub: "Across all orders",
@@ -224,14 +220,14 @@ const AllOrdersPage = () => {
     },
     {
       title: "Pending",
-      value: stats?.pending,
+      value: totalPendingOrders,
       sub: "Awaiting action",
       icon: <Clock className="h-5 w-5 text-amber-600" />,
       accent: "bg-amber-100 dark:bg-amber-950",
     },
     {
       title: "Delivered",
-      value: stats?.delivered,
+      value: totalDeliveredOrders,
       sub: "Successfully fulfilled",
       icon: <CheckCircle2 className="h-5 w-5 text-green-600" />,
       accent: "bg-green-100 dark:bg-green-950",
