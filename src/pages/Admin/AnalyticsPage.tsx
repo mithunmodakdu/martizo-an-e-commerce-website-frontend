@@ -21,11 +21,28 @@ import {
   ShoppingBag,
   Users,
 } from "lucide-react";
+import { FaBangladeshiTakaSign } from 'react-icons/fa6';
 
 import { useState } from "react";
+import { useGetOrderStatsQuery } from "@/redux/features/stats.api";
 
 export default function Analytics() {
   const [period, setPeriod] = useState("This Year");
+ const {data: orderStatsData} = useGetOrderStatsQuery(undefined);
+  console.log(orderStatsData)
+  const totalOrders = orderStatsData?.totalOrders || 0;
+  const ordersThisMonth = orderStatsData?.ordersInLastThirtyDays || 0;
+  const ordersInLastSixtyDays = orderStatsData?.ordersInLastSixtyDays || 0;
+  const ordersInLastMonth = ordersInLastSixtyDays - ordersThisMonth;
+  const ordersChangePercentage = (ordersThisMonth - ordersInLastMonth)/ ordersInLastMonth * 100;
+
+   const totalItemsPrice = orderStatsData?.totalItemsPrice || 0;
+  const totalItemsPriceThisMonth = orderStatsData?.totalItemsPriceThisMonth;
+  const totalItemsPriceLastMonth = orderStatsData?.totalItemsPriceLastMonth;
+  const totalItemsPriceChangePercentage = (totalItemsPriceThisMonth - totalItemsPriceLastMonth)/totalItemsPriceLastMonth * 100;
+
+
+
 
   const today = new Date();
   const formattedToday = today.toLocaleDateString("en-GB", {
@@ -38,19 +55,19 @@ export default function Analytics() {
   const statItems: IStatCard[] = [
     {
       title: "Total Revenue",
-      value: "$784.2K",
-      change: "18.4%",
-      changeType: "up",
-      icon: <DollarSign/>,
-      sub: "$112K this month",
+      value: `৳ ${totalItemsPrice}`,
+      change: `${totalItemsPriceChangePercentage.toFixed(2)}%`,
+      changeType: totalItemsPriceChangePercentage > 0 ? "up" : "down",
+      icon: <FaBangladeshiTakaSign />,
+      sub: `৳${(totalItemsPriceThisMonth/1000).toFixed(2)}K this month`,
     },
     {
       title: "Total Orders",
-      value: "6,248",
-      change: "12.1%",
-      changeType: "up",
+      value: totalOrders,
+      change: `${ordersChangePercentage.toFixed(2)}%`,
+      changeType: ordersChangePercentage > 0 ? "up" : "down",
       icon: <ShoppingBag/>,
-      sub: "861 this month",
+      sub: `${ordersThisMonth} this month`,
     },
     {
       title: "Active Customers",

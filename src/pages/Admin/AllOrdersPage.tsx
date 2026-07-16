@@ -94,15 +94,12 @@ const AllOrdersPage = () => {
   });
 
   const {data: orderStatsData} = useGetOrderStatsQuery(undefined);
-  console.log(orderStatsData)
 
   const totalOrders = orderStatsData?.totalOrders || 0;
   const totalItemsPrice = orderStatsData?.totalItemsPrice || 0;
   const totalOrdersByStatus = orderStatsData?.totalOrdersByStatus || [];
   const totalPendingOrders = totalOrdersByStatus?.filter((orderStatus: {_id: string, count: number}) => orderStatus._id === "PENDING")[0]?.count || 0;
   const totalDeliveredOrders = totalOrdersByStatus?.filter((orderStatus: {_id: string, count: number}) => orderStatus._id === "DELIVERED")[0]?.count || 0;
-
-  console.log(totalDeliveredOrders)
 
   const [deleteOrderById] = useDeleteOrderByIdMutation();
   const [deleteSelectedOrders] = useDeleteSelectedOrdersMutation();

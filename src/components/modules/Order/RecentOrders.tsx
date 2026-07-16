@@ -15,7 +15,6 @@ const RecentOrders = () => {
     sortDir: "desc",
     limit: 5,
   });
-  console.log(ordersData)
 
   return (
     <>
