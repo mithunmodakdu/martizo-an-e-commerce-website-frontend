@@ -31,11 +31,17 @@ export default function Analytics() {
  const {data: orderStatsData} = useGetOrderStatsQuery(undefined);
   console.log(orderStatsData)
   const totalOrders = orderStatsData?.totalOrders || 0;
-  const totalItemsPrice = orderStatsData?.totalItemsPrice || 0;
   const ordersThisMonth = orderStatsData?.ordersInLastThirtyDays || 0;
   const ordersInLastSixtyDays = orderStatsData?.ordersInLastSixtyDays || 0;
   const ordersInLastMonth = ordersInLastSixtyDays - ordersThisMonth;
   const ordersChangePercentage = (ordersThisMonth - ordersInLastMonth)/ ordersInLastMonth * 100;
+
+   const totalItemsPrice = orderStatsData?.totalItemsPrice || 0;
+  const totalItemsPriceThisMonth = orderStatsData?.totalItemsPriceThisMonth;
+  const totalItemsPriceLastMonth = orderStatsData?.totalItemsPriceLastMonth;
+  const totalItemsPriceChangePercentage = (totalItemsPriceThisMonth - totalItemsPriceLastMonth)/totalItemsPriceLastMonth * 100;
+
+
 
 
   const today = new Date();
@@ -50,10 +56,10 @@ export default function Analytics() {
     {
       title: "Total Revenue",
       value: `৳ ${totalItemsPrice}`,
-      change: "18.4%",
-      changeType: "up",
+      change: `${totalItemsPriceChangePercentage.toFixed(2)}%`,
+      changeType: totalItemsPriceChangePercentage > 0 ? "up" : "down",
       icon: <FaBangladeshiTakaSign />,
-      sub: "৳112K this month",
+      sub: `৳${(totalItemsPriceThisMonth/1000).toFixed(2)}K this month`,
     },
     {
       title: "Total Orders",
