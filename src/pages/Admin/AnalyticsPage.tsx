@@ -51,7 +51,8 @@ export default function Analytics() {
   const avgItemsPriceUptoLastMonth = orderStatsData?.avgItemsPriceUptoLastMonth ?? 0;
   const avgItemsPriceChangePercentage = avgItemsPriceUptoLastMonth === 0 ? 0 : (avgItemsPrice - avgItemsPriceUptoLastMonth)/ avgItemsPriceUptoLastMonth * 100;
 
-  
+  const {totalActiveUsers = 0, newUsersThisMonth = 0, newUsersLastMonth = 0} = userStatsData || {};
+  const newUsersChangePercentage = newUsersLastMonth === 0 ? 0 : (newUsersThisMonth - newUsersLastMonth)/newUsersLastMonth * 100;
 
   const today = new Date();
   const formattedToday = today.toLocaleDateString("en-GB", {
@@ -80,11 +81,11 @@ export default function Analytics() {
     },
     {
       title: "Active Customers",
-      value: "18,492",
-      change: "9.3%",
-      changeType: "up",
+      value: `${totalActiveUsers}`,
+      change: `${newUsersChangePercentage}%`,
+      changeType: newUsersChangePercentage > 0 ? "up" : "down",
       icon: <Users />,
-      sub: "1,204 new this month",
+      sub: `${newUsersThisMonth} new this month`,
     },
     {
       title: "Avg. Order Value",
