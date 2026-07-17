@@ -21,26 +21,33 @@ import {
   ShoppingBag,
   Users,
 } from "lucide-react";
-import { FaBangladeshiTakaSign } from 'react-icons/fa6';
+import { FaBangladeshiTakaSign } from "react-icons/fa6";
 
 import { useState } from "react";
 import { useGetOrderStatsQuery } from "@/redux/features/stats.api";
 
 export default function Analytics() {
   const [period, setPeriod] = useState("This Year");
- const {data: orderStatsData} = useGetOrderStatsQuery(undefined);
-  console.log(orderStatsData)
+  const { data: orderStatsData } = useGetOrderStatsQuery(undefined);
+  console.log(orderStatsData);
   const totalOrders = orderStatsData?.totalOrders || 0;
   const ordersThisMonth = orderStatsData?.ordersInLastThirtyDays || 0;
   const ordersInLastSixtyDays = orderStatsData?.ordersInLastSixtyDays || 0;
   const ordersInLastMonth = ordersInLastSixtyDays - ordersThisMonth;
-  const ordersChangePercentage = (ordersThisMonth - ordersInLastMonth)/ ordersInLastMonth * 100;
+  const ordersChangePercentage =
+    ((ordersThisMonth - ordersInLastMonth) / ordersInLastMonth) * 100;
 
-   const totalItemsPrice = orderStatsData?.totalItemsPrice || 0;
+  const totalItemsPrice = orderStatsData?.totalItemsPrice || 0;
   const totalItemsPriceThisMonth = orderStatsData?.totalItemsPriceThisMonth;
   const totalItemsPriceLastMonth = orderStatsData?.totalItemsPriceLastMonth;
-  const totalItemsPriceChangePercentage = (totalItemsPriceThisMonth - totalItemsPriceLastMonth)/totalItemsPriceLastMonth * 100;
-
+  const totalItemsPriceChangePercentage =
+    ((totalItemsPriceThisMonth - totalItemsPriceLastMonth) /
+      totalItemsPriceLastMonth) *
+    100;
+  
+  const avgItemsPrice = orderStatsData?.avgItemsPrice;
+  const avgItemsPriceUptoLastMonth = orderStatsData?.avgItemsPriceUptoLastMonth;
+  const avgItemsPriceChangePercentage = (avgItemsPrice - avgItemsPriceUptoLastMonth)/ avgItemsPriceUptoLastMonth * 100;
 
 
 
@@ -59,14 +66,14 @@ export default function Analytics() {
       change: `${totalItemsPriceChangePercentage.toFixed(2)}%`,
       changeType: totalItemsPriceChangePercentage > 0 ? "up" : "down",
       icon: <FaBangladeshiTakaSign />,
-      sub: `৳${(totalItemsPriceThisMonth/1000).toFixed(2)}K this month`,
+      sub: `৳${(totalItemsPriceThisMonth / 1000).toFixed(2)}K this month`,
     },
     {
       title: "Total Orders",
       value: totalOrders,
       change: `${ordersChangePercentage.toFixed(2)}%`,
       changeType: ordersChangePercentage > 0 ? "up" : "down",
-      icon: <ShoppingBag/>,
+      icon: <ShoppingBag />,
       sub: `${ordersThisMonth} this month`,
     },
     {
@@ -74,16 +81,16 @@ export default function Analytics() {
       value: "18,492",
       change: "9.3%",
       changeType: "up",
-      icon: <Users/>,
+      icon: <Users />,
       sub: "1,204 new this month",
     },
     {
       title: "Avg. Order Value",
-      value: "$125.50",
-      change: "3.2%",
-      changeType: "down",
-      icon: <Package/>,
-      sub: "Down from $129.70",
+      value: `৳ ${avgItemsPrice.toFixed(2)}`,
+      change: `${avgItemsPriceChangePercentage.toFixed(2)}%`,
+      changeType: avgItemsPriceChangePercentage > 0 ? "up" : "down",
+      icon: <Package />,
+      sub: avgItemsPrice > avgItemsPriceUptoLastMonth? `Up from ৳ ${avgItemsPriceUptoLastMonth.toFixed(2)}` : `Down from ৳ ${avgItemsPriceUptoLastMonth.toFixed(2)}`,
     },
   ];
 
@@ -115,11 +122,9 @@ export default function Analytics() {
 
         {/* Analytics StatCard */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          {
-            statItems?.map(item => (
-              <StatCard key={item.title} item={item}/>
-            ))
-          }
+          {statItems?.map((item) => (
+            <StatCard key={item.title} item={item} />
+          ))}
         </div>
 
         {/* Charts row 1 */}
