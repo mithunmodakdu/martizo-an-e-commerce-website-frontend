@@ -7,7 +7,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
         {payload.map((p: any) => (
           <p key={p.name} className="text-muted-foreground">
             <span className="text-foreground font-medium">
-              {p.name === "revenue" ? `$${p.value.toLocaleString()}` : p.value.toLocaleString()}
+              {p.name === "revenue" ? `৳${p.value.toLocaleString()}` : p.value.toLocaleString()}
             </span>{" "}
             {p.name}
           </p>

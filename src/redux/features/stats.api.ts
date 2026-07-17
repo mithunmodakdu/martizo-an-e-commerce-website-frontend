@@ -8,10 +8,19 @@ const statsApi = baseApi.injectEndpoints({
         method: "GET"
       }),
       transformResponse: res => res.data
+    }),
+
+    getUserStats: builder.query({
+      query: () => ({
+        url: "/stats/users",
+        method: "GET"
+      }),
+      transformResponse: res => res.data
     })
   })
 })
 
 export const {
-  useGetOrderStatsQuery
+  useGetOrderStatsQuery,
+  useGetUserStatsQuery
 } = statsApi;
