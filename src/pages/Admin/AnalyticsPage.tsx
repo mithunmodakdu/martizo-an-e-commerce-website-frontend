@@ -24,32 +24,34 @@ import {
 import { FaBangladeshiTakaSign } from "react-icons/fa6";
 
 import { useState } from "react";
-import { useGetOrderStatsQuery } from "@/redux/features/stats.api";
+import { useGetOrderStatsQuery, useGetUserStatsQuery } from "@/redux/features/stats.api";
 
 export default function Analytics() {
   const [period, setPeriod] = useState("This Year");
-  const { data: orderStatsData } = useGetOrderStatsQuery(undefined);
-  console.log(orderStatsData);
+  const { data: orderStatsData} = useGetOrderStatsQuery(undefined);
+  const {data: userStatsData} = useGetUserStatsQuery(undefined);
+  console.log(userStatsData)
+
   const totalOrders = orderStatsData?.totalOrders || 0;
   const ordersThisMonth = orderStatsData?.ordersInLastThirtyDays || 0;
   const ordersInLastSixtyDays = orderStatsData?.ordersInLastSixtyDays || 0;
   const ordersInLastMonth = ordersInLastSixtyDays - ordersThisMonth;
-  const ordersChangePercentage =
+  const ordersChangePercentage = ordersInLastMonth === 0 ? 0 :
     ((ordersThisMonth - ordersInLastMonth) / ordersInLastMonth) * 100;
 
   const totalItemsPrice = orderStatsData?.totalItemsPrice || 0;
-  const totalItemsPriceThisMonth = orderStatsData?.totalItemsPriceThisMonth;
-  const totalItemsPriceLastMonth = orderStatsData?.totalItemsPriceLastMonth;
-  const totalItemsPriceChangePercentage =
+  const totalItemsPriceThisMonth = orderStatsData?.totalItemsPriceThisMonth || 0;
+  const totalItemsPriceLastMonth = orderStatsData?.totalItemsPriceLastMonth || 0;
+  const totalItemsPriceChangePercentage = totalItemsPriceLastMonth === 0 ? 0 :
     ((totalItemsPriceThisMonth - totalItemsPriceLastMonth) /
       totalItemsPriceLastMonth) *
     100;
   
-  const avgItemsPrice = orderStatsData?.avgItemsPrice;
-  const avgItemsPriceUptoLastMonth = orderStatsData?.avgItemsPriceUptoLastMonth;
-  const avgItemsPriceChangePercentage = (avgItemsPrice - avgItemsPriceUptoLastMonth)/ avgItemsPriceUptoLastMonth * 100;
+  const avgItemsPrice = orderStatsData?.avgItemsPrice ?? 0;
+  const avgItemsPriceUptoLastMonth = orderStatsData?.avgItemsPriceUptoLastMonth ?? 0;
+  const avgItemsPriceChangePercentage = avgItemsPriceUptoLastMonth === 0 ? 0 : (avgItemsPrice - avgItemsPriceUptoLastMonth)/ avgItemsPriceUptoLastMonth * 100;
 
-
+  
 
   const today = new Date();
   const formattedToday = today.toLocaleDateString("en-GB", {
