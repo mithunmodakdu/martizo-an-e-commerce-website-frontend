@@ -9,22 +9,28 @@ import {
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import CustomTooltip from "@/components/modules/Analytics/CustomTooltip";
+import { useGetOrderStatsQuery } from "@/redux/features/stats.api";
 
 const RevenueChart = () => {
-  const revenueData = [
-    { month: "Jan", revenue: 42000, orders: 310 },
-    { month: "Feb", revenue: 38500, orders: 280 },
-    { month: "Mar", revenue: 51200, orders: 395 },
-    { month: "Apr", revenue: 47800, orders: 362 },
-    { month: "May", revenue: 63100, orders: 481 },
-    { month: "Jun", revenue: 58400, orders: 440 },
-    { month: "Jul", revenue: 72000, orders: 553 },
-    { month: "Aug", revenue: 68900, orders: 521 },
-    { month: "Sep", revenue: 79200, orders: 604 },
-    { month: "Oct", revenue: 84500, orders: 648 },
-    { month: "Nov", revenue: 97300, orders: 745 },
-    { month: "Dec", revenue: 112000, orders: 861 },
-  ];
+  const {data: orderStatsData} = useGetOrderStatsQuery(undefined);
+
+  const monthlyOrdersAndRevenue = orderStatsData?.monthlyOrdersAndRevenue || [];
+  const months = [
+  "",
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
+  const monthlyOrdersAndRevenueData = monthlyOrdersAndRevenue.map((item) =>  ({ month: months[item?.month], revenue: item?.totalRevenue, orders: item?.totalOrders }));
 
   return (
     <Card className="lg:col-span-2 border-border/60 shadow-sm">
@@ -35,7 +41,7 @@ const RevenueChart = () => {
               Revenue & Orders
             </CardTitle>
             <p className="text-xs text-muted-foreground mt-0.5">
-              Monthly performance for 2025
+              Monthly performance for last 12 months
             </p>
           </div>
           <div className="flex items-center gap-4 text-xs text-muted-foreground">
@@ -53,7 +59,7 @@ const RevenueChart = () => {
       <CardContent>
         <ResponsiveContainer width="100%" height={240}>
           <AreaChart
-            data={revenueData}
+            data={monthlyOrdersAndRevenueData}
             margin={{ top: 4, right: 4, left: -20, bottom: 0 }}
           >
             <defs>
@@ -93,7 +99,7 @@ const RevenueChart = () => {
               tick={{ fontSize: 11, fill: "var(--muted-foreground)" }}
               axisLine={false}
               tickLine={false}
-              tickFormatter={(v) => `$${(v / 1000).toFixed(0)}k`}
+              tickFormatter={(v) => `৳${(v / 1000).toFixed(0)}k`}
             />
             <Tooltip content={<CustomTooltip />} />
             <Area

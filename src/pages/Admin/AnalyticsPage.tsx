@@ -16,7 +16,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import {
   ChevronDown,
-  DollarSign,
   Package,
   ShoppingBag,
   Users,
@@ -30,7 +29,6 @@ export default function Analytics() {
   const [period, setPeriod] = useState("This Year");
   const { data: orderStatsData} = useGetOrderStatsQuery(undefined);
   const {data: userStatsData} = useGetUserStatsQuery(undefined);
-  console.log(userStatsData)
 
   const totalOrders = orderStatsData?.totalOrders || 0;
   const ordersThisMonth = orderStatsData?.ordersInLastThirtyDays || 0;
