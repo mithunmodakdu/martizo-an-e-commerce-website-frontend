@@ -61,11 +61,17 @@
   --border: oklch(0.92 0.004 286.32);
   --input: oklch(0.92 0.004 286.32);
   --ring: oklch(0.841 0.238 128.85);
-  --chart-1: oklch(0.871 0.15 154.449);
-  --chart-2: oklch(0.723 0.219 149.579);
-  --chart-3: oklch(0.627 0.194 149.214);
-  --chart-4: oklch(0.527 0.154 150.069);
-  --chart-5: oklch(0.448 0.119 151.328);
+  --chart-1: oklch(0.65 0.17 40); /* Orange */
+  --chart-2: oklch(0.6 0.18 15); /* Red-orange */
+  --chart-3: oklch(0.62 0.16 85); /* Golden yellow */
+  --chart-4: oklch(0.58 0.16 265); /* Blue */
+  --chart-5: oklch(0.6 0.17 310); /* Purple-magenta */
+  --chart-6: oklch(0.6 0.17 90); /* Yellow-green */
+  --chart-7: oklch(0.58 0.15 300); /* Purple */
+  --chart-8: oklch(0.6 0.14 330); /* Pink */
+  --chart-9: oklch(0.55 0.15 200); /* Deep blue */
+  --chart-10: oklch(0.58 0.16 25); /* Red */
+  --chart-11: oklch(0.55 0.15 200);
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.141 0.005 285.823);
   --sidebar-primary: oklch(0.648 0.2 131.684);
@@ -95,11 +101,17 @@
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.405 0.101 131.063);
-  --chart-1: oklch(0.871 0.15 154.449);
-  --chart-2: oklch(0.723 0.219 149.579);
-  --chart-3: oklch(0.627 0.194 149.214);
-  --chart-4: oklch(0.527 0.154 150.069);
-  --chart-5: oklch(0.448 0.119 151.328);
+  --chart-1: oklch(0.65 0.17 40); /* Orange */
+  --chart-2: oklch(0.6 0.18 15); /* Red-orange */
+  --chart-3: oklch(0.62 0.16 85); /* Golden yellow */
+  --chart-4: oklch(0.58 0.16 265); /* Blue */
+  --chart-5: oklch(0.6 0.17 310); /* Purple-magenta */
+  --chart-6: oklch(0.6 0.17 90); /* Yellow-green */
+  --chart-7: oklch(0.58 0.15 300); /* Purple */
+  --chart-8: oklch(0.6 0.14 330); /* Pink */
+  --chart-9: oklch(0.55 0.15 200); /* Deep blue */
+  --chart-10: oklch(0.58 0.16 25); /* Red */
+  --chart-11: oklch(0.55 0.15 200);
   --sidebar: oklch(0.21 0.006 285.885);
   --sidebar-foreground: oklch(0.985 0 0);
   --sidebar-primary: oklch(0.768 0.233 130.85);
@@ -118,4 +130,3 @@
     @apply bg-background text-foreground;
   }
 }
-
