@@ -1,14 +1,32 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useGetOrderStatsQuery } from "@/redux/features/stats.api";
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 
 const CategoryPie = () => {
-  const categoryData = [
-    { name: "Electronics", value: 34, color: "var(--primary)" },
-    { name: "Clothing", value: 28, color: "oklch(0.723 0.219 149.579)" },
-    { name: "Home & Garden", value: 18, color: "oklch(0.871 0.15 154.449)" },
-    { name: "Sports", value: 12, color: "oklch(0.527 0.154 150.069)" },
-    { name: "Other", value: 8, color: "oklch(0.92 0.004 286.32)" },
-  ];
+  const {data: orderStatsData} = useGetOrderStatsQuery(undefined);
+
+  const ordersPerCategory = orderStatsData?.ordersPerCategory || [];
+ 
+  const colors = [
+    "var(--primary)",
+    "var(--chart-1)",
+    "var(--chart-2)",
+    "var(--chart-3)",
+    "var(--chart-4)",
+    "var(--chart-5)",
+    "var(--chart-6)",
+    "var(--chart-7)",
+    "var(--chart-8)",
+    "var(--chart-9)",
+    "var(--chart-10)",
+    "var(--chart-11)"
+    
+  ]
+  const ordersPerCategoryData = ordersPerCategory?.map((item, idx) => (
+    { name: item?.category, 
+      value: item?.totalOrders, 
+      color: colors[idx] 
+    }))
 
   return (
     <Card className="border-border/60 shadow-sm">
@@ -24,7 +42,7 @@ const CategoryPie = () => {
         <ResponsiveContainer width="100%" height={160}>
           <PieChart>
             <Pie
-              data={categoryData}
+              data={ordersPerCategoryData}
               cx="50%"
               cy="50%"
               innerRadius={48}
@@ -32,7 +50,7 @@ const CategoryPie = () => {
               paddingAngle={3}
               dataKey="value"
             >
-              {categoryData.map((entry, i) => (
+              {ordersPerCategoryData.map((entry, i) => (
                 <Cell key={i} fill={entry.color} stroke="transparent" />
               ))}
             </Pie>
@@ -48,7 +66,7 @@ const CategoryPie = () => {
           </PieChart>
         </ResponsiveContainer>
         <div className="mt-3 space-y-2">
-          {categoryData.map((cat) => (
+          {ordersPerCategoryData.map((cat) => (
             <div
               key={cat.name}
               className="flex items-center justify-between text-xs"
