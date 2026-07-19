@@ -1,51 +1,24 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { useGetProductStatsQuery } from "@/redux/features/stats.api";
 import { Eye, Star, TrendingDown, TrendingUp } from "lucide-react";
+import { Link } from "react-router";
 
 const TopProducts = () => {
-  const topProducts = [
-    {
-      id: 1,
-      name: "Wireless Pro Headphones",
-      sales: 1842,
-      revenue: 276300,
+  const {data: productStatsData} = useGetProductStatsQuery(undefined);
+  console.log(productStatsData)
+  const topProductsData = productStatsData?.topProductsByRevenue?.map((item, idx) => ( {
+      id: idx + 1,
+      name: item.productName,
+      sales: item.totalQuantity
+,
+      revenue: item.totalRevenue
+,
       rating: 4.8,
       trend: "up",
-    },
-    {
-      id: 2,
-      name: "Minimalist Watch Series X",
-      sales: 1241,
-      revenue: 198560,
-      rating: 4.9,
-      trend: "up",
-    },
-    {
-      id: 3,
-      name: "Running Shoes Elite",
-      sales: 983,
-      revenue: 147450,
-      rating: 4.7,
-      trend: "down",
-    },
-    {
-      id: 4,
-      name: "Leather Crossbody Bag",
-      sales: 876,
-      revenue: 131400,
-      rating: 4.6,
-      trend: "up",
-    },
-    {
-      id: 5,
-      name: "Smart Home Hub",
-      sales: 741,
-      revenue: 111150,
-      rating: 4.5,
-      trend: "down",
-    },
-  ];
+    }));
+
 
   return (
     <Card className="lg:col-span-2 border-border/60 shadow-sm">
@@ -59,14 +32,16 @@ const TopProducts = () => {
               Best performing by revenue
             </p>
           </div>
-          <Button variant="ghost" size="sm" className="text-xs text-primary">
-            View All
+         <Link to={"/products"}>
+          <Button variant="outline" size="sm" className="text-xs text-primary hover:cursor-pointer">
+            View All Products
           </Button>
+         </Link>
         </div>
       </CardHeader>
       <CardContent>
         <div className="space-y-1">
-          {topProducts.map((p, i) => (
+          {topProductsData?.map((p, i) => (
             <div
               key={p.id}
               className="flex items-center gap-3 py-2.5 px-2 rounded-lg hover:bg-muted/50 transition-colors group"
@@ -79,11 +54,6 @@ const TopProducts = () => {
                 <div className="flex items-center gap-2 mt-0.5">
                   <span className="text-xs text-muted-foreground">
                     {p.sales.toLocaleString()} sold
-                  </span>
-                  <span className="text-muted-foreground/40">·</span>
-                  <span className="flex items-center gap-0.5 text-xs text-amber-500">
-                    <Star className="w-3 h-3 fill-amber-500" />
-                    {p.rating}
                   </span>
                 </div>
               </div>
