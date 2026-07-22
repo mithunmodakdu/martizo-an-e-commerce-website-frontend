@@ -10,24 +10,14 @@ import {
   YAxis,
 } from "recharts";
 import ChartTooltip from "./ChartTooltip";
+import { useGetOrderStatsQuery } from "@/redux/features/stats.api";
 
 const DailyRevenueChart = () => {
-  const revenueData = [
-    { day: "May 1", revenue: 3200, projected: 3000 },
-    { day: "May 2", revenue: 4100, projected: 3200 },
-    { day: "May 3", revenue: 2900, projected: 3400 },
-    { day: "May 4", revenue: 5200, projected: 3600 },
-    { day: "May 5", revenue: 4800, projected: 3800 },
-    { day: "May 6", revenue: 6100, projected: 4000 },
-    { day: "May 7", revenue: 5700, projected: 4200 },
-    { day: "May 8", revenue: 7300, projected: 4400 },
-    { day: "May 9", revenue: 6500, projected: 4600 },
-    { day: "May 10", revenue: 8200, projected: 4800 },
-    { day: "May 11", revenue: 7100, projected: 5000 },
-    { day: "May 12", revenue: 9400, projected: 5200 },
-    { day: "May 13", revenue: 8800, projected: 5400 },
-    { day: "May 14", revenue: 10200, projected: 5600 },
-  ];
+  const {data: orderStatsData} = useGetOrderStatsQuery(undefined);
+  const last14daysOrdersAndRevenue = orderStatsData?.last14daysOrdersAndRevenue || [];
+
+  const revenueData = last14daysOrdersAndRevenue?.map((item) => ({ day: `${item?.month} ${item?.day}`, revenue: item?.totalRevenue, projected: 200 }))
+  console.log(revenueData)
 
   const monthlyGoal = { current: 87400, target: 120000 };
 
@@ -73,7 +63,7 @@ const DailyRevenueChart = () => {
               tick={{ fontSize: 10, fill: "oklch(0.552 0.016 285.938)" }}
               axisLine={false}
               tickLine={false}
-              tickFormatter={(v) => `$${v / 1000}k`}
+              tickFormatter={(v) => `৳${v / 1000}k`}
             />
             <Tooltip content={<ChartTooltip />} />
             <ReferenceLine

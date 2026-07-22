@@ -15,7 +15,7 @@ export default function ChartTooltip({ active, payload, label }: any) {
           />
           <span className="capitalize">{p.name}:</span>
           <span className="font-medium text-foreground">
-            ${p.value.toLocaleString()}
+            ৳{p.value.toLocaleString()}
           </span>
         </div>
       ))}
