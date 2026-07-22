@@ -1,4 +1,3 @@
-// import AnalyticsStatCard from "@/components/modules/Analytics/AnalyticsStatCard";
 import CategoryPie from "@/components/modules/Analytics/CategoryPie";
 import RecentOrders from "@/components/modules/Order/RecentOrders";
 import RevenueChart from "@/components/modules/Analytics/RevenueChart";
@@ -7,26 +6,15 @@ import WeeklyVisitors from "@/components/modules/Analytics/WeeklyVisitors";
 import ContentHeader from "@/components/modules/Shared/ContentHeader/ContentHeader";
 import type { IStatCard } from "@/components/modules/Shared/StatCard";
 import StatCard from "@/components/modules/Shared/StatCard";
-import { Button } from "@/components/ui/button";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  ChevronDown,
   Package,
   ShoppingBag,
   Users,
 } from "lucide-react";
 import { FaBangladeshiTakaSign } from "react-icons/fa6";
-
-import { useState } from "react";
 import { useGetOrderStatsQuery, useGetUserStatsQuery } from "@/redux/features/stats.api";
 
 export default function Analytics() {
-  const [period, setPeriod] = useState("This Year");
   const { data: orderStatsData} = useGetOrderStatsQuery(undefined);
   const {data: userStatsData} = useGetUserStatsQuery(undefined);
 
@@ -104,21 +92,6 @@ export default function Analytics() {
             title="Analytics Overview"
             description={`${formattedToday} · All data refreshed 5 minutes ago`}
           />
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="gap-2 font-medium">
-                {period}
-                <ChevronDown className="w-3.5 h-3.5" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {["Today", "This Week", "This Month", "This Year"].map((p) => (
-                <DropdownMenuItem key={p} onClick={() => setPeriod(p)}>
-                  {p}
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
         </div>
 
         {/* Analytics StatCard */}

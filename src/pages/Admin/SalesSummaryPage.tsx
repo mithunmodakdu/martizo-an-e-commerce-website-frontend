@@ -33,21 +33,6 @@ export default function SalesSummaryPage() {
           title="Sales Summary"
           description={`${formattedToday} · All data refreshed 5 minutes ago`}
         />
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="gap-2 font-medium">
-              {period}
-              <ChevronDown className="w-3.5 h-3.5" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {["Today", "This Week", "This Month", "This Year"].map((p) => (
-              <DropdownMenuItem key={p} onClick={() => setPeriod(p)}>
-                {p}
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
       </div>
 
       {/* Row 1 — Revenue Chart + Monthly Goal */}
