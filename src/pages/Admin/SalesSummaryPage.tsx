@@ -1,21 +1,10 @@
-import { useState } from "react";
-import { ChevronDown } from "lucide-react";
 import ContentHeader from "@/components/modules/Shared/ContentHeader/ContentHeader";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
 import DailyRevenueChart from "@/components/modules/SalesSummary/DailyRevenueChart";
 import MonthlyGoal from "@/components/modules/SalesSummary/MonthlyGoal";
 import ConversionFunnel from "@/components/modules/SalesSummary/ConversionFunnel";
 import SalesByChannel from "@/components/modules/SalesSummary/SalesByChannel";
-import RecentTransactions from "@/components/modules/SalesSummary/RecentTransactions";
 
 export default function SalesSummaryPage() {
-  const [period, setPeriod] = useState("This Year");
 
   const today = new Date();
   const formattedToday = today.toLocaleDateString("en-GB", {
@@ -47,8 +36,6 @@ export default function SalesSummaryPage() {
         <SalesByChannel />
       </div>
       
-      {/* Row 3 — Recent Transactions */}
-      <RecentTransactions/>
     </div>
   );
 }
