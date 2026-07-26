@@ -45,7 +45,7 @@ const DailyRevenueChart = () => {
         <ResponsiveContainer width="100%" height={210}>
           <LineChart
             data={revenueData}
-            margin={{ top: 8, right: 12, bottom: 0, left: -10 }}
+            margin={{ top: 8, right: 15, bottom: 0, left: -10 }}
           >
             <CartesianGrid
               strokeDasharray="3 3"
