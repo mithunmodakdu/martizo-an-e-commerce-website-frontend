@@ -3,8 +3,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -14,7 +12,6 @@ import {
   MapPin,
   Bell,
   Shield,
-  LogOut,
   Edit2,
   Package,
   ChevronRight,
@@ -24,7 +21,6 @@ import {
   Clock,
   CreditCard,
   Plus,
-  Save,
   X,
 } from "lucide-react";
 import PersonalInfoCard from "@/components/modules/User/PersonalInfoCard";
@@ -33,18 +29,9 @@ import { OrderRow } from "@/components/modules/User/OrderRow";
 import { AddressCard } from "@/components/modules/User/AddressCard";
 import type { IStatCard } from "@/components/modules/Shared/StatCard";
 import StatCard from "@/components/modules/Shared/StatCard";
+import { useGetMeQuery } from "@/redux/features/users.api";
+import getFormattedDate from "@/utils/getFormattedDate";
 
-const user = {
-  name: "Rayan Chowdhury",
-  email: "rayan@example.com",
-  phone: "+880 1712 345 678",
-  avatar: "",
-  initials: "RC",
-  memberSince: "March 2022",
-  tier: "Gold",
-  points: 3240,
-  nextTierPoints: 5000,
-};
 
 const stats = [
   { label: "Orders", value: "48", icon: ShoppingBag },
@@ -175,7 +162,12 @@ export default function UserProfilePage() {
   const [notifs, setNotifs] = useState(
     Object.fromEntries(notificationPrefs.map((n) => [n.key, n.enabled])),
   );
-
+  const {data: meData} = useGetMeQuery(undefined);
+  
+  const {name, avatar, createdAt, tier} = meData?.data || {};
+  const formattedDate = getFormattedDate(createdAt);
+  const initials = name.split(" ").map((word: string) => word[0]).join("").toUpperCase();
+  console.log(meData?.data)
   return (
     <div className="min-h-screen bg-background">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8 space-y-6">
@@ -186,22 +178,22 @@ export default function UserProfilePage() {
             <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 -mt-10 mb-6">
               <div className="flex items-end gap-4">
                 <Avatar className="w-20 h-20 border-4 border-background shadow-md ring-2 ring-primary/20">
-                  <AvatarImage src={user.avatar} />
+                  <AvatarImage src={avatar} />
                   <AvatarFallback className="bg-primary/10 text-primary font-bold text-xl">
-                    {user.initials}
+                    {initials}
                   </AvatarFallback>
                 </Avatar>
                 <div className="mb-1.5">
                   <div className="flex items-center gap-2 flex-wrap">
                     <h1 className="text-lg font-bold text-foreground">
-                      {user.name}
+                      {name}
                     </h1>
                     <Badge className="text-[11px] rounded-full px-2.5 font-semibold bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300 border-0">
-                      ✦ {user.tier} Member
+                      ✦ {tier} Member
                     </Badge>
                   </div>
                   <p className="text-xs text-muted-foreground mt-0.5">
-                    Member since {user.memberSince}
+                    Member since {formattedDate}
                   </p>
                 </div>
               </div>
