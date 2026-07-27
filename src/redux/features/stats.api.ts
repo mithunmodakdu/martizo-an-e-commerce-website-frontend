@@ -2,6 +2,14 @@ import { baseApi } from "../baseApi";
 
 const statsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
+    getMyStats: builder.query({
+      query: () => ({
+        url: "/stats/my-stats",
+        method: "GET"
+      }),
+      transformResponse: res => res.data
+    }),
+
     getOrderStats: builder.query({
       query: () => ({
         url: "/stats/orders",
@@ -29,6 +37,7 @@ const statsApi = baseApi.injectEndpoints({
 })
 
 export const {
+  useGetMyStatsQuery,
   useGetOrderStatsQuery,
   useGetProductStatsQuery,
   useGetUserStatsQuery

@@ -31,38 +31,8 @@ import type { IStatCard } from "@/components/modules/Shared/StatCard";
 import StatCard from "@/components/modules/Shared/StatCard";
 import { useGetMeQuery } from "@/redux/features/users.api";
 import getFormattedDate from "@/utils/getFormattedDate";
+import { useGetMyStatsQuery } from "@/redux/features/stats.api";
 
-
-const stats = [
-  { label: "Orders", value: "48", icon: ShoppingBag },
-  { label: "Wishlist", value: "12", icon: Heart },
-  { label: "Reviews", value: "9", icon: Star },
-  { label: "Points", value: "3,240", icon: Shield },
-];
-
- const statItems: IStatCard[] = [
-    {
-      title: "Orders",
-      value: "48",
-      icon: <ShoppingBag className="h-5 w-5 bg-primary"/>,
-    },
-    {
-      title: "Wishlist",
-      value: "12",
-      icon: <Heart className="h-5 w-5 bg-primary"/>,
-    },
-    {
-      title: "Reviews",
-      value: "9",
-      icon: <Star className="h-5 w-5 bg-primary"/>,
-    },
-    {
-      title: "Points",
-      value: "3,240",
-      icon: <Shield className="h-5 w-5 bg-primary"/>,
-    },
-
-  ];
 
 const notificationPrefs = [
   {
@@ -163,11 +133,36 @@ export default function UserProfilePage() {
     Object.fromEntries(notificationPrefs.map((n) => [n.key, n.enabled])),
   );
   const {data: meData} = useGetMeQuery(undefined);
-  
-  const {name, avatar, createdAt, tier} = meData?.data || {};
+  const {data: myStatsData} = useGetMyStatsQuery(undefined);
+  console.log(myStatsData)
+  const {name, avatar, createdAt, tier, points} = meData?.data || {};
   const formattedDate = getFormattedDate(createdAt);
   const initials = name.split(" ").map((word: string) => word[0]).join("").toUpperCase();
-  console.log(meData?.data)
+  
+
+  const statItems: IStatCard[] = [
+    {
+      title: "Orders",
+      value: myStatsData?.myTotalOrders || 0,
+      icon: <ShoppingBag />,
+    },
+    {
+      title: "Wishlist",
+      value: myStatsData?.myTotalItemsInWishlist || 0,
+      icon: <Heart/>,
+    },
+    {
+      title: "Reviews",
+      value: "9",
+      icon: <Star/>,
+    },
+    {
+      title: "Points",
+      value: points,
+      icon: <Shield/>,
+    },
+
+  ];
   return (
     <div className="min-h-screen bg-background">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8 space-y-6">
