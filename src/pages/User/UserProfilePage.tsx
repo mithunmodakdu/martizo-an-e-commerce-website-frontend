@@ -22,6 +22,7 @@ import {
   CreditCard,
   Plus,
   X,
+  ShoppingCart,
 } from "lucide-react";
 import PersonalInfoCard from "@/components/modules/User/PersonalInfoCard";
 import LoyaltyCard from "@/components/modules/User/LoyaltyCard";
@@ -134,7 +135,6 @@ export default function UserProfilePage() {
   );
   const {data: meData} = useGetMeQuery(undefined);
   const {data: myStatsData} = useGetMyStatsQuery(undefined);
-  console.log(myStatsData)
   const {name, avatar, createdAt, tier, points} = meData?.data || {};
   const formattedDate = getFormattedDate(createdAt);
   const initials = name.split(" ").map((word: string) => word[0]).join("").toUpperCase();
@@ -152,9 +152,9 @@ export default function UserProfilePage() {
       icon: <Heart/>,
     },
     {
-      title: "Reviews",
-      value: "9",
-      icon: <Star/>,
+      title: "Cart",
+      value: myStatsData?.myTotalCartItems,
+      icon: <ShoppingCart />,
     },
     {
       title: "Points",

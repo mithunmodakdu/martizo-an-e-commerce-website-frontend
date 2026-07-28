@@ -17,7 +17,7 @@ const PersonalInfoCard = () => {
           {[
             { label: "Full Name", value: userData?.data?.name },
             { label: "Email Address", value: userData?.data?.email },
-            { label: "Phone Number", value: userData?.data?.phone },
+            { label: "Phone Number", value: userData?.data?.phone ? userData?.data?.phone : "N/A" },
             {
               label: "Member Since",
               value: getFormattedDate(userData?.data?.createdAt),
