@@ -3,7 +3,7 @@ import { useGetMeQuery } from "@/redux/features/users.api";
 import getFormattedDate from "@/utils/getFormattedDate";
 
 const PersonalInfoCard = () => {
-  const { data: userData } = useGetMeQuery(undefined);
+  const { data: meData } = useGetMeQuery(undefined);
 
   return (
     <Card className="rounded-xl border-border shadow-sm">
@@ -15,12 +15,12 @@ const PersonalInfoCard = () => {
       <CardContent className="px-6 pb-6 space-y-5">
         <div className="grid sm:grid-cols-2 gap-5">
           {[
-            { label: "Full Name", value: userData?.data?.name },
-            { label: "Email Address", value: userData?.data?.email },
-            { label: "Phone Number", value: userData?.data?.phone ? userData?.data?.phone : "N/A" },
+            { label: "Full Name", value: meData?.data?.name },
+            { label: "Email Address", value: meData?.data?.email },
+            { label: "Phone Number", value: meData?.data?.phone ? meData?.data?.phone : "N/A" },
             {
               label: "Member Since",
-              value: getFormattedDate(userData?.data?.createdAt),
+              value: getFormattedDate(meData?.data?.createdAt),
             },
           ].map(({ label, value }) => (
             <div key={label}>

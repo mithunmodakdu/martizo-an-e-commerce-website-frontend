@@ -1,20 +1,17 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
-const user = {
-  name: "Rayan Chowdhury",
-  email: "rayan@example.com",
-  phone: "+880 1712 345 678",
-  avatar: "",
-  initials: "RC",
-  memberSince: "March 2022",
-  tier: "Gold",
-  points: 3240,
-  nextTierPoints: 5000,
-};
+import { useGetMyLoyaltyAccountWithProgressQuery } from "@/redux/features/loyalty";
 
 const LoyaltyCard = () => {
-  const progressPct = Math.min((user.points / user.nextTierPoints) * 100, 100);
+  const { data: loyaltyAccountProgressData } =
+    useGetMyLoyaltyAccountWithProgressQuery(undefined);
+  console.log(loyaltyAccountProgressData);
+
+  const progressPct = Math.min(
+    (loyaltyAccountProgressData?.lifetimeEarned / loyaltyAccountProgressData?.nextTierMin) * 100,
+    100
+  );
+
   return (
     <Card className="rounded-xl border-border shadow-sm">
       <CardHeader className="px-6 pt-6 pb-1">
@@ -26,7 +23,7 @@ const LoyaltyCard = () => {
             variant="outline"
             className="text-xs font-semibold text-primary border-primary/30"
           >
-            {user.tier} Tier
+            {loyaltyAccountProgressData?.tier} Tier
           </Badge>
         </div>
       </CardHeader>
@@ -34,13 +31,13 @@ const LoyaltyCard = () => {
         <div className="flex items-baseline justify-between">
           <div>
             <span className="text-3xl font-bold text-foreground">
-              {user.points.toLocaleString()}
+              {loyaltyAccountProgressData?.lifetimeEarned.toLocaleString()}
             </span>
             <span className="text-sm text-muted-foreground ml-1.5">points</span>
           </div>
           <span className="text-xs text-muted-foreground">
-            {(user.nextTierPoints - user.points).toLocaleString()} pts to
-            Platinum
+            {loyaltyAccountProgressData?.pointsToNextTier.toLocaleString()} pts to {" "}
+            {loyaltyAccountProgressData?.nextTier}
           </span>
         </div>
         <div className="space-y-1.5">
@@ -51,8 +48,8 @@ const LoyaltyCard = () => {
             />
           </div>
           <div className="flex justify-between text-[11px] text-muted-foreground">
-            <span>Gold (Current)</span>
-            <span>Platinum at {user.nextTierPoints.toLocaleString()} pts</span>
+            <span>{loyaltyAccountProgressData?.tier} (Current)</span>
+            <span>{loyaltyAccountProgressData?.nextTier} at {loyaltyAccountProgressData?.nextTierMin.toLocaleString()} pts</span>
           </div>
         </div>
         <div className="grid grid-cols-3 gap-3 pt-1">
