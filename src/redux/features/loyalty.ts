@@ -9,8 +9,20 @@ const loyaltyApi = baseApi.injectEndpoints({
       }),
       transformResponse: res => res.data,
       providesTags: ["POINTS"]
+    }),
+
+    getMyLoyaltyAccountWithProgress: builder.query({
+      query: () => ({
+        url: "/loyalty/my-account-with-progress",
+        method: "GET"
+      }),
+      transformResponse: res => res.data,
+      providesTags: ["POINTS"]
     })
   })
 })
 
-export const {useGetMyLoyaltyAccountQuery} = loyaltyApi;
+export const {
+  useGetMyLoyaltyAccountQuery,
+  useGetMyLoyaltyAccountWithProgressQuery
+} = loyaltyApi;
