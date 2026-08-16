@@ -1,5 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useGetMyLoyaltyAccountQuery } from "@/redux/features/loyalty";
+
 
 const user = {
   name: "Rayan Chowdhury",
@@ -14,6 +16,9 @@ const user = {
 };
 
 const LoyaltyCard = () => {
+  const {data: loyaltyAccountData} = useGetMyLoyaltyAccountQuery(undefined);
+  console.log(loyaltyAccountData)
+  
   const progressPct = Math.min((user.points / user.nextTierPoints) * 100, 100);
   return (
     <Card className="rounded-xl border-border shadow-sm">
@@ -26,7 +31,7 @@ const LoyaltyCard = () => {
             variant="outline"
             className="text-xs font-semibold text-primary border-primary/30"
           >
-            {user.tier} Tier
+            {loyaltyAccountData.tier} Tier
           </Badge>
         </div>
       </CardHeader>
@@ -34,7 +39,7 @@ const LoyaltyCard = () => {
         <div className="flex items-baseline justify-between">
           <div>
             <span className="text-3xl font-bold text-foreground">
-              {user.points.toLocaleString()}
+              {loyaltyAccountData.lifetimeEarned.toLocaleString()}
             </span>
             <span className="text-sm text-muted-foreground ml-1.5">points</span>
           </div>
