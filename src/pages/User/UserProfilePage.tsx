@@ -33,6 +33,7 @@ import StatCard from "@/components/modules/Shared/StatCard";
 import { useGetMeQuery } from "@/redux/features/users.api";
 import getFormattedDate from "@/utils/getFormattedDate";
 import { useGetMyStatsQuery } from "@/redux/features/stats.api";
+import { useGetMyLoyaltyAccountWithProgressQuery } from "@/redux/features/loyalty";
 
 
 const notificationPrefs = [
@@ -135,7 +136,9 @@ export default function UserProfilePage() {
   );
   const {data: meData} = useGetMeQuery(undefined);
   const {data: myStatsData} = useGetMyStatsQuery(undefined);
-  const {name, avatar, createdAt, tier, points} = meData?.data || {};
+    const { data: loyaltyAccountProgressData } =
+      useGetMyLoyaltyAccountWithProgressQuery(undefined);
+  const {name, avatar, createdAt} = meData?.data || {};
   const formattedDate = getFormattedDate(createdAt);
   const initials = name.split(" ").map((word: string) => word[0]).join("").toUpperCase();
   
@@ -157,8 +160,8 @@ export default function UserProfilePage() {
       icon: <ShoppingCart />,
     },
     {
-      title: "Points",
-      value: points,
+      title: "Available Points",
+      value: loyaltyAccountProgressData?.availablePoints,
       icon: <Shield/>,
     },
 
@@ -184,7 +187,7 @@ export default function UserProfilePage() {
                       {name}
                     </h1>
                     <Badge className="text-[11px] rounded-full px-2.5 font-semibold bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300 border-0">
-                      ✦ {tier} Member
+                      ✦ {loyaltyAccountProgressData?.tier} Member
                     </Badge>
                   </div>
                   <p className="text-xs text-muted-foreground mt-0.5">

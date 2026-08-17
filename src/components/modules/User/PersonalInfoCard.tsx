@@ -5,6 +5,7 @@ import getFormattedDate from "@/utils/getFormattedDate";
 const PersonalInfoCard = () => {
   const { data: meData } = useGetMeQuery(undefined);
 
+
   return (
     <Card className="rounded-xl border-border shadow-sm">
       <CardHeader className="px-6 pt-6 pb-1">
