@@ -2,6 +2,14 @@ import { baseApi } from "../baseApi";
 
 const loyaltyApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
+    getEarnedPointsInLastMonth: builder.query({
+      query: () => ({
+        url: "/loyalty/earned-points-last-month",
+        method: "GET"
+      }),
+      transformResponse: res => res.data
+    }),
+
     getMyLoyaltyAccount: builder.query({
       query: () => ({
         url: "/loyalty/my-account",
@@ -23,6 +31,7 @@ const loyaltyApi = baseApi.injectEndpoints({
 })
 
 export const {
+  useGetEarnedPointsInLastMonthQuery,
   useGetMyLoyaltyAccountQuery,
   useGetMyLoyaltyAccountWithProgressQuery
 } = loyaltyApi;

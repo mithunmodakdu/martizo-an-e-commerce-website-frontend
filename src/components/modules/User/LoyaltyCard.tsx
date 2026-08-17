@@ -1,15 +1,22 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useGetMyLoyaltyAccountWithProgressQuery } from "@/redux/features/loyalty";
+import {
+  useGetEarnedPointsInLastMonthQuery,
+  useGetMyLoyaltyAccountWithProgressQuery,
+} from "@/redux/features/loyalty";
+import getFormattedDate from "@/utils/getFormattedDate";
 
 const LoyaltyCard = () => {
   const { data: loyaltyAccountProgressData } =
     useGetMyLoyaltyAccountWithProgressQuery(undefined);
-  console.log(loyaltyAccountProgressData);
+  const { data: earnedPointsInLastMonth } =
+    useGetEarnedPointsInLastMonthQuery(undefined);
 
   const progressPct = Math.min(
-    (loyaltyAccountProgressData?.lifetimeEarned / loyaltyAccountProgressData?.nextTierMin) * 100,
-    100
+    (loyaltyAccountProgressData?.lifetimeEarned /
+      loyaltyAccountProgressData?.nextTierMin) *
+      100,
+    100,
   );
 
   return (
@@ -36,8 +43,8 @@ const LoyaltyCard = () => {
             <span className="text-sm text-muted-foreground ml-1.5">points</span>
           </div>
           <span className="text-xs text-muted-foreground">
-            {loyaltyAccountProgressData?.pointsToNextTier.toLocaleString()} pts to {" "}
-            {loyaltyAccountProgressData?.nextTier}
+            {loyaltyAccountProgressData?.pointsToNextTier.toLocaleString()} pts
+            to {loyaltyAccountProgressData?.nextTier}
           </span>
         </div>
         <div className="space-y-1.5">
@@ -49,14 +56,23 @@ const LoyaltyCard = () => {
           </div>
           <div className="flex justify-between text-[11px] text-muted-foreground">
             <span>{loyaltyAccountProgressData?.tier} (Current)</span>
-            <span>{loyaltyAccountProgressData?.nextTier} at {loyaltyAccountProgressData?.nextTierMin.toLocaleString()} pts</span>
+            <span>
+              {loyaltyAccountProgressData?.nextTier} at{" "}
+              {loyaltyAccountProgressData?.nextTierMin.toLocaleString()} pts
+            </span>
           </div>
         </div>
         <div className="grid grid-cols-3 gap-3 pt-1">
           {[
-            { label: "Earned this month", value: "420 pts" },
-            { label: "Redeemed total", value: "1,800 pts" },
-            { label: "Expiry", value: "Dec 2026" },
+            { label: "Earned this month", value: earnedPointsInLastMonth?.totalPointsInLastMonth },
+            {
+              label: "Redeemed total",
+              value: loyaltyAccountProgressData?.lifetimeRedeemed,
+            },
+            {
+              label: "Expiry",
+              value: getFormattedDate(loyaltyAccountProgressData?.expiryDate),
+            },
           ].map(({ label, value }) => (
             <div key={label} className="bg-muted/60 rounded-lg p-3 text-center">
               <p className="text-sm font-semibold text-foreground">{value}</p>
