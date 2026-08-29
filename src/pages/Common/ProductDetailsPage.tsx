@@ -1,4 +1,5 @@
 import { ProductDetails } from "@/components/modules/Product/ProductDetails";
+import { ReviewsSection } from "@/components/modules/Review/ReviewsSection";
 import { useGetProductBySlugQuery } from "@/redux/features/products.api";
 import Loading from "@/utils/Loading";
 import { useParams } from "react-router";
@@ -14,6 +15,9 @@ export default function ProductDetailsPage() {
       {
         isLoading? <Loading/> : <ProductDetails productData={data}/>
       }
+      <div>
+        <ReviewsSection/>
+      </div>
     </div>
   );
 }

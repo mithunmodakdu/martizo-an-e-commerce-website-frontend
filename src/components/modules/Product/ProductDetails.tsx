@@ -1,11 +1,8 @@
-"use client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CircleCheck, Star, StarHalf } from "lucide-react";
 import { type ControllerRenderProps, useForm } from "react-hook-form";
 import z from "zod";
-
 import { cn } from "@/lib/utils";
-
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
