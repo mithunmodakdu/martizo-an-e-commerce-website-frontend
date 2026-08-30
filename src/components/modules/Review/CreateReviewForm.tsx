@@ -30,28 +30,25 @@ import type { FileMetadata } from "@/hooks/use-file-upload";
 import { StarRating } from "./StarRating";
 
 export function CreateReviewForm() {
-  const [resSuccess, setResSuccess ] = useState<boolean>(false);
+  const [resSuccess, setResSuccess] = useState<boolean>(false);
   const [images, setImages] = useState<[] | (FileMetadata | File)[]>([]);
-  const [rating, setRating] = useState(0);
 
   const form = useForm({
     defaultValues: {
+      rating: "",
       title: "",
       comment: "",
     },
   });
 
-
   const onSubmit = async (data) => {
-    console.log("data:", data)
+    console.log("data:", data);
     const formData = new FormData();
     formData.append("data", JSON.stringify(data));
     images.forEach((image) => formData.append("files", image as File));
 
-    console.log(formData.get("data"))
-    console.log(formData.get("files"))
-
-   
+    console.log(formData.get("data"));
+    console.log(formData.get("files"));
   };
 
   return (
@@ -66,14 +63,29 @@ export function CreateReviewForm() {
         <form id="create-review-form" onSubmit={form.handleSubmit(onSubmit)}>
           <FieldGroup>
 
-            
-      <div>
-        <label className="mb-1.5 block text-sm font-medium text-foreground">
-          Your rating
-        </label>
-        <StarRating value={rating} onChange={setRating} size="lg" />
-      </div>
-
+            {/* Star Rating */}
+            <Controller
+              name="rating"
+              control={form.control}
+              rules={{
+                required: "Please select a rating",
+                min: { value: 1, message: "Please select a rating" },
+              }}
+              render={({ field, fieldState }) => (
+                <div>
+                  <FieldLabel className="pb-3">Rating</FieldLabel>
+                  <StarRating
+                    value={Number(field.value ?? 0)}
+                    onChange={field.onChange}
+                  />
+                  {fieldState.error && (
+                    <p className="text-sm text-destructive mt-1">
+                      {fieldState.error.message}
+                    </p>
+                  )}
+                </div>
+              )}
+            />
 
             {/* Title */}
             <Controller
@@ -81,9 +93,7 @@ export function CreateReviewForm() {
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="review-title">
-                    Title
-                  </FieldLabel>
+                  <FieldLabel htmlFor="review-title">Title</FieldLabel>
                   <Input
                     {...field}
                     id="review-title"
@@ -104,9 +114,7 @@ export function CreateReviewForm() {
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="review-comment">
-                    Comment
-                  </FieldLabel>
+                  <FieldLabel htmlFor="review-comment">Comment</FieldLabel>
                   <InputGroup>
                     <InputGroupTextarea
                       {...field}
@@ -131,7 +139,6 @@ export function CreateReviewForm() {
                 </Field>
               )}
             />
-            
           </FieldGroup>
         </form>
 
@@ -139,7 +146,10 @@ export function CreateReviewForm() {
         <div className="space-y-5 my-5">
           <Field>
             <FieldLabel htmlFor="review-images">Images</FieldLabel>
-            <MultipleImagesUploader onChange={setImages} resSuccess={resSuccess} />
+            <MultipleImagesUploader
+              onChange={setImages}
+              resSuccess={resSuccess}
+            />
           </Field>
         </div>
       </CardContent>
