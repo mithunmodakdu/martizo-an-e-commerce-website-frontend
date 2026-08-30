@@ -27,10 +27,12 @@ import {
 import { useState } from "react";
 import MultipleImagesUploader from "@/components/ui/MultipleImagesUploader";
 import type { FileMetadata } from "@/hooks/use-file-upload";
+import { StarRating } from "./StarRating";
 
 export function CreateReviewForm() {
   const [resSuccess, setResSuccess ] = useState<boolean>(false);
   const [images, setImages] = useState<[] | (FileMetadata | File)[]>([]);
+  const [rating, setRating] = useState(0);
 
   const form = useForm({
     defaultValues: {
@@ -63,6 +65,15 @@ export function CreateReviewForm() {
       <CardContent>
         <form id="create-review-form" onSubmit={form.handleSubmit(onSubmit)}>
           <FieldGroup>
+
+            
+      <div>
+        <label className="mb-1.5 block text-sm font-medium text-foreground">
+          Your rating
+        </label>
+        <StarRating value={rating} onChange={setRating} size="lg" />
+      </div>
+
 
             {/* Title */}
             <Controller
