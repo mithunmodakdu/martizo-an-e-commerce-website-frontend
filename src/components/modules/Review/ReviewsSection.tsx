@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useGetMeQuery } from "@/redux/features/users.api";
+import { CreateReviewForm } from "./CreateReviewForm";
 
 
 interface ReviewsSectionProps {
@@ -20,7 +21,7 @@ export const ReviewsSection = () =>{
   const isAuthenticated = meData?.data?.email;
 
   return (
-    <section id="reviews" className="space-y-5">
+    <section id="reviews" className="space-y-5 bg-muted-foreground p-10">
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-semibold text-foreground">
           Ratings & Reviews
@@ -35,11 +36,9 @@ export const ReviewsSection = () =>{
               Write a review
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-md">
-            <DialogHeader>
-              <DialogTitle>Write a review</DialogTitle>
-            </DialogHeader>
-            
+          <DialogContent className="sm:max-w-xl">
+                        
+            <CreateReviewForm/>
 
           </DialogContent>
         </Dialog>
