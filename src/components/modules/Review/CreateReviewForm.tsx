@@ -30,13 +30,13 @@ import type { FileMetadata } from "@/hooks/use-file-upload";
 import { StarRating } from "./StarRating";
 
 export function CreateReviewForm({productId}: {productId: string}) {
-  console.log(productId)
   const [resSuccess, setResSuccess] = useState<boolean>(false);
   const [images, setImages] = useState<[] | (FileMetadata | File)[]>([]);
+  
 
   const form = useForm({
     defaultValues: {
-      productId: "",
+      productId: productId,
       rating: "",
       title: "",
       comment: "",
@@ -44,7 +44,6 @@ export function CreateReviewForm({productId}: {productId: string}) {
   });
 
   const onSubmit = async (data) => {
-    console.log("data:", data);
     const formData = new FormData();
     formData.append("data", JSON.stringify(data));
     images.forEach((image) => formData.append("files", image as File));
