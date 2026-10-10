@@ -29,12 +29,14 @@ import MultipleImagesUploader from "@/components/ui/MultipleImagesUploader";
 import type { FileMetadata } from "@/hooks/use-file-upload";
 import { StarRating } from "./StarRating";
 
-export function CreateReviewForm() {
+export function CreateReviewForm({productId}: {productId: string}) {
+  console.log(productId)
   const [resSuccess, setResSuccess] = useState<boolean>(false);
   const [images, setImages] = useState<[] | (FileMetadata | File)[]>([]);
 
   const form = useForm({
     defaultValues: {
+      productId: "",
       rating: "",
       title: "",
       comment: "",
@@ -52,8 +54,8 @@ export function CreateReviewForm() {
   };
 
   return (
-    <Card className="w-full max-w-3xl mx-auto">
-      <CardHeader>
+    <div className="w-full max-w-xl px-5 py-7">
+      <CardHeader className="pb-5">
         <CardTitle className="text-2xl">Write Review</CardTitle>
         <CardDescription>
           Please fill in the form to write your review.
@@ -165,6 +167,6 @@ export function CreateReviewForm() {
           </Button>
         </Field>
       </CardFooter>
-    </Card>
+    </div>
   );
 }

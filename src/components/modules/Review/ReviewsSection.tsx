@@ -11,11 +11,12 @@ import { useGetMeQuery } from "@/redux/features/users.api";
 import { CreateReviewForm } from "./CreateReviewForm";
 
 
-interface ReviewsSectionProps {
+interface IReviewsSectionProps {
   productId: string;
 }
 
-export const ReviewsSection = () =>{
+export const ReviewsSection = (props: IReviewsSectionProps) =>{
+  console.log(props.productId)
   const [open, setOpen] = useState(false);
   const {data: meData} = useGetMeQuery(undefined);
   const isAuthenticated = meData?.data?.email;
@@ -36,9 +37,9 @@ export const ReviewsSection = () =>{
               Write a review
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-xl">
+          <DialogContent className="sm:max-w-xl h-2/3 p-0 overflow-scroll">
                         
-            <CreateReviewForm/>
+            <CreateReviewForm productId={props.productId}/>
 
           </DialogContent>
         </Dialog>

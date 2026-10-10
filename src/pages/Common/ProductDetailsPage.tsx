@@ -6,17 +6,17 @@ import { useParams } from "react-router";
 
 
 export default function ProductDetailsPage() {
-  console.log(useParams())
+  // console.log(useParams())
   const slug = useParams().slug;
   const {data, isLoading} = useGetProductBySlugQuery(slug);
-  console.log(data)
+  
   return (
     <div className="max-w-7xl mx-auto p-5">
       {
         isLoading? <Loading/> : <ProductDetails productData={data}/>
       }
       <div>
-        <ReviewsSection/>
+        <ReviewsSection productId={data?._id as string}/>
       </div>
     </div>
   );
